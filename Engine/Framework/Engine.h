@@ -1,0 +1,43 @@
+#pragma once
+
+#include <memory>
+
+#include "Input/Input.h"
+
+
+class Game;
+class GameWindow;
+class Graphics;
+class Input;
+class AudioDevice;
+class RenderManager;
+class SceneManager;
+class GameObjectManager;
+class AssetManager;
+class ThreadPool;
+
+#ifdef ENABLE_IMGUI
+namespace Editer {
+    class EditerManager;
+}
+#endif // ENABLE_IMGUI
+
+
+class Engine {
+public:
+    static void Run(Game* game);
+
+    static Game* GetGame();
+    static GameWindow* GetGameWindow();
+    static Graphics* GetGraphics();
+    static Input* GetInput();
+    static AudioDevice* GetAudioDevice();
+    static RenderManager* GetRenderManager();
+    static SceneManager* GetSceneManager();
+    static AssetManager* GetAssetManager();
+    static GameObjectManager* GetGameObjectManager();
+    static ThreadPool* GetThreadPool();
+#ifdef ENABLE_IMGUI
+    static Editer::EditerManager* GetEditerManager();
+#endif ENABLE_IMGUI
+};
