@@ -5,14 +5,6 @@
 
 void Player::Initialize() {
     model_.SetModel(AssetManager::GetInstance()->FindModel("suit_walk"));
-    walk_ = AssetManager::GetInstance()->FindAnimation("human_walk");
-    skeleton_ = std::make_shared<Skeleton>();
-    skeleton_->Create(model_.GetModel());
-    model_.SetSkeleton(skeleton_);
-    skeleton_->ApplyAnimation(walk_->GetAnimation("Walk"), 0.0f);
-    skeleton_->Update();
-
-    hammer_.SetModel(AssetManager::GetInstance()->FindModel("hammer"));
 }
 
 void Player::Update() {
