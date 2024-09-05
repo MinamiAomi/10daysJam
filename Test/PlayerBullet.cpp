@@ -3,7 +3,7 @@
 #include "Input/input.h"
 #include "Framework/AssetManager.h"
 
-const float PlayerBullet::kLimitLine = -50.0f;
+const float PlayerBullet::kLimitLine = -30.0f;
 
 void PlayerBullet::Initialize(const Vector3& position,const Vector3& velocity) {
 	model_.SetModel(AssetManager::GetInstance()->FindModel("player"));
