@@ -11,6 +11,8 @@
 #include "Audio/AudioSource.h"
 #include "Graphics/Skeleton.h"
 
+#include "Game/BlockManager.h"
+#include "Game/EnemyManager.h"
 #include "Game/Player.h"
 
 class GameScene :
@@ -26,6 +28,8 @@ private:
     Vector3 euler_;
     std::shared_ptr<DirectionalLight> sunLight_;
 
+    std::shared_ptr<BlockManager> blockManager_;
+    std::shared_ptr<EnemyManager> enemyManager_;
     std::shared_ptr<Player> player_;
 
 };

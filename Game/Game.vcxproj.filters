@@ -21,11 +21,51 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockManager.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBulletManager.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Player.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionAttribute.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockManager.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBulletManager.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
   </ItemGroup>

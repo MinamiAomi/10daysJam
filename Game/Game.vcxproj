@@ -15,14 +15,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BlockManager.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerBulletManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockManager.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="CollisionAttribute.h" />
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerBulletManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

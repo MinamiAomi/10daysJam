@@ -1,5 +1,10 @@
 {
     "Model": {
-
+        "box": "box.obj",
+        "sphere": "sphere.obj",
+        "player": "player.gltf",
+        "playerBullet": "playerBullet.gltf",
+        "enemy": "enemy.gltf",
+        "block": "block.gltf"
     } 
 }
