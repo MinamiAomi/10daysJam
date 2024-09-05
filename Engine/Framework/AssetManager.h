@@ -5,8 +5,6 @@
 #include <mutex>
 #include <string>
 
-#include "Asset.h"
-
 class Model;
 class TextureResource;
 class Sound;
@@ -14,8 +12,6 @@ class Animation;
 
 class AssetManager {
 public:
-    using AssetList = std::list<std::shared_ptr<Asset>>;
-
     static AssetManager* GetInstance();
 
     void AddModel(const std::string& name, const std::shared_ptr<Model>& model) { modelMap_.emplace(std::make_pair(name, model)); }
@@ -36,14 +32,6 @@ public:
     }
     std::shared_ptr<Animation> FindAnimation(const std::string& name) const { return animationMap_.at(name); }
 
-
-
-    void Add(const std::shared_ptr<Asset>& resource);
-    std::shared_ptr<Asset> Find(const std::string& name);
-
-    void Remove(const std::shared_ptr<Asset>& resource);
-    const AssetList& GetAssetList() const { return assetList_; }
-
 private:
     AssetManager() = default;
     ~AssetManager() = default;
@@ -55,6 +43,5 @@ private:
     std::map<std::string, std::shared_ptr<Sound>> soundMap_;
     std::map<std::string, std::shared_ptr<Animation>> animationMap_;
 
-    AssetList assetList_;
     std::mutex mutex_;
 };

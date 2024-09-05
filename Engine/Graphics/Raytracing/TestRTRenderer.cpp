@@ -45,7 +45,7 @@ namespace {
                 woss << exports[i].Name << L"\n";
             }
             return woss.str();
-        };
+            };
 
         for (UINT i = 0; i < desc->NumSubobjects; i++) {
             wstr << L"| [" << i << L"]: ";
@@ -253,7 +253,7 @@ void TestRTRenderer::CreateStateObject() {
         auto dxilLibSubobject = stateObjectDesc.CreateSubobject<CD3DX12_DXIL_LIBRARY_SUBOBJECT>();
         dxilLibSubobject->SetDXILLibrary(&shaderByteCode);
         dxilLibSubobject->DefineExport(exportName);
-    };
+        };
 
     // 1 ~ 3.DXILLib
     CreateShaderSubobject(kRayGenerationShader, kRayGenerationName);
@@ -309,7 +309,7 @@ void TestRTRenderer::CreateShaderTables() {
 
         auto InsertIdentifier = [&](const wchar_t* name) {
             identifierMap_[name] = stateObjectProperties->GetShaderIdentifier(name);
-        };
+            };
         InsertIdentifier(kRayGenerationName);
         InsertIdentifier(kRecursiveHitGroupName);
         InsertIdentifier(kRecursiveMissName);
@@ -356,7 +356,7 @@ void TestRTRenderer::BuildScene(CommandContext& commandContext, const ModelSorte
         materialData.metallicRoughnessMapIndex = defaultWhiteTextureIndex;
         materialData.normalMapIndex = defaultNormalTextureIndex;
         return materialData;
-    };
+        };
 
     auto SetMaterialData = [](MaterialData& dest, const Material& src) {
         dest.albedo = src.albedo;
@@ -366,7 +366,7 @@ void TestRTRenderer::BuildScene(CommandContext& commandContext, const ModelSorte
         if (src.albedoMap) { dest.albedoMapIndex = src.albedoMap->GetSRV().GetIndex(); }
         if (src.metallicRoughnessMap) { dest.metallicRoughnessMapIndex = src.metallicRoughnessMap->GetSRV().GetIndex(); }
         if (src.normalMap) { dest.normalMapIndex = src.normalMap->GetSRV().GetIndex(); }
-    };
+        };
 
 
     auto& drawModels = modelSorter.GetDrawModels();
@@ -467,8 +467,8 @@ void TestRTRenderer::BuildScene(CommandContext& commandContext, const ModelSorte
         float g;
         float exposure;
     } skyParameter;
-    
-    skyParameter.sunPosition = RenderManager::GetInstance()->GetSky().GetSunDirection();
+
+    skyParameter.sunPosition = /*RenderManager::GetInstance()->GetSky().GetSunDirection()*/{ 0.0f, 1.0f, 0.0f };
     skyParameter.sunIntensity = 1300.0f;
     skyParameter.Kr = 0.0025f;
     skyParameter.Km = 0.0010f;

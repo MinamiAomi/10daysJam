@@ -5,7 +5,6 @@
 #include "GameWindow.h"
 
 #include "Framework/Engine.h"
-#include "Editer/EditerManager.h"
 
 static bool useGrayscale = true;
 
@@ -32,7 +31,7 @@ void RenderManager::Initialize() {
     skinningManager_.Initialize();
     geometryRenderingPass_.Initialize(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight());
     lightingRenderingPass_.Initialize(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight());
-    skybox_.Initialize(lightingRenderingPass_.GetResult().GetRTVFormat(), geometryRenderingPass_.GetDepth().GetFormat());
+    //skybox_.Initialize(lightingRenderingPass_.GetResult().GetRTVFormat(), geometryRenderingPass_.GetDepth().GetFormat());
     lineDrawer_.Initialize(lightingRenderingPass_.GetResult().GetRTVFormat());
     //particleCore_.Initialize(lightingRenderingPass_.GetResult().GetRTVFormat());
 
@@ -43,7 +42,7 @@ void RenderManager::Initialize() {
     //    modelRenderer.Initialize(mainColorBuffer_, mainDepthBuffer_);
     transition_.Initialize();
     
-    testRTRenderer_.Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight());
+    //testRTRenderer_.Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight());
     //raytracingRenderer_.Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight());
 
     //raymarchingRenderer_.Create(mainColorBuffer_.GetWidth(), mainColorBuffer_.GetHeight());
@@ -71,9 +70,9 @@ void RenderManager::Render() {
 
     commandContext_.Start(D3D12_COMMAND_LIST_TYPE_DIRECT);
 
-    const float deltaSecond = 1 / 60.0f;
-    const float daySpeed = 1;
-    sky_.Update(deltaSecond / daySpeed);
+    //const float deltaSecond = 1 / 60.0f;
+    //const float daySpeed = 1;
+    //sky_.Update(deltaSecond / daySpeed);
 
     skinningManager_.Update(commandContext_);
 
@@ -84,7 +83,7 @@ void RenderManager::Render() {
         modelSorter_.Sort(*camera);
 
         //raytracingRenderer_.Render(commandContext_, *camera, *sunLight);
-        testRTRenderer_.Render(commandContext_, *camera, modelSorter_);
+        //testRTRenderer_.Render(commandContext_, *camera, modelSorter_);
 
         geometryRenderingPass_.Render(commandContext_, *camera, modelSorter_);
         lightingRenderingPass_.Render(commandContext_, geometryRenderingPass_, *camera, *sunLight);
@@ -93,7 +92,7 @@ void RenderManager::Render() {
         commandContext_.TransitionResource(geometryRenderingPass_.GetDepth(), D3D12_RESOURCE_STATE_DEPTH_READ);
         commandContext_.SetViewportAndScissorRect(0, 0, lightingRenderingPass_.GetResult().GetWidth(), lightingRenderingPass_.GetResult().GetHeight());
         commandContext_.SetRenderTarget(lightingRenderingPass_.GetResult().GetRTV(), geometryRenderingPass_.GetDepth().GetDSV());
-        skybox_.SetWorldMatrix(Matrix4x4::MakeAffineTransform({ 1.0f, 1.0f, 1.0f }, Quaternion::identity, camera->GetPosition()));
+        //skybox_.SetWorldMatrix(Matrix4x4::MakeAffineTransform({ 1.0f, 1.0f, 1.0f }, Quaternion::identity, camera->GetPosition()));
         //skybox_.Render(commandContext_, *camera);
 
         commandContext_.SetRenderTarget(lightingRenderingPass_.GetResult().GetRTV());
@@ -114,18 +113,7 @@ void RenderManager::Render() {
 
     auto& swapChainBuffer = swapChain_.GetColorBuffer(targetSwapChainBufferIndex);
 
-#ifndef ENABLE_IMGUI
     commandContext_.CopyBuffer(swapChainBuffer, finalImageBuffer_);
-#else 
-    // スワップチェーンに描画
-    commandContext_.TransitionResource(swapChainBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
-    commandContext_.FlushResourceBarriers();
-    commandContext_.SetRenderTarget(swapChainBuffer.GetRTV(ColorBuffer::RTV::SRGB));
-    //commandContext_.ClearColor(swapChainBuffer);
-    commandContext_.SetViewportAndScissorRect(0, 0, swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight());
-
-    Engine::GetEditerManager()->RenderToColorBuffer(commandContext_);
-#endif // ENABLE_IMGUI
 
     commandContext_.TransitionResource(swapChainBuffer, D3D12_RESOURCE_STATE_PRESENT);
 

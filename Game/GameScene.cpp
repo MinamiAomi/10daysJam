@@ -15,13 +15,11 @@ void GameScene::OnInitialize() {
     RenderManager::GetInstance()->SetCamera(camera_);
 
     sunLight_ = std::make_shared<DirectionalLight>();
-    sunLight_->direction = Vector3(1.0f, -1.0f, 1.0f).Normalized();
+    sunLight_->direction = Vector3(0.0f, -1.0f, 0.0f).Normalized();
     RenderManager::GetInstance()->SetSunLight(sunLight_);
 }
 
 void GameScene::OnUpdate() {
-
-    Engine::GetGameObjectManager()->Update();
 
     Input* input = Input::GetInstance();
 

@@ -1,6 +1,4 @@
 #pragma once
-#include "GameObject/Component.h"
-
 #include <functional>
 #include <memory>
 #include <string>
@@ -23,12 +21,8 @@ struct RayCastInfo {
     std::shared_ptr<GameObject> gameObject;
     float nearest;
 };
-
-class Collider :
-    public Component {
+class Collider {
     friend class CollisionManager;
-    
-    COMPONENT_IMPL(Collider);
 public:
     using Callback = std::function<void(const CollisionInfo&)>;
 
@@ -40,19 +34,27 @@ public:
     virtual bool IsCollision(BoxCollider* collider, CollisionInfo& collisionInfo) = 0;
     virtual bool RayCast(const Vector3& origin, const Vector3& diff, uint32_t mask, RayCastInfo& nearest) = 0;
 
+    void SetGameObject(const std::shared_ptr<GameObject>& gameObject) { gameObject_ = gameObject; }
     void SetCallback(Callback callback) { callback_ = callback; }
     void SetCollisionAttribute(uint32_t attribute) { collisionAttribute_ = attribute; }
     void SetCollisionMask(uint32_t mask) { collisionMask_ = mask; }
+    void SetIsActive(bool isActive) { isActive_ = isActive; }
 
     void OnCollision(const CollisionInfo& collisionInfo);
+
+    std::shared_ptr<GameObject> GetGameObject() { return gameObject_.lock(); }
+    bool IsActive() const { return isActive_; }
 
 protected:
     bool CanCollision(Collider* other) const;
     bool CanCollision(uint32_t mask) const;
 
+    std::weak_ptr<GameObject> gameObject_;
+
     Callback callback_;
     uint32_t collisionAttribute_ = 0xFFFFFFFF;
     uint32_t collisionMask_ = 0xFFFFFFFF;
+    bool isActive_;
 };
 
 class SphereCollider :

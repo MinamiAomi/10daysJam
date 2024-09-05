@@ -10,7 +10,6 @@
 #include "Graphics/LightManager.h"
 #include "Audio/AudioSource.h"
 #include "Graphics/Skeleton.h"
-#include "GameObject/GameObjectManager.h"
 
 class GameScene :
     public BaseScene {
@@ -24,6 +23,4 @@ private:
     std::shared_ptr<Camera> camera_;
     Vector3 euler_;
     std::shared_ptr<DirectionalLight> sunLight_;
-
-
 };

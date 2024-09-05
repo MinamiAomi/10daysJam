@@ -2,58 +2,13 @@
 
 #include "Graphics/ImGuiManager.h"
 
-void GameObject::RenderInInspectorView() {
-#ifdef ENABLE_IMGUI
-    ImGui::PushID(this);
-    ImGui::Checkbox("##IsActive", &isActive_);
-    ImGui::SameLine();
-    ImGui::InputText("##Name", &name_, ImGuiInputTextFlags_EnterReturnsTrue);
-    if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
-        ImGui::Separator();
-        ImGui::DragFloat3("Translate", &transform.translate.x, 0.1f);
-        Vector3 rotate = transform.rotate.EulerAngle() * Math::ToDegree;
-        ImGui::DragFloat3("Rotate", &rotate.x, 1.0f);
-        transform.rotate = Quaternion::MakeFromEulerAngle(rotate * Math::ToRadian);
-        ImGui::DragFloat3("Scale", &transform.scale.x, 0.1f);
-        transform.UpdateMatrix();
-        ImGui::TreePop();
-    }
-    for (auto& component : componentList_) {
-        ImGui::Separator();
-        if (ImGui::TreeNodeEx(component.second->GetComponentName().c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-            ImGui::Separator();
-            component.second->Edit();
-            ImGui::TreePop();
-        }
-    }
-    ImGui::PopID();
-#endif // ENABLE_IMGUI
-}
 
-void GameObject::InitializeUninitializedComponents() {
-    // 未初期化のコンポーネントを初期化
-    for (auto& component : uninitializedComponents_) {
-        component->Initialize();
-    }
-    uninitializedComponents_.clear();
-
-    for (const auto& child : children_) {
-        if (auto sp = child.lock()) {
-            sp->InitializeUninitializedComponents();
-        }
-    }
-}
-
-void GameObject::Update() {
-    // すべてのコンポーネントを更新
-    for (auto& component : componentList_) {
-        component.second->Update();
-    }
+void GameObject::UpdateTransformHierarchy() {
     transform.UpdateMatrix();
 
     for (const auto& child : children_) {
         if (auto sp = child.lock()) {
-            sp->Update();
+            sp->UpdateTransformHierarchy();
         }
     }
 }

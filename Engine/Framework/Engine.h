@@ -12,16 +12,8 @@ class Input;
 class AudioDevice;
 class RenderManager;
 class SceneManager;
-class GameObjectManager;
 class AssetManager;
 class ThreadPool;
-
-#ifdef ENABLE_IMGUI
-namespace Editer {
-    class EditerManager;
-}
-#endif // ENABLE_IMGUI
-
 
 class Engine {
 public:
@@ -35,9 +27,5 @@ public:
     static RenderManager* GetRenderManager();
     static SceneManager* GetSceneManager();
     static AssetManager* GetAssetManager();
-    static GameObjectManager* GetGameObjectManager();
     static ThreadPool* GetThreadPool();
-#ifdef ENABLE_IMGUI
-    static Editer::EditerManager* GetEditerManager();
-#endif ENABLE_IMGUI
 };

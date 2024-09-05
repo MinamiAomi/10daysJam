@@ -73,9 +73,6 @@
     <Filter Include="Graphics\Shader\PostEffect">
       <UniqueIdentifier>{63e39e26-1af7-48dd-8ebd-a1bc73338a5a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editer">
-      <UniqueIdentifier>{ef36ddaa-c373-4dc6-910e-5c2ec9584396}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{0059160c-501a-4a56-b462-c53484c369cb}</UniqueIdentifier>
     </Filter>
@@ -333,35 +330,11 @@
     <ClCompile Include="File\JsonConverter.cpp">
       <Filter>File</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject\GameObjectManager.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject\GameObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Externals\ImGui\imgui_stdlib.cpp">
       <Filter>Externals\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Editer\HierarchyView.cpp">
-      <Filter>Editer</Filter>
-    </ClCompile>
-    <ClCompile Include="Editer\InspectorView.cpp">
-      <Filter>Editer</Filter>
-    </ClCompile>
-    <ClCompile Include="Editer\EditerManager.cpp">
-      <Filter>Editer</Filter>
-    </ClCompile>
-    <ClCompile Include="Editer\SceneView.cpp">
-      <Filter>Editer</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject\GameObjectFactory.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Editer\ConsoleView.cpp">
-      <Filter>Editer</Filter>
-    </ClCompile>
-    <ClCompile Include="Editer\ProjectView.cpp">
-      <Filter>Editer</Filter>
     </ClCompile>
     <ClCompile Include="Utility\Utility.cpp">
       <Filter>Utility</Filter>
@@ -371,9 +344,6 @@
     </ClCompile>
     <ClCompile Include="Graphics\Raytracing\Denoiser.cpp">
       <Filter>Graphics\Raytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Asset.cpp">
-      <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Texture.cpp">
       <Filter>Graphics\Standard</Filter>
@@ -629,9 +599,6 @@
     <ClInclude Include="Graphics\LightingRenderingPass.h">
       <Filter>Graphics\Standard</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\SphereMapConverter.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Node.h">
       <Filter>Graphics\Standard</Filter>
     </ClInclude>
@@ -692,44 +659,8 @@
     <ClInclude Include="GameObject\GameObject.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject\Component.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject\GameObjectManager.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject\GameObjectFactory.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Editer\EditerManager.h">
-      <Filter>Editer</Filter>
-    </ClInclude>
-    <ClInclude Include="Editer\HierarchyView.h">
-      <Filter>Editer</Filter>
-    </ClInclude>
-    <ClInclude Include="Editer\EditerView.h">
-      <Filter>Editer</Filter>
-    </ClInclude>
-    <ClInclude Include="Editer\InspectorView.h">
-      <Filter>Editer</Filter>
-    </ClInclude>
-    <ClInclude Include="Editer\SceneView.h">
-      <Filter>Editer</Filter>
-    </ClInclude>
-    <ClInclude Include="Editer\ConsoleView.h">
-      <Filter>Editer</Filter>
-    </ClInclude>
-    <ClInclude Include="Editer\EditerInterface.h">
-      <Filter>Editer</Filter>
-    </ClInclude>
     <ClInclude Include="Externals\ImGui\imgui_stdlib.h">
       <Filter>Externals\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Editer\ProjectView.h">
-      <Filter>Editer</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Asset.h">
-      <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Utility\Utility.h">
       <Filter>Utility</Filter>

@@ -52,11 +52,11 @@ public:
     Transition& GetTransition() { return transition_; }
     SkinningManager& GetSkinningManager() { return skinningManager_; }
     LineDrawer& GetLineDrawer() { return lineDrawer_; }
-    Skybox& GetSkybox() { return skybox_; }
+    //Skybox& GetSkybox() { return skybox_; }
     LightingRenderingPass& GetLightingRenderingPass() { return lightingRenderingPass_; }
-    TestRTRenderer& GetTestRTRenderer() { return testRTRenderer_; }
+    //TestRTRenderer& GetTestRTRenderer() { return testRTRenderer_; }
     PostEffect& GetPostEffect() { return postEffect_; }
-    Sky& GetSky() { return sky_; }
+    //Sky& GetSky() { return sky_; }
 
 private:
     RenderManager() = default;
@@ -77,11 +77,11 @@ private:
     SkinningManager skinningManager_;
     GeometryRenderingPass geometryRenderingPass_;
     LightingRenderingPass lightingRenderingPass_;
-    Skybox skybox_;
+    //Skybox skybox_;
     LineDrawer lineDrawer_;
-    ParticleCore particleCore_;
+    //ParticleCore particleCore_;
     
-    TestRTRenderer testRTRenderer_;
+    //TestRTRenderer testRTRenderer_;
     //RaytracingRenderer raytracingRenderer_;
     //RaymarchingRenderer raymarchingRenderer_;
     //ModelRenderer modelRenderer;
@@ -89,13 +89,13 @@ private:
     //Bloom bloom_;
     FXAA fxaa_;
     PostEffect postEffect_;
-    ComputeShaderTester computeShaderTester_;
+    //ComputeShaderTester computeShaderTester_;
     //LightManager lightManager_;
-    Sky sky_;
+    //Sky sky_;
     Timer timer_;
     std::weak_ptr<const Camera> camera_;
     std::weak_ptr<const DirectionalLight> sunLight_;
 
-    UINT64 frameCount_;
+    UINT64 frameCount_ = 0;
     bool raymarching_ = false;
 };
