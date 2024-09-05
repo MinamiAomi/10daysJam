@@ -1,4 +1,6 @@
 {
     "Model" : {
+        "box" : "box.obj",
+        "sphere" : "sphere.obj"
      } 
 }
