@@ -10,8 +10,8 @@
 void TestScene::OnInitialize() {
 
     camera_ = std::make_shared<Camera>();
-    camera_->SetPosition({ 0.0f, 1.0f, -5.0f });
-    camera_->SetRotate(Quaternion::MakeLookRotation({ 0.0f, -1.0f, 5.0f }));
+    camera_->SetPosition({ 0.0f, 0.0f, -80.0f });
+    camera_->SetRotate(Quaternion::MakeLookRotation({ 0.0f, 0.0f, 1.0f }));
     camera_->UpdateMatrices();
     RenderManager::GetInstance()->SetCamera(camera_);
 
@@ -30,88 +30,91 @@ void TestScene::OnInitialize() {
     lightingRenderlingPass.SetRadianceTexture(TextureLoader::Load("Resources/skybox/skybox_8k_radiance.dds"));
 
 
-    Vector3 offset = { 50.0f, 20.0f, 0.0f };
-    auto sphereModel = AssetManager::GetInstance()->FindModel("sphere");
-    for (uint32_t row = 0; row < kRowCount; ++row) {
-        for (uint32_t column = 0; column < kColumnCount; ++column) {
-            auto& sphere = spheres_[row][column];
-            sphere.material = std::make_shared<Material>();
-            sphere.material->albedo = { 1.0f, 1.0f, 1.0f };
-            sphere.material->metallic = (float)row / (kRowCount - 1);
-            sphere.material->roughness = (float)column / (kColumnCount - 1);
-            sphere.model.SetModel(sphereModel);
-            sphere.model.SetMaterial(sphere.material);
-            sphere.model.SetWorldMatrix(Matrix4x4::MakeTranslation(Vector3{ -15.0f + column * 3.0f, -15.0f + row * 3.0f, 0.0f } + offset));
-            sphere.model.SetBeReflected(false);
-        }
-    }
+    //Vector3 offset = { 50.0f, 20.0f, 0.0f };
+    //auto sphereModel = AssetManager::GetInstance()->FindModel("sphere");
+    //for (uint32_t row = 0; row < kRowCount; ++row) {
+    //    for (uint32_t column = 0; column < kColumnCount; ++column) {
+    //        auto& sphere = spheres_[row][column];
+    //        sphere.material = std::make_shared<Material>();
+    //        sphere.material->albedo = { 1.0f, 1.0f, 1.0f };
+    //        sphere.material->metallic = (float)row / (kRowCount - 1);
+    //        sphere.material->roughness = (float)column / (kColumnCount - 1);
+    //        sphere.model.SetModel(sphereModel);
+    //        sphere.model.SetMaterial(sphere.material);
+    //        sphere.model.SetWorldMatrix(Matrix4x4::MakeTranslation(Vector3{ -15.0f + column * 3.0f, -15.0f + row * 3.0f, 0.0f } + offset));
+    //        sphere.model.SetBeReflected(false);
+    //    }
+    //}
 
-    //player_.Initialize();
-    LevelLoader::Load("Resources/scene.json", *Engine::GetGameObjectManager());
+    player_ = std::make_unique<Player>();
+    player_->Initialize();
+
+    //LevelLoader::Load("Resources/scene.json", *Engine::GetGameObjectManager());
 }
 
 void TestScene::OnUpdate() {
 
     Engine::GetGameObjectManager()->Update();
 
-    Input* input = Input::GetInstance();
+    //Input* input = Input::GetInstance();
 
-    auto mouseMoveX = input->GetMouseMoveX();
-    auto mouseMoveY = input->GetMouseMoveY();
-    auto wheel = input->GetMouseWheel();
+    //auto mouseMoveX = input->GetMouseMoveX();
+    //auto mouseMoveY = input->GetMouseMoveY();
+    //auto wheel = input->GetMouseWheel();
 
-    Quaternion rotate = camera_->GetRotate();
-    Vector3 position = camera_->GetPosition();
+    //Quaternion rotate = camera_->GetRotate();
+    //Vector3 position = camera_->GetPosition();
 
-    Vector3 diffPosition;
+    //Vector3 diffPosition;
 
-    if (input->IsMousePressed(1)) {
-        constexpr float rotSpeed = Math::ToRadian * 0.1f;
-        euler_.x += rotSpeed * static_cast<float>(mouseMoveY);
-        euler_.y += rotSpeed * static_cast<float>(mouseMoveX);
-    }
-    else if (input->IsMousePressed(2)) {
-        Vector3 cameraX = rotate.GetRight() * (-static_cast<float>(mouseMoveX) * 0.01f);
-        Vector3 cameraY = rotate.GetUp() * (static_cast<float>(mouseMoveY) * 0.01f);
-        diffPosition += cameraX + cameraY;
-    }
-    else if (wheel != 0) {
-        Vector3 cameraZ = rotate.GetForward() * (static_cast<float>(wheel / 120) * 0.5f);
-        diffPosition += cameraZ;
-    }
+    //if (input->IsMousePressed(1)) {
+    //    constexpr float rotSpeed = Math::ToRadian * 0.1f;
+    //    euler_.x += rotSpeed * static_cast<float>(mouseMoveY);
+    //    euler_.y += rotSpeed * static_cast<float>(mouseMoveX);
+    //}
+    //else if (input->IsMousePressed(2)) {
+    //    Vector3 cameraX = rotate.GetRight() * (-static_cast<float>(mouseMoveX) * 0.01f);
+    //    Vector3 cameraY = rotate.GetUp() * (static_cast<float>(mouseMoveY) * 0.01f);
+    //    diffPosition += cameraX + cameraY;
+    //}
+    //else if (wheel != 0) {
+    //    Vector3 cameraZ = rotate.GetForward() * (static_cast<float>(wheel / 120) * 0.5f);
+    //    diffPosition += cameraZ;
+    //}
 
-    {
-        auto BoolInt = [](bool x) {
-            return x ? 1 : 0;
-            };
+    //{
+    //    auto BoolInt = [](bool x) {
+    //        return x ? 1 : 0;
+    //        };
 
-        int xRotate = BoolInt(input->IsKeyPressed(DIK_DOWN)) - BoolInt(input->IsKeyPressed(DIK_UP));
-        int yRotate = BoolInt(input->IsKeyPressed(DIK_RIGHT)) - BoolInt(input->IsKeyPressed(DIK_LEFT));
+    //    int xRotate = BoolInt(input->IsKeyPressed(DIK_DOWN)) - BoolInt(input->IsKeyPressed(DIK_UP));
+    //    int yRotate = BoolInt(input->IsKeyPressed(DIK_RIGHT)) - BoolInt(input->IsKeyPressed(DIK_LEFT));
 
-        constexpr float rotSpeed = Math::ToRadian * 1.0f;
-        euler_.x += rotSpeed * static_cast<float>(xRotate);
-        euler_.y += rotSpeed * static_cast<float>(yRotate);
-
-
-        int xMove = BoolInt(input->IsKeyPressed(DIK_D)) - BoolInt(input->IsKeyPressed(DIK_A));
-        Vector3 cameraX = rotate.GetRight() * (float)xMove * 0.5f;
-        diffPosition += cameraX;
-
-        int yMove = BoolInt(input->IsKeyPressed(DIK_SPACE)) - BoolInt(input->IsKeyPressed(DIK_LSHIFT));
-        Vector3 cameraY = rotate.GetUp() * (float)yMove * 0.5f;
-        diffPosition += cameraY;
-
-        int zMove = BoolInt(input->IsKeyPressed(DIK_W)) - BoolInt(input->IsKeyPressed(DIK_S));
-        Vector3 cameraZ = rotate.GetForward() * (float)zMove * 0.5f;
-        diffPosition += cameraZ;
-    }
+    //    constexpr float rotSpeed = Math::ToRadian * 1.0f;
+    //    euler_.x += rotSpeed * static_cast<float>(xRotate);
+    //    euler_.y += rotSpeed * static_cast<float>(yRotate);
 
 
+    //    int xMove = BoolInt(input->IsKeyPressed(DIK_D)) - BoolInt(input->IsKeyPressed(DIK_A));
+    //    Vector3 cameraX = rotate.GetRight() * (float)xMove * 0.5f;
+    //    diffPosition += cameraX;
 
-    camera_->SetPosition(position + diffPosition);
-    camera_->SetRotate(Quaternion::MakeFromEulerAngle(euler_));
-    camera_->UpdateMatrices();
+    //    int yMove = BoolInt(input->IsKeyPressed(DIK_SPACE)) - BoolInt(input->IsKeyPressed(DIK_LSHIFT));
+    //    Vector3 cameraY = rotate.GetUp() * (float)yMove * 0.5f;
+    //    diffPosition += cameraY;
 
+    //    int zMove = BoolInt(input->IsKeyPressed(DIK_W)) - BoolInt(input->IsKeyPressed(DIK_S));
+    //    Vector3 cameraZ = rotate.GetForward() * (float)zMove * 0.5f;
+    //    diffPosition += cameraZ;
+    //}
+
+
+
+    //camera_->SetPosition(position + diffPosition);
+    //camera_->SetRotate(Quaternion::MakeFromEulerAngle(euler_));
+    //camera_->UpdateMatrices();
+
+    player_->Update();
     //sunLight_->DrawImGui("SunLight");
     //testObject_.DrawImGui("Sphere");
 }

@@ -37,6 +37,8 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="PlayerBulletManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Test.h">
@@ -55,6 +57,12 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBulletManager.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,6 +11,8 @@
 #include "Audio/AudioSource.h"
 #include "Graphics/Skeleton.h"
 #include "GameObject/GameObjectManager.h"
+#include "Test/DebugCamera.h"
+
 
 #include "Player.h"
 
@@ -27,13 +29,15 @@ private:
     Vector3 euler_;
     std::shared_ptr<DirectionalLight> sunLight_;
 
-    static const uint32_t kRowCount = 2;
+  /*  static const uint32_t kRowCount = 2;
     static const uint32_t kColumnCount = 5;
     struct PBRSphere {
         ModelInstance model;
         std::shared_ptr<Material> material;
     };
     PBRSphere spheres_[kRowCount][kColumnCount];
-    ModelInstance room_;
+    ModelInstance room_;*/
 
+
+    std::unique_ptr<Player> player_;
 };
