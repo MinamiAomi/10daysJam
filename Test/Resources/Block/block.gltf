@@ -8,39 +8,19 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				0,
-				1
+				0
 			]
 		}
 	],
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Cube.001"
-		},
-		{
-			"name":"Cube"
-		}
-	],
-	"materials":[
-		{
-			"doubleSided":true,
-			"name":"Material.001",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.800000011920929,
-					0.800000011920929,
-					0.800000011920929,
-					1
-				],
-				"metallicFactor":0,
-				"roughnessFactor":0.5
-			}
+			"name":"\u7acb\u65b9\u4f53"
 		}
 	],
 	"meshes":[
 		{
-			"name":"Cube.001",
+			"name":"\u7acb\u65b9\u4f53",
 			"primitives":[
 				{
 					"attributes":{
@@ -48,8 +28,7 @@
 						"TEXCOORD_0":1,
 						"NORMAL":2
 					},
-					"indices":3,
-					"material":0
+					"indices":3
 				}
 			]
 		}
@@ -60,14 +39,14 @@
 			"componentType":5126,
 			"count":24,
 			"max":[
-				2,
-				2,
-				2
+				1,
+				1,
+				1
 			],
 			"min":[
-				-2,
-				-2,
-				-2
+				-1,
+				-1,
+				-1
 			],
 			"type":"VEC3"
 		},
@@ -119,7 +98,7 @@
 	"buffers":[
 		{
 			"byteLength":840,
-			"uri":"player.bin"
+			"uri":"block.bin"
 		}
 	]
 }

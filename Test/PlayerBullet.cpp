@@ -1,16 +1,27 @@
 #include "PlayerBullet.h"
 
-#include "Input/input.h"
 #include "Framework/AssetManager.h"
+
+#include "CollisionAttribute.h"
+
 
 const float PlayerBullet::kLimitLine = -30.0f;
 
 void PlayerBullet::Initialize(const Vector3& position,const Vector3& velocity) {
-	model_.SetModel(AssetManager::GetInstance()->FindModel("player"));
+	model_.SetModel(AssetManager::GetInstance()->FindModel("playerBullet"));
     transform_.translate = position;
     velocity_ = velocity;
     isAlive_ = true;
     isOnce_ = false;
+
+    collider_ = std::make_shared<SphereCollider>();
+    collider_->SetCallback([this](const CollisionInfo& collisionInfo) { OnCollision(collisionInfo); });
+    collider_->SetCollisionAttribute(CollisionAttribute::PlayerBullet);
+    collider_->SetCollisionMask(CollisionAttribute::Player | CollisionAttribute::Block);
+    collider_->SetRadius(1.0f);
+    collider_->SetCenter(position);
+    transform_.translate = position;
+
     UpdateTransform();
 }
 
@@ -31,5 +42,14 @@ void PlayerBullet::Update() {
 
 void PlayerBullet::UpdateTransform() {
     transform_.UpdateMatrix();
+    collider_->SetCenter(transform_.translate);
     model_.SetWorldMatrix(transform_.worldMatrix);
+}
+
+void PlayerBullet::OnCollision(const CollisionInfo& info) {
+    if (info.gameObject && 
+        isOnce_
+        ) {
+
+    }
 }

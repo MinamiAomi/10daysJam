@@ -46,6 +46,9 @@ void TestScene::OnInitialize() {
     //    }
     //}
 
+    blockManager_ = std::make_unique<BlockManager>();
+    blockManager_->Initialize();
+
     player_ = std::make_unique<Player>();
     player_->Initialize();
 
@@ -113,6 +116,8 @@ void TestScene::OnUpdate() {
     //camera_->SetPosition(position + diffPosition);
     //camera_->SetRotate(Quaternion::MakeFromEulerAngle(euler_));
     //camera_->UpdateMatrices();
+
+    blockManager_->Update();
 
     player_->Update();
     //sunLight_->DrawImGui("SunLight");

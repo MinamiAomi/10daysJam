@@ -13,7 +13,7 @@
 #include "GameObject/GameObjectManager.h"
 #include "Test/DebugCamera.h"
 
-
+#include "BlockManager.h"
 #include "Player.h"
 
 class TestScene :
@@ -38,6 +38,7 @@ private:
     PBRSphere spheres_[kRowCount][kColumnCount];
     ModelInstance room_;*/
 
-
+    std::unique_ptr<BlockManager> blockManager_;
     std::unique_ptr<Player> player_;
+    
 };

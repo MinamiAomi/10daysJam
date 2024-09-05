@@ -15,6 +15,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BlockManager.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
@@ -26,6 +28,10 @@
     <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockManager.h" />
+    <ClInclude Include="CollisionAttribute.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="DebugCamera.h" />

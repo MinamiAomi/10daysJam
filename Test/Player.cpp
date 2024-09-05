@@ -10,6 +10,9 @@ void Player::Initialize() {
 	bulletManager_->Initialize();
 	fireTime_ = 0.0f;
 
+	transform_.translate.y = 3.0f;
+	transform_.UpdateMatrix();
+
 	//walk_ = AssetManager::GetInstance()->FindAnimation("human_walk");
 	//skeleton_ = std::make_shared<Skeleton>();
 	//skeleton_->Create(model_.GetModel());

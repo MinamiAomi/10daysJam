@@ -37,8 +37,16 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp" />
-    <ClCompile Include="PlayerBulletManager.cpp" />
+    <ClCompile Include="Block.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBulletManager.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Test.h">
@@ -63,6 +71,18 @@
       <Filter>Game\Object</Filter>
     </ClInclude>
     <ClInclude Include="PlayerBulletManager.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionAttribute.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockManager.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
   </ItemGroup>

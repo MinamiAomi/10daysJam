@@ -15,32 +15,21 @@
 	],
 	"nodes":[
 		{
-			"mesh":0,
-			"name":"Cube.001"
+			"name":"Cube"
 		},
 		{
-			"name":"Cube"
-		}
-	],
-	"materials":[
-		{
-			"doubleSided":true,
-			"name":"Material.001",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.800000011920929,
-					0.800000011920929,
-					0.800000011920929,
-					1
-				],
-				"metallicFactor":0,
-				"roughnessFactor":0.5
-			}
+			"mesh":0,
+			"name":"\u7403",
+			"scale":[
+				0.36718231439590454,
+				0.36718231439590454,
+				0.36718231439590454
+			]
 		}
 	],
 	"meshes":[
 		{
-			"name":"Cube.001",
+			"name":"\u7403.001",
 			"primitives":[
 				{
 					"attributes":{
@@ -48,8 +37,7 @@
 						"TEXCOORD_0":1,
 						"NORMAL":2
 					},
-					"indices":3,
-					"material":0
+					"indices":3
 				}
 			]
 		}
@@ -58,68 +46,68 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":24,
+			"count":2122,
 			"max":[
-				2,
-				2,
-				2
+				0.9999997019767761,
+				1,
+				0.9999993443489075
 			],
 			"min":[
-				-2,
-				-2,
-				-2
+				-0.9999990463256836,
+				-2.333186388015747,
+				-1
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":24,
+			"count":2122,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":24,
+			"count":2122,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":36,
+			"count":3072,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":288,
+			"byteLength":25464,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":192,
-			"byteOffset":288,
+			"byteLength":16976,
+			"byteOffset":25464,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":288,
-			"byteOffset":480,
+			"byteLength":25464,
+			"byteOffset":42440,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":72,
-			"byteOffset":768,
+			"byteLength":6144,
+			"byteOffset":67904,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":840,
-			"uri":"player.bin"
+			"byteLength":74048,
+			"uri":"playerBullet.bin"
 		}
 	]
 }
