@@ -5,6 +5,7 @@
 
 #include "CollisionAttribute.h"
 #include "Engine/Math/MathUtils.h"
+#include "Game/GameProperty.h"
 
 void Player::Initialize() {
 	SetName("Player");
@@ -25,10 +26,13 @@ void Player::Initialize() {
 void Player::Reset() {
 	fireTime_ = 0.0f;
 
+	canJump_ = true;
 	velocity_ = Vector3::zero;
 	transform.translate.y = initializePosition_;
 
 	UpdateTransform();
+
+	bulletManager_->Reset();
 }
 
 void Player::UpdateTransform() {
@@ -42,7 +46,9 @@ void Player::UpdateTransform() {
 
 void Player::OnCollision(const CollisionInfo& collisionInfo) {
 	if (collisionInfo.gameObject->GetName() == "Block") {
+		// 着地
 		if (Vector3::Dot(collisionInfo.normal, Vector3(0.0f, 1.0f, 0.0f)) >= 0.8f) {
+			canJump_ = true;
 			velocity_.y = 0.0f;
 		}
 		transform.translate += collisionInfo.depth * collisionInfo.normal;
@@ -63,16 +69,25 @@ void Player::Update() {
 		if (input->IsKeyPressed(DIK_A)) { move.x = -1.0f; }
 		if (input->IsKeyPressed(DIK_D)) { move.x = 1.0f; }
 		float acceleration = 0.0f;
-		if (input->IsKeyTrigger(DIK_W)) { acceleration = 0.8f; }
+		if (input->IsKeyTrigger(DIK_W) && canJump_) {
+			acceleration = 0.8f;
+			canJump_ = false;
+		}
 		if (move != Vector3::zero) {
 			move = move.Normalized() * 0.4f;
-
 			velocity_.x += move.x;
 		}
 		velocity_.y += acceleration;
 		velocity_.y -= 0.03f;
-		velocity_.y  = (std::max)(velocity_.y,-1.0f);
+		velocity_.y = (std::max)(velocity_.y, -1.0f);
 		transform.translate += velocity_;
+		// プレイヤー反転
+		if (transform.translate.x > GameProperty::GameStageSize.x) {
+			transform.translate.x = -GameProperty::GameStageSize.x;
+		}
+		else if (transform.translate.x < -GameProperty::GameStageSize.x) {
+			transform.translate.x = GameProperty::GameStageSize.x;
+		}
 	}
 
 	// Bullet

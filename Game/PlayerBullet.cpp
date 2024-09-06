@@ -3,9 +3,7 @@
 #include "Framework/AssetManager.h"
 
 #include "CollisionAttribute.h"
-
-
-const float PlayerBullet::kLimitLine = -30.0f;
+#include "GameProperty.h"
 
 void PlayerBullet::Initialize(const Vector3& position, const Vector3& velocity) {
 	SetName("Bullet");
@@ -33,9 +31,9 @@ void PlayerBullet::Update() {
 		isAlive_ = false;
 	}
 	// 下に着いたら
-	if (transform.translate.y <= kLimitLine) {
+	if (transform.translate.y <= -GameProperty::GameStageSize.y) {
 		// 反転
-		transform.translate.y = kLimitLine * -1.0f;
+		transform.translate.y = GameProperty::GameStageSize.y;
 		collider_->SetCollisionMask(CollisionAttribute::Enemy | CollisionAttribute::Block | CollisionAttribute::Player);
 		isOnce_ = true;
 	}
@@ -57,7 +55,7 @@ void PlayerBullet::OnCollision(const CollisionInfo& info) {
 		}
 	}
 	if (info.gameObject->GetName() == "Player") {
-			isAlive_ = false;
+		isAlive_ = false;
 	}
 	if (info.gameObject->GetName() == "Enemy") {
 		isAlive_ = false;

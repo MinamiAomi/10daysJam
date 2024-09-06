@@ -21,6 +21,7 @@ private:
 	ModelInstance model_;
 	std::shared_ptr<BoxCollider> collider_;
 
+	bool canJump_;
 	float initializePosition_ = 4.0f;
 	Vector3 velocity_;
 

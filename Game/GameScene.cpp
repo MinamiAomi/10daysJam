@@ -11,7 +11,7 @@
 void GameScene::OnInitialize() {
 
     camera_ = std::make_shared<Camera>();
-    camera_->SetPosition({ 0.0f, -5.0f, -80.0f });
+    camera_->SetPosition({ 0.0f, -4.0f, -80.0f });
     camera_->SetRotate(Quaternion::MakeLookRotation({ 0.0f, 0.0f, 1.0f }));
     camera_->UpdateMatrices();
     RenderManager::GetInstance()->SetCamera(camera_);
@@ -91,7 +91,11 @@ void GameScene::OnUpdate() {
         Vector3 cameraZ = rotate.GetForward() * (float)zMove * 0.5f;
         diffPosition += cameraZ;*/
     }
-
+    if (input->IsKeyTrigger(DIK_R)) {
+        blockManager_->Reset();
+        enemyManager_->Reset();
+        player_->Reset();
+    }
 
 
     camera_->SetPosition(position + diffPosition);

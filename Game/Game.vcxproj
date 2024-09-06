@@ -31,6 +31,7 @@
     <ClInclude Include="BlockManager.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="GameProperty.h" />
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="CollisionAttribute.h" />
     <ClInclude Include="GameBase.h" />
