@@ -15,7 +15,6 @@ void Block::Initialize(const Vector3& position) {
 	collider_->SetIsActive(true);
 
 	transform.translate = position;
-	isOnce_ = false;
 	isAlive_ = true;
 	UpdateTransform();
 }
@@ -27,23 +26,24 @@ void Block::Update() {
 	// 落下リミット
 	if (transform.translate.y <= -GameProperty::GameStageSize.y) {
 		transform.translate.y = GameProperty::GameStageSize.y;
-		isOnce_ = true;
 	}
 	// 上から降ってくる
-	if (isOnce_ && transform.translate.y <= 0.0f) {
-		velocity_ = Vector3::zero;
-		transform.translate.y = 0.0f;
-		isOnce_ = false;
-	}
 	UpdateTransform();
 }
 
 void Block::OnCollision(const CollisionInfo& info) {
 	if (info.gameObject->GetName() == "Bullet") {
- 		velocity_ = { 0.0f,-0.3f,0.0f };
+		velocity_ = { 0.0f,-0.3f,0.0f };
 	}
 	if (info.gameObject->GetName() == "Enemy") {
 		isAlive_ = false;
+	}
+	if (info.gameObject->GetName() == "Block") {
+		// ブロックに上もしくは下に触れたら
+		if (Vector3::Dot(info.normal, Vector3::up) >= 0.8f ||
+			Vector3::Dot(info.normal, Vector3::down) >= 0.8f) {
+			velocity_ = { 0.0f,0.0f,0.0f };
+		}
 	}
 }
 

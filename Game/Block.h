@@ -18,7 +18,6 @@ private:
 	void UpdateTransform();
 	std::shared_ptr<BoxCollider> collider_;
 	Vector3 velocity_;
-	bool isOnce_;
 	bool isAlive_;
 	ModelInstance model_;
 };
