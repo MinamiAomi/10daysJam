@@ -5,6 +5,7 @@
 
 #include "CollisionAttribute.h"
 #include "Engine/Math/MathUtils.h"
+#include "Game/GameProperty.h"
 
 void Player::Initialize() {
 	SetName("Player");
@@ -69,18 +70,24 @@ void Player::Update() {
 		if (input->IsKeyPressed(DIK_D)) { move.x = 1.0f; }
 		float acceleration = 0.0f;
 		if (input->IsKeyTrigger(DIK_W) && canJump_) {
-			acceleration = 0.8f; 
+			acceleration = 0.8f;
 			canJump_ = false;
 		}
 		if (move != Vector3::zero) {
 			move = move.Normalized() * 0.4f;
-
 			velocity_.x += move.x;
 		}
 		velocity_.y += acceleration;
 		velocity_.y -= 0.03f;
 		velocity_.y = (std::max)(velocity_.y, -1.0f);
 		transform.translate += velocity_;
+		// プレイヤー反転
+		if (transform.translate.x > GameProperty::GameStageSize.x) {
+			transform.translate.x = -GameProperty::GameStageSize.x;
+		}
+		else if (transform.translate.x < -GameProperty::GameStageSize.x) {
+			transform.translate.x = GameProperty::GameStageSize.x;
+		}
 	}
 
 	// Bullet

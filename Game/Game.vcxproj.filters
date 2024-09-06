@@ -68,6 +68,9 @@
     <ClInclude Include="EnemyManager.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
+    <ClInclude Include="GameProperty.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

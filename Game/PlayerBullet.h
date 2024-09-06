@@ -16,7 +16,6 @@ public:
 private:
 	void UpdateTransform();
 	void OnCollision(const CollisionInfo& info);
-	static const float kLimitLine;
 	Vector3 velocity_;
 	ModelInstance model_;
 	bool isAlive_;

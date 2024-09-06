@@ -2,6 +2,7 @@
 
 #include "Framework/AssetManager.h"
 #include "CollisionAttribute.h"
+#include "Game/GameProperty.h"
 
 void Block::Initialize(const Vector3& position) {
 	SetName("Block");
@@ -24,8 +25,8 @@ void Block::Update() {
 	transform.translate += velocity_;
 
 	// 落下リミット
-	if (transform.translate.y <= -30.0f) {
-		transform.translate.y = 30.0f;
+	if (transform.translate.y <= -GameProperty::GameStageSize.y) {
+		transform.translate.y = GameProperty::GameStageSize.y;
 		isOnce_ = true;
 	}
 	// 上から降ってくる
