@@ -81,8 +81,9 @@ void Player::Update() {
 		if (fireTime_ > 0.0f) {
 			fireTime_ -= 1.0f;
 		}
+		bool inputFlag = input->IsKeyPressed(DIK_SPACE) && input->IsGamepadButtonPressed(GamepadButton::B);
 		// 弾発射
-		if (input->IsKeyPressed(DIK_SPACE) &&
+		if (inputFlag &&
 			fireTime_ <= 0.0f) {
 			bulletManager_->FireBullet(transform.translate, { 0.0f,-0.5f,0.0f });
 			fireTime_ = fireInterval_;
