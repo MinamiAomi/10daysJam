@@ -15,7 +15,7 @@ public:
 private:
 	void Create();
 	Random::RandomNumberGenerator rnd_;
-	std::list<std::shared_ptr<Enemy>> enemies_;
+	std::list<std::shared_ptr<Enemy>> enemies_;      
 	int32_t interval_ = 120;
 	int32_t time_ = 0;
 };

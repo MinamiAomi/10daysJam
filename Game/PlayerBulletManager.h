@@ -11,6 +11,8 @@ public:
 	void Update();
 	void FireBullet(const Vector3& position, const Vector3& velocity);
 	void RemoveBullet(std::shared_ptr<PlayerBullet> bullet);
+
+	void Reset();
 private:
 	std::list<std::shared_ptr<PlayerBullet>> playerBullets_;
 };

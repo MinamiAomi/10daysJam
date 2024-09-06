@@ -1,7 +1,7 @@
 #include "PlayerBulletManager.h"
 
 void PlayerBulletManager::Initialize() {
-    playerBullets_.clear();
+    Reset();
 }
 
 void PlayerBulletManager::Update() {
@@ -27,4 +27,9 @@ void PlayerBulletManager::FireBullet(const Vector3& position, const Vector3& vel
 
 void PlayerBulletManager::RemoveBullet(std::shared_ptr<PlayerBullet> bullet) {
     playerBullets_.erase(std::remove(playerBullets_.begin(), playerBullets_.end(), bullet), playerBullets_.end());
+}
+
+void PlayerBulletManager::Reset() {
+    playerBullets_.clear();
+
 }

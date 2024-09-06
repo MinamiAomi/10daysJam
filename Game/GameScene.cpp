@@ -91,7 +91,11 @@ void GameScene::OnUpdate() {
         Vector3 cameraZ = rotate.GetForward() * (float)zMove * 0.5f;
         diffPosition += cameraZ;*/
     }
-
+    if (input->IsKeyTrigger(DIK_R)) {
+        blockManager_->Reset();
+        enemyManager_->Reset();
+        player_->Reset();
+    }
 
 
     camera_->SetPosition(position + diffPosition);
