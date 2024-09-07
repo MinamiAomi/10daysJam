@@ -17,7 +17,6 @@ private:
 	void OnCollision(const CollisionInfo& info);
 	void UpdateTransform();
 	std::shared_ptr<BoxCollider> collider_;
-	Vector3 velocity_;
 	bool isAlive_;
 	ModelInstance model_;
 };

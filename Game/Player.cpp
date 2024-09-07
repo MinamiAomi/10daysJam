@@ -17,9 +17,6 @@ void Player::Initialize() {
 	collider_->SetCollisionMask(CollisionAttribute::PlayerBullet | CollisionAttribute::Block);
 	collider_->SetIsActive(true);
 
-	bulletManager_ = std::make_shared<PlayerBulletManager>();
-	bulletManager_->Initialize();
-
 	Reset();
 }
 
@@ -31,8 +28,25 @@ void Player::Reset() {
 	transform.translate.y = initializePosition_;
 
 	UpdateTransform();
+}
 
-	bulletManager_->Reset();
+void Player::FireBullet() {
+	auto input = Input::GetInstance();
+	auto gamepad = input->GetXInputState();
+	// Bullet
+	{
+		// インターバルカウント
+		if (fireTime_ > 0.0f) {
+			fireTime_ -= 1.0f;
+		}
+		// 弾発射
+		if (input->IsKeyPressed(DIK_SPACE) &&
+			fireTime_ <= 0.0f) {
+			bulletManager_->FireBullet(transform.translate, { 0.0f,-0.5f,0.0f }, CollisionAttribute::PlayerBullet);
+			fireTime_ = fireInterval_;
+		}
+		bulletManager_->Update();
+	}
 }
 
 void Player::UpdateTransform() {
@@ -88,22 +102,12 @@ void Player::Update() {
 		else if (transform.translate.x < -GameProperty::GameStageSize.x) {
 			transform.translate.x = GameProperty::GameStageSize.x;
 		}
+		if (transform.translate.y <= -GameProperty::GameStageSize.y) {
+			transform.translate.y = GameProperty::GameStageSize.y;
+		}
 	}
 
-	// Bullet
-	{
-		// インターバルカウント
-		if (fireTime_ > 0.0f) {
-			fireTime_ -= 1.0f;
-		}
-		// 弾発射
-		if (input->IsKeyPressed(DIK_SPACE) &&
-			fireTime_ <= 0.0f) {
-			bulletManager_->FireBullet(transform.translate, { 0.0f,-0.5f,0.0f });
-			fireTime_ = fireInterval_;
-		}
-		bulletManager_->Update();
-	}
+	FireBullet();
 	UpdateTransform();
 
 }

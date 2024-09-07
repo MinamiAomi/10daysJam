@@ -1,5 +1,14 @@
 #include "EnemyManager.h"
 
+#include "GameProperty.h"
+
+namespace {
+	enum EnemyType {
+		kNormal,
+		kCount
+	};
+}
+
 void EnemyManager::Initialize() {
 	Reset();
 }
@@ -29,9 +38,22 @@ void EnemyManager::Reset() {
 }
 
 void EnemyManager::Create() {
-	auto enemy = std::make_shared<Enemy>();
-	Vector3 position(rnd_.NextFloatRange(-18.0f, 18.0f), -30.0f, 0.0f);
-	enemy->Initialize(position);
-	enemies_.emplace_back(enemy);
+	auto enemyType = rnd_.NextUIntRange(0, EnemyType::kCount - 1);
+
+	switch (enemyType) {
+	case EnemyType::kNormal:
+	{
+		auto enemy = std::make_shared<NormalEnemy>();
+		Vector3 position(rnd_.NextFloatRange(-GameProperty::GameStageSize.x, GameProperty::GameStageSize.x), -GameProperty::GameStageSize.y, 0.0f);
+		enemy->Initialize(position);
+		enemy->SetBulletManager(bulletManager_);
+		enemies_.emplace_back(enemy);
+
+	}
+	break;
+	default:
+		break;
+	}
+	// インターバルリセット
 	time_ = interval_;
 }

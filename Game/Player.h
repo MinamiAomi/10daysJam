@@ -7,7 +7,7 @@
 #include "Graphics/Skeleton.h"
 
 #include "Engine/Collision/Collider.h"
-#include "PlayerBulletManager.h"
+#include "BulletManager.h"
 
 class Player : public GameObject {
 public:
@@ -15,7 +15,9 @@ public:
 	void Update();
 
 	void Reset();
+	void SetBulletManager(std::shared_ptr<BulletManager> bulletManager) { bulletManager_ = bulletManager; }
 private:
+	void FireBullet();
 	void UpdateTransform();
 	void OnCollision(const CollisionInfo& collisionInfo);
 	ModelInstance model_;
@@ -26,7 +28,7 @@ private:
 	Vector3 velocity_;
 
 #pragma region Bullet
-	std::shared_ptr<PlayerBulletManager> bulletManager_;
+	std::shared_ptr<BulletManager> bulletManager_;
 	// インターバル
 	float fireInterval_ = 30.0f;
 	float fireTime_ = 0.0f;

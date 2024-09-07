@@ -11,6 +11,7 @@
 #include "Audio/AudioSource.h"
 #include "Graphics/Skeleton.h"
 
+#include "Game/BulletManager.h"
 #include "Game/BlockManager.h"
 #include "Game/EnemyManager.h"
 #include "Game/Player.h"
@@ -28,6 +29,7 @@ private:
     Vector3 euler_;
     std::shared_ptr<DirectionalLight> sunLight_;
 
+    std::shared_ptr<BulletManager> bulletManager_;
     std::shared_ptr<BlockManager> blockManager_;
     std::shared_ptr<EnemyManager> enemyManager_;
     std::shared_ptr<Player> player_;
