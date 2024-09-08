@@ -30,10 +30,10 @@
     <ClCompile Include="BlockManager.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
+    <ClCompile Include="Bullet.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBulletManager.cpp">
+    <ClCompile Include="BulletManager.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
@@ -56,10 +56,10 @@
     <ClInclude Include="BlockManager.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
+    <ClInclude Include="Bullet.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBulletManager.h">
+    <ClInclude Include="BulletManager.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">

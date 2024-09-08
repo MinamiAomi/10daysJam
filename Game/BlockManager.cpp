@@ -1,6 +1,7 @@
 #include "BlockManager.h"
 
-const uint32_t BlockManager::kMaxBlockCount = 20;
+const uint32_t BlockManager::kMaxBlockRow = 60;
+const uint32_t BlockManager::kMaxBlockColumn = 10;
 
 void BlockManager::Initialize() {
 	Reset();
@@ -26,19 +27,20 @@ void BlockManager::Reset() {
 
 	float distance = 2.0f;
 	float startX = 0.0f;
-	uint32_t num = kMaxBlockCount;
+	uint32_t num = kMaxBlockRow;
 	// 奇数or偶数
 	if (num % 2 == 0) {
-		startX = -(float(kMaxBlockCount) * 0.5f - 0.5f) * distance;
+		startX = -(float(kMaxBlockRow) * 0.5f - 0.5f) * distance;
 	}
 	else {
-		startX = -(float(kMaxBlockCount) * 0.5f) * distance;
+		startX = -(float(kMaxBlockRow) * 0.5f) * distance;
 	}
-
-	for (uint32_t i = 0; i < kMaxBlockCount; i++) {
-		auto block = std::make_shared<Block>();
-		Vector3 position(startX + i * distance, 0.0f, 0.0f);
-		block->Initialize(position);
-		blocks_.emplace_back(block);
+	for (uint32_t y = 0; y < kMaxBlockColumn; y++) {
+		for (uint32_t x = 0; x < kMaxBlockRow; x++) {
+			auto block = std::make_shared<Block>();
+			Vector3 position(startX + x * distance, y * -distance, 0.0f);
+			block->Initialize(position);
+			blocks_.emplace_back(block);
+		}
 	}
 }

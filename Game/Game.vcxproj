@@ -19,12 +19,12 @@
     <ClCompile Include="BlockManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
-    <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerBulletManager.cpp" />
+    <ClCompile Include="BulletManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
@@ -32,12 +32,12 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="GameProperty.h" />
-    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="CollisionAttribute.h" />
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerBulletManager.h" />
+    <ClInclude Include="BulletManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
