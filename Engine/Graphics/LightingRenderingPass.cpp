@@ -130,7 +130,7 @@ void LightingRenderingPass::Render(CommandContext& commandContext, GeometryRende
     sceneData.lightDirection = light.direction;
 
     SkyParameter skyParameter;
-    skyParameter.sunPosition = /*RenderManager::GetInstance()->GetSky().GetSunDirection()*/{ 0.0f, 1.0f, 0.0f };
+    skyParameter.sunPosition = /*RenderManager::GetInstance()->GetSky().GetSunDirection()*/Vector3{ 0.0f, 1.0f, -1.0f }.Normalized();
     skyParameter.sunIntensity = 1300.0f;
     skyParameter.sunIntensity = 1300.0f;
     skyParameter.Kr = 0.0025f;

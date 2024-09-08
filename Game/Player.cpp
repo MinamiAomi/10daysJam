@@ -69,7 +69,8 @@ void Player::Update() {
 		if (input->IsKeyPressed(DIK_A)) { move.x = -1.0f; }
 		if (input->IsKeyPressed(DIK_D)) { move.x = 1.0f; }
 		float acceleration = 0.0f;
-		if (input->IsKeyTrigger(DIK_W) && canJump_) {
+		bool jumpInputFlag = input->IsKeyTrigger(DIK_W) || input->IsGamepadButtonPressed(GamepadButton::A);
+		if (jumpInputFlag && canJump_) {
 			acceleration = 0.8f;
 			canJump_ = false;
 		}
@@ -96,9 +97,9 @@ void Player::Update() {
 		if (fireTime_ > 0.0f) {
 			fireTime_ -= 1.0f;
 		}
-		bool inputFlag = input->IsKeyPressed(DIK_SPACE) && input->IsGamepadButtonPressed(GamepadButton::B);
+		bool bulletInputFlag = input->IsKeyPressed(DIK_SPACE) || input->IsGamepadButtonPressed(GamepadButton::RightShoulder);
 		// 弾発射
-		if (inputFlag &&
+		if (bulletInputFlag &&
 			fireTime_ <= 0.0f) {
 			bulletManager_->FireBullet(transform.translate, { 0.0f,-0.5f,0.0f });
 			fireTime_ = fireInterval_;
@@ -106,5 +107,5 @@ void Player::Update() {
 		bulletManager_->Update();
 	}
 	UpdateTransform();
-
+	     
 }
