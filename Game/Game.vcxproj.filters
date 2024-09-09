@@ -39,7 +39,9 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h" />

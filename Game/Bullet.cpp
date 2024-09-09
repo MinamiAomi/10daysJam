@@ -57,7 +57,7 @@ void PlayerBullet::OnCollision(const CollisionInfo& info) {
 
 void EnemyBullet::Initialize(const Vector3& position, const Vector3& velocity) {
 	SetName("EnemyBullet");
-	model_.SetModel(AssetManager::GetInstance()->FindModel("playerBullet"));
+	model_.SetModel(AssetManager::GetInstance()->FindModel("enemyBullet"));
 	transform.translate = position;
 	velocity_ = velocity;
 	isAlive_ = true;

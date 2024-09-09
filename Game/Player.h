@@ -17,15 +17,25 @@ public:
 	void Reset();
 	void SetBulletManager(std::shared_ptr<BulletManager> bulletManager) { bulletManager_ = bulletManager; }
 private:
+	void Move();
 	void FireBullet();
+	void UpdateInvincible();
 	void UpdateTransform();
 	void OnCollision(const CollisionInfo& collisionInfo);
 	ModelInstance model_;
 	std::shared_ptr<BoxCollider> collider_;
 
-	bool canJump_;
 	float initializePosition_ = 4.0f;
-	Vector3 velocity_;
+	float velocity_ = 0.2f;
+	float angle_ = 0.0f;
+	Vector3 currentVector_;
+
+#pragma region Invincible
+	// インターバル
+	float invincibleTime_;
+	float invincibleInterval_ = 30.0f;
+#pragma endregion
+
 
 #pragma region Bullet
 	std::shared_ptr<BulletManager> bulletManager_;
