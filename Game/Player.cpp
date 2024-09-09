@@ -83,7 +83,8 @@ void Player::Update() {
 		if (input->IsKeyPressed(DIK_A)) { move.x = -1.0f; }
 		if (input->IsKeyPressed(DIK_D)) { move.x = 1.0f; }
 		float acceleration = 0.0f;
-		if (input->IsKeyTrigger(DIK_W) && canJump_) {
+		bool jumpInputFlag = input->IsKeyTrigger(DIK_W) || input->IsGamepadButtonPressed(GamepadButton::A);
+		if (jumpInputFlag && canJump_) {
 			acceleration = 0.8f;
 			canJump_ = false;
 		}
@@ -109,5 +110,5 @@ void Player::Update() {
 
 	FireBullet();
 	UpdateTransform();
-
+	     
 }
