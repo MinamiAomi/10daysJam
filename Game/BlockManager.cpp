@@ -1,7 +1,6 @@
 #include "BlockManager.h"
 
-const uint32_t BlockManager::kMaxBlockRow = 60;
-const uint32_t BlockManager::kMaxBlockColumn = 5;
+#include "GameProperty.h"
 
 void BlockManager::Initialize() {
 	Reset();
@@ -27,16 +26,16 @@ void BlockManager::Reset() {
 
 	float distance = 2.0f;
 	float startX = 0.0f;
-	uint32_t num = kMaxBlockRow;
+	uint32_t num = GameProperty::MaxBlockRow;
 	// 奇数or偶数
 	if (num % 2 == 0) {
-		startX = -(float(kMaxBlockRow) * 0.5f - 0.5f) * distance;
+		startX = -(float(GameProperty::MaxBlockRow) * 0.5f - 0.5f) * distance;
 	}
 	else {
-		startX = -(float(kMaxBlockRow) * 0.5f) * distance;
+		startX = -(float(GameProperty::MaxBlockRow) * 0.5f) * distance;
 	}
-	for (uint32_t y = 0; y < kMaxBlockColumn; y++) {
-		for (uint32_t x = 0; x < kMaxBlockRow; x++) {
+	for (uint32_t y = 0; y < GameProperty::MaxBlockColumn; y++) {
+		for (uint32_t x = 0; x < GameProperty::MaxBlockRow; x++) {
 			auto block = std::make_shared<Block>();
 			Vector3 position(startX + x * distance, y * -distance, 0.0f);
 			block->Initialize(position);

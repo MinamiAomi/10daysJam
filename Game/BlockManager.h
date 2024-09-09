@@ -11,7 +11,5 @@ public:
 
 	void Reset();
 private:
-	static const uint32_t kMaxBlockRow;
-	static const uint32_t kMaxBlockColumn;
 	std::list<std::shared_ptr<Block>> blocks_;
 };

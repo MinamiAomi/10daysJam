@@ -3,6 +3,9 @@
 #include "Engine/Math/MathUtils.h"
 
 namespace GameProperty {
-	// 中心からの距離になってますねこれ
-	const Vector2 GameStageSize = { 60.0f,36.0f };
+	const uint32_t MaxBlockRow = 10;
+	const uint32_t MaxBlockColumn = 5;
+	const uint32_t BlockSize = 2;
+	// 中心から
+	const Vector2 GameStageSize = { float(MaxBlockRow) ,36.0f };
 }
