@@ -23,6 +23,8 @@
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapBlock.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="BulletManager.cpp" />
   </ItemGroup>
@@ -36,6 +38,10 @@
     <ClInclude Include="CollisionAttribute.h" />
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapBlock.h" />
+    <ClInclude Include="MapSection.h" />
+    <ClInclude Include="MapTileBase.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="BulletManager.h" />
   </ItemGroup>
