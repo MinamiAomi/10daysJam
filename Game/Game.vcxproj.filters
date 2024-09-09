@@ -16,6 +16,9 @@
     <Filter Include="Externals">
       <UniqueIdentifier>{dca3c85e-ef89-4b02-a25e-66b266dd535f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Particle">
+      <UniqueIdentifier>{39f5bae8-408d-4888-baa0-79113bc71721}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -40,6 +43,12 @@
       <Filter>Game\Object</Filter>
     </ClCompile>
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="BlockParticles.cpp">
+      <Filter>Game\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockParticle.cpp">
+      <Filter>Game\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h" />
@@ -70,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="GameProperty.h">
       <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockParticles.h">
+      <Filter>Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockParticle.h">
+      <Filter>Game\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
