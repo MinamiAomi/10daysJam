@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include <numbers>
+
 #include "Input/input.h"
 #include "Framework/AssetManager.h"
 
@@ -14,7 +16,7 @@ void Player::Initialize() {
 	collider_->SetGameObject(this->shared_from_this());
 	collider_->SetCallback([this](const CollisionInfo& collisionInfo) { OnCollision(collisionInfo); });
 	collider_->SetCollisionAttribute(CollisionAttribute::Player);
-	collider_->SetCollisionMask(CollisionAttribute::PlayerBullet | CollisionAttribute::Block);
+	collider_->SetCollisionMask(CollisionAttribute::PlayerBullet | CollisionAttribute::EnemyBullet | CollisionAttribute::Block);
 	collider_->SetIsActive(true);
 
 	Reset();
@@ -22,12 +24,72 @@ void Player::Initialize() {
 
 void Player::Reset() {
 	fireTime_ = 0.0f;
+	invincibleTime_ = 0.0f;
+	velocity_ = 0.2f;
+	currentVector_ = { 0.0f,-1.0f,0.0f };
 
-	canJump_ = true;
-	velocity_ = Vector3::zero;
 	transform.translate.y = initializePosition_;
 
 	UpdateTransform();
+}
+
+void Player::Move() {
+	auto input = Input::GetInstance();
+	auto gamepad = input->GetXInputState();
+	float AngularVelocity = 0.1f;  // Steering speed
+	//float velocity_ = 0.1f;        // Movement speed
+
+	// Move
+	{
+		Vector3 move{};
+
+		// Handle input for movement direction
+		if (std::abs(gamepad.Gamepad.sThumbLX) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.x = gamepad.Gamepad.sThumbLX / 32767.0f; }
+		if (std::abs(gamepad.Gamepad.sThumbLY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.y = gamepad.Gamepad.sThumbLY / 32767.0f; }
+		if (input->IsKeyPressed(DIK_A)) { move.x += -1.0f; }
+		if (input->IsKeyPressed(DIK_D)) { move.x += 1.0f; }
+		if (input->IsKeyPressed(DIK_W)) { move.y += 1.0f; }
+		if (input->IsKeyPressed(DIK_S)) { move.y += -1.0f; }
+
+		if (move != Vector3::zero) {
+			//float angle = 0.0f;
+			//Vector3 from = { 0.0f, 1.0f, 0.0f };  // Default forward direction
+			//Vector3 to = move.Normalized();
+
+			//// Calculate the angle difference between current forward and input direction
+			//float dot = Vector3::Dot(to, from);
+			//Vector2 Vector2From = { from.x, from.y };
+			//Vector2 Vector2To = { to.x, to.y };
+
+			//if (dot >= 1.0f) {
+			//	angle = 0.0f;
+			//}
+			//else if (dot <= -1.0f) {
+			//	angle = 180.0f * std::numbers::pi_v<float> / 180.0f;
+			//}
+			//else if (Vector2::Cross(Vector2To, Vector2From) > 0) {
+			//	angle = -std::acosf(dot);  // Turn left
+			//}
+			//else {
+			//	angle = std::acosf(dot);   // Turn right
+			//}
+
+			//// Smoothly interpolate to the target angle
+
+			//angle_ = std::lerp(angle_, angle * Math::ToDegree, AngularVelocity);
+
+			currentVector_ = Vector3::Slerp(AngularVelocity, currentVector_, move.Normalized()).Normalized();
+			//transform.rotate = Quaternion::MakeFromTwoVector(currentVector_, move.Normalized());
+		}
+
+		// Move forward in the direction of the current angle
+		//Vector3 forwardDirection = Quaternion::MakeForZAxis(angle_ * Math::ToRadian).GetUp();
+		transform.translate += currentVector_.Normalized() * velocity_;
+
+		// Limit player movement within stage bounds
+		//transform.translate.x = std::clamp(transform.translate.x, -GameProperty::GameStageSize.x, GameProperty::GameStageSize.x);
+	}
+
 }
 
 void Player::FireBullet() {
@@ -49,7 +111,17 @@ void Player::FireBullet() {
 	}
 }
 
+void Player::UpdateInvincible() {
+	if (invincibleTime_ > 0.0f) {
+		invincibleTime_ -= 1.0f;
+	}
+	else {
+		model_.SetColor({ 1.0f, 1.0f, 1.0f });
+	}
+}
+
 void Player::UpdateTransform() {
+
 	transform.UpdateMatrix();
 	// 怪しい
 	collider_->SetSize({ 2.0f,4.0f,2.0f });
@@ -60,55 +132,20 @@ void Player::UpdateTransform() {
 
 void Player::OnCollision(const CollisionInfo& collisionInfo) {
 	if (collisionInfo.gameObject->GetName() == "Block") {
-		// 着地
-		if (Vector3::Dot(collisionInfo.normal, Vector3(0.0f, 1.0f, 0.0f)) >= 0.8f) {
-			canJump_ = true;
-			velocity_.y = 0.0f;
-		}
 		transform.translate += collisionInfo.depth * collisionInfo.normal;
 		UpdateTransform();
+	}
+	if (collisionInfo.gameObject->GetName() == "EnemyBullet") {
+		model_.SetColor({ 1.0f, 0.0f, 0.0f });
+		invincibleTime_ = invincibleInterval_;
 	}
 }
 
 
 void Player::Update() {
-	auto input = Input::GetInstance();
-	auto gamepad = input->GetXInputState();
-	// Move
-	{
-		Vector3 move;
-		velocity_.x = 0.0f;
-		if (std::abs(gamepad.Gamepad.sThumbLX) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.x = gamepad.Gamepad.sThumbLX / 255.0f; }
-		if (std::abs(gamepad.Gamepad.sThumbLY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.z = gamepad.Gamepad.sThumbLY / 255.0f; }
-		if (input->IsKeyPressed(DIK_A)) { move.x = -1.0f; }
-		if (input->IsKeyPressed(DIK_D)) { move.x = 1.0f; }
-		float acceleration = 0.0f;
-		bool jumpInputFlag = input->IsKeyTrigger(DIK_W) || input->IsGamepadButtonPressed(GamepadButton::A);
-		if (jumpInputFlag && canJump_) {
-			acceleration = 0.8f;
-			canJump_ = false;
-		}
-		if (move != Vector3::zero) {
-			move = move.Normalized() * 0.4f;
-			velocity_.x += move.x;
-		}
-		velocity_.y += acceleration;
-		velocity_.y -= 0.03f;
-		velocity_.y = (std::max)(velocity_.y, -1.0f);
-		transform.translate += velocity_;
-		// プレイヤー反転
-		if (transform.translate.x > GameProperty::GameStageSize.x) {
-			transform.translate.x = -GameProperty::GameStageSize.x;
-		}
-		else if (transform.translate.x < -GameProperty::GameStageSize.x) {
-			transform.translate.x = GameProperty::GameStageSize.x;
-		}
-		if (transform.translate.y <= -GameProperty::GameStageSize.y) {
-			transform.translate.y = GameProperty::GameStageSize.y;
-		}
-	}
-
+	Move();
 	FireBullet();
+	UpdateInvincible();
 	UpdateTransform();
-	     
+
 }

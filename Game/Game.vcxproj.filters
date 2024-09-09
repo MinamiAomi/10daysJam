@@ -42,6 +42,9 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="BlockParticles.cpp">
       <Filter>Game\Particle</Filter>
