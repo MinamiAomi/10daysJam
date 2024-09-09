@@ -1,7 +1,7 @@
 #include "BlockManager.h"
 
 const uint32_t BlockManager::kMaxBlockRow = 60;
-const uint32_t BlockManager::kMaxBlockColumn = 10;
+const uint32_t BlockManager::kMaxBlockColumn = 5;
 
 void BlockManager::Initialize() {
 	Reset();
