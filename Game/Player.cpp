@@ -26,7 +26,8 @@ void Player::Reset() {
 	fireTime_ = 0.0f;
 	invincibleTime_ = 0.0f;
 	velocity_ = 0.2f;
-	currentVector_ = { 0.0f,-1.0f,0.0f };
+	angle_ = 270.0f;
+	currentVector_ = { 0.0f,1.0f,0.0f };
 
 	transform.translate.y = initializePosition_;
 
@@ -36,9 +37,9 @@ void Player::Reset() {
 void Player::Move() {
 	auto input = Input::GetInstance();
 	auto gamepad = input->GetXInputState();
-	float AngularVelocity = 0.1f;  // Steering speed
+	float AngularVelocity = 2.0f;  // Steering speed
 	//float velocity_ = 0.1f;        // Movement speed
-
+	// 
 	// Move
 	{
 		Vector3 move{};
@@ -46,45 +47,18 @@ void Player::Move() {
 		// Handle input for movement direction
 		if (std::abs(gamepad.Gamepad.sThumbLX) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.x = gamepad.Gamepad.sThumbLX / 32767.0f; }
 		if (std::abs(gamepad.Gamepad.sThumbLY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.y = gamepad.Gamepad.sThumbLY / 32767.0f; }
-		if (input->IsKeyPressed(DIK_A)) { move.x += -1.0f; }
-		if (input->IsKeyPressed(DIK_D)) { move.x += 1.0f; }
-		if (input->IsKeyPressed(DIK_W)) { move.y += 1.0f; }
-		if (input->IsKeyPressed(DIK_S)) { move.y += -1.0f; }
-
-		if (move != Vector3::zero) {
-			//float angle = 0.0f;
-			//Vector3 from = { 0.0f, 1.0f, 0.0f };  // Default forward direction
-			//Vector3 to = move.Normalized();
-
-			//// Calculate the angle difference between current forward and input direction
-			//float dot = Vector3::Dot(to, from);
-			//Vector2 Vector2From = { from.x, from.y };
-			//Vector2 Vector2To = { to.x, to.y };
-
-			//if (dot >= 1.0f) {
-			//	angle = 0.0f;
-			//}
-			//else if (dot <= -1.0f) {
-			//	angle = 180.0f * std::numbers::pi_v<float> / 180.0f;
-			//}
-			//else if (Vector2::Cross(Vector2To, Vector2From) > 0) {
-			//	angle = -std::acosf(dot);  // Turn left
-			//}
-			//else {
-			//	angle = std::acosf(dot);   // Turn right
-			//}
-
-			//// Smoothly interpolate to the target angle
-
-			//angle_ = std::lerp(angle_, angle * Math::ToDegree, AngularVelocity);
+		if (input->IsKeyPressed(DIK_A)) { angle_ -= AngularVelocity; }
+		if (input->IsKeyPressed(DIK_D)) { angle_ += AngularVelocity; }
+		float angle = angle_ * Math::ToRadian;
+		move = { std::cosf(angle),std::sinf(angle),0.0f };
+		/*if (move != Vector3::zero) {
 
 			currentVector_ = Vector3::Slerp(AngularVelocity, currentVector_, move.Normalized()).Normalized();
-			//transform.rotate = Quaternion::MakeFromTwoVector(currentVector_, move.Normalized());
-		}
+		}*/
 
-		// Move forward in the direction of the current angle
-		//Vector3 forwardDirection = Quaternion::MakeForZAxis(angle_ * Math::ToRadian).GetUp();
-		transform.translate += currentVector_.Normalized() * velocity_;
+		transform.translate += move * velocity_;
+		Quaternion rotate = Quaternion::MakeForXAxis(Math::HalfPi);
+		transform.rotate = Quaternion::MakeLookRotation(move) * rotate;
 
 		// Limit player movement within stage bounds
 		//transform.translate.x = std::clamp(transform.translate.x, -GameProperty::GameStageSize.x, GameProperty::GameStageSize.x);
