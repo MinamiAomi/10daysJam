@@ -35,9 +35,19 @@ void GameScene::OnInitialize() {
 	player_->Initialize();
 	player_->SetBulletManager(bulletManager_);
 
+	blockParticles_ = std::make_shared<BlockParticles>();
+	blockParticles_->Initialize(player_.get());
 }
 
 void GameScene::OnUpdate() {
+
+	Input* input = Input::GetInstance();
+
+	if (input->IsKeyTrigger(DIK_P)) {
+		blockParticles_->Emit({ 0.0f,5.0f,0.0f });
+	}
+
+	blockParticles_->Update();
 
 	blockManager_->Update();
 	enemyManager_->Update();
@@ -46,7 +56,6 @@ void GameScene::OnUpdate() {
 
 	CollisionManager::GetInstance()->CheckCollision();
 
-	Input* input = Input::GetInstance();
 
 	auto mouseMoveX = input->GetMouseMoveX();
 	auto mouseMoveY = input->GetMouseMoveY();
