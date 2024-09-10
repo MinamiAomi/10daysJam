@@ -22,12 +22,15 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="FollowCamera.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapBlock.cpp" />
+    <ClCompile Include="MapBomb.cpp" />
     <ClCompile Include="MapCollider.cpp" />
+    <ClCompile Include="MapGravity.cpp" />
     <ClCompile Include="MapSection.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="BulletManager.cpp" />
@@ -39,6 +42,7 @@
     <ClInclude Include="BlockParticles.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="GameProperty.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="CollisionAttribute.h" />
@@ -46,7 +50,9 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapBlock.h" />
+    <ClInclude Include="MapBomb.h" />
     <ClInclude Include="MapCollider.h" />
+    <ClInclude Include="MapGravity.h" />
     <ClInclude Include="MapProperty.h" />
     <ClInclude Include="MapSection.h" />
     <ClInclude Include="MapTileBase.h" />

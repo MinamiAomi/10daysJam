@@ -6,6 +6,27 @@
         "playerBullet": "playerBullet.gltf",
         "enemy": "enemy.gltf",
         "enemyBullet": "enemyBullet.gltf",
-        "block": "block.gltf"
+        "blockParticle_0": "blockParticle_0.obj",
+        "blockParticle_1": "blockParticle_1.obj",
+        "blockParticle_2": "blockParticle_2.obj",
+        "blockParticle_3": "blockParticle_3.obj",
+        "blockParticle_4": "blockParticle_4.obj",
+        "blockParticle_5": "blockParticle_5.obj",
+        "blockParticle_6": "blockParticle_6.obj",
+        "blockParticle_7": "blockParticle_7.obj",
+        "blockParticle_8": "blockParticle_8.obj",
+        "blockParticle_9": "blockParticle_9.obj",
+        "blockParticle_10": "blockParticle_10.obj",
+        "blockParticle_11": "blockParticle_11.obj",
+        "blockParticle_12": "blockParticle_12.obj",
+        "blockParticle_13": "blockParticle_13.obj",
+        "blockParticle_14": "blockParticle_14.obj",
+        "blockParticle_15": "blockParticle_15.obj",
+        "blockParticle_16": "blockParticle_16.obj",
+        "blockParticle_17": "blockParticle_17.obj",
+        "blockParticle_18": "blockParticle_18.obj",
+        "blockParticle_19": "blockParticle_19.obj",
+        "block": "block.gltf",
+        "gravity": "gravity.gltf"
     } 
 }

@@ -357,6 +357,7 @@
     <ClCompile Include="Graphics\Sky.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="File\JsonHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\BaseScene.h">
@@ -688,6 +689,9 @@
     </ClInclude>
     <ClInclude Include="Graphics\Sky.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="File\JsonHelper.h">
+      <Filter>File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

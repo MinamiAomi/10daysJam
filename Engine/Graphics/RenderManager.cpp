@@ -66,6 +66,7 @@ void RenderManager::Finalize() {
     auto imguiManager = ImGuiManager::GetInstance();
     imguiManager->Shutdown();
 
+
     DefaultTexture::Finalize();
 }
 
@@ -144,8 +145,9 @@ void RenderManager::Render() {
 
     graphics_->GetReleasedObjectTracker().FrameIncrementForRelease();
 
-    imguiManager->NewFrame();
 
     timer_.KeepFrameRate(60);
+    imguiManager->NewFrame();
+
 
 }

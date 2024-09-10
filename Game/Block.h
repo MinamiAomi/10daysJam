@@ -8,15 +8,49 @@
 
 #include "Engine/Collision/Collider.h"
 
-class Block :public GameObject {
+class BlockParticles;
+
+class Block : public GameObject {
 public:
-	void Initialize(const Vector3& position);
-	void Update();
+	virtual void Initialize(const Vector3& position) = 0;
+	virtual void Update() = 0;
 	bool GetIsAlive() { return isAlive_; }
-private:
-	void OnCollision(const CollisionInfo& info);
-	void UpdateTransform();
+protected:
+	virtual void OnCollision(const CollisionInfo& info) = 0;
+	virtual void UpdateTransform() = 0;
 	std::shared_ptr<BoxCollider> collider_;
 	bool isAlive_;
 	ModelInstance model_;
+};
+
+
+class NormalBlock :public Block {
+public:
+	void Initialize(const Vector3& position) override;
+	void Update() override;
+
+	void SetBlockParticles(BlockParticles* blockParticles) { blockParticle_ = blockParticles; }
+
+private:
+	BlockParticles* blockParticle_ = nullptr;
+	void OnCollision(const CollisionInfo& info) override;
+	void UpdateTransform()override;
+};
+
+class ExplosionBlock :public Block {
+public:
+	void Initialize(const Vector3& position) override;
+	void Update() override;
+private:
+	void OnCollision(const CollisionInfo& info) override;
+	void UpdateTransform()override;
+};
+
+class GravityBlock :public Block {
+public:
+	void Initialize(const Vector3& position) override;
+	void Update() override;
+private:
+	void OnCollision(const CollisionInfo& info) override;
+	void UpdateTransform()override;
 };

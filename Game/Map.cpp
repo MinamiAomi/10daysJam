@@ -6,6 +6,7 @@
 #include "Externals/nlohmann/json.hpp"
 
 #include "MapBlock.h"
+#include "MapGravity.h"
 #include "MapSection.h"
 
 namespace {
@@ -66,20 +67,20 @@ namespace {
 
 void Map::Initialize() {
 
-    Load();
+	Load();
 
-    for (uint32_t i = 0; i < 10; ++i) {
-        uint32_t addSectionIndex = rng_.NextUIntRange(0, (uint32_t)sections_.size() - 1);
-        AddSection(addSectionIndex);
-    }
+	for (uint32_t i = 0; i < 10; ++i) {
+		uint32_t addSectionIndex = rng_.NextUIntRange(0, (uint32_t)sections_.size() - 1);
+		AddSection(addSectionIndex);
+	}
 }
 
 void Map::Update() {
-    for (auto& [key, tile] : tileInstanceList_) {
-        if (tile->IsActive()) {
-            tile->OnUpdate();
-        }
-    }
+	for (auto& [key, tile] : tileInstanceList_) {
+		if (tile->IsActive()) {
+			tile->OnUpdate();
+		}
+	}
 }
 
 void Map::CheckCollision() {
@@ -187,44 +188,53 @@ void Map::Load() {
 }
 
 void Map::AddSection(uint32_t sectionIndex) {
-    assert(sectionIndex < sections_.size());
-    // 追加する区画の種類
-    sectionOrder_.emplace_back(sectionIndex);
-    auto& section = *sections_[sectionIndex];
-    // 追加するタイルデータ
-    const auto& addTileData = section.GetTileData();
-    // 現状の行
-    uint16_t baseRow = (uint16_t)tileData_.size();
-    // 追加
-    tileData_.insert(tileData_.end(), addTileData.begin(), addTileData.end());
-    // タイルのインスタンスを追加
-    for (uint16_t row = 0; row < addTileData.size(); ++row) {
-        for (uint16_t column = 0; column < MapProperty::kMapColumn; ++column) {
-            auto tile = addTileData[row][column];
-            uint16_t mapRow = row + baseRow, mapColumn = column;
-            auto tileInstance = CreateTileInstance(tile, mapRow, mapColumn);
-            if (tileInstance) {
-                tileInstanceList_[PosKey(mapRow, mapColumn)] = std::move(tileInstance);
-            }
-        }
-    }
+	assert(sectionIndex < sections_.size());
+	// 追加する区画の種類
+	sectionOrder_.emplace_back(sectionIndex);
+	auto& section = *sections_[sectionIndex];
+	// 追加するタイルデータ
+	const auto& addTileData = section.GetTileData();
+	// 現状の行
+	uint16_t baseRow = (uint16_t)tileData_.size();
+	// 追加
+	tileData_.insert(tileData_.end(), addTileData.begin(), addTileData.end());
+	// タイルのインスタンスを追加
+	for (uint16_t row = 0; row < addTileData.size(); ++row) {
+		for (uint16_t column = 0; column < MapProperty::kMapColumn; ++column) {
+			auto tile = addTileData[row][column];
+			uint16_t mapRow = row + baseRow, mapColumn = column;
+			auto tileInstance = CreateTileInstance(tile, mapRow, mapColumn);
+			if (tileInstance) {
+				tileInstanceList_[PosKey(mapRow, mapColumn)] = std::move(tileInstance);
+			}
+		}
+	}
 }
 
 std::unique_ptr<MapTileBase> Map::CreateTileInstance(Tile::Enum tile, uint16_t row, uint16_t column) {
-    std::unique_ptr<MapTileBase> instance;
-    switch (tile) {
-    case Tile::Block: {
-        auto block = std::make_unique<MapBlock>(*this, row, column);
-        instance = std::move(block);
-        break;
-    }
-    case Tile::Air:
-    default:
-        break;
-    }
+	std::unique_ptr<MapTileBase> instance;
+	switch (tile) {
+	case Tile::Block:
+	{
+		auto block = std::make_unique<MapBlock>(*this, row, column);
+		//block->SetPlayer();
+		instance = std::move(block);
+		break;
+	}
+	case Tile::Gravity:
+	{
+		auto block = std::make_unique<MapGravity>(*this, row, column);
+		block->SetPlayer(player_);
+		instance = std::move(block);
+		break;
+	}
+	case Tile::Air:
+	default:
+		break;
+	}
 
-    if (instance) {
-        instance->OnInitialize();
-    }
-    return instance;
+	if (instance) {
+		instance->OnInitialize();
+	}
+	return instance;
 }

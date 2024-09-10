@@ -2,7 +2,10 @@
 
 #include "GameProperty.h"
 
-void BlockManager::Initialize() {
+#include "BlockParticles.h"
+
+void BlockManager::Initialize(BlockParticles* blockParticles) {
+	blockParticles_ = blockParticles;
 	Reset();
 }
 
@@ -21,10 +24,32 @@ void BlockManager::Update() {
 	}
 }
 
+void BlockManager::Create(const Vector3& position, const BlockType::Type& type) {
+	switch (type) {
+	case BlockType::kNormal:
+	{
+		auto block = std::make_shared<NormalBlock>();
+		block->Initialize(position);
+		block->SetBlockParticles(blockParticles_);
+		blocks_.emplace_back(block);
+
+	}
+	break;
+	case BlockType::kExplosion:
+	{
+		auto block = std::make_shared<ExplosionBlock>();
+		block->Initialize(position);
+		blocks_.emplace_back(block);
+	}
+	break;
+	default:
+		break;
+	}
+}
+
 void BlockManager::Reset() {
 	blocks_.clear();
-
-	//float distance = 2.0f;
+  //float distance = 2.0f;
 	//float startX = 0.0f;
 	//uint32_t num = GameProperty::MaxBlockRow;
 	//// 奇数or偶数
@@ -36,10 +61,9 @@ void BlockManager::Reset() {
 	//}
 	//for (uint32_t y = 0; y < GameProperty::MaxBlockColumn; y++) {
 	//	for (uint32_t x = 0; x < GameProperty::MaxBlockRow; x++) {
-	//		auto block = std::make_shared<Block>();
 	//		Vector3 position(startX + x * distance, y * -distance, 0.0f);
-	//		block->Initialize(position);
-	//		blocks_.emplace_back(block);
+	//		Create(position, BlockType::kNormal);
 	//	}
 	//}
+
 }
