@@ -2,6 +2,11 @@
 
 #include "GameProperty.h"
 
+#include "BlockParticles.h"
+
+void BlockManager::Initialize(BlockParticles* blockParticles) {
+	blockParticles_ = blockParticles;
+	//Reset();
 void BlockManager::Initialize() {
 	Reset();
 }
@@ -27,7 +32,9 @@ void BlockManager::Create(const Vector3& position, const BlockType::Type& type) 
 	{
 		auto block = std::make_shared<NormalBlock>();
 		block->Initialize(position);
+		block->SetBlockParticles(blockParticles_);
 		blocks_.emplace_back(block);
+
 	}
 	break;
 	case BlockType::kExplosion:

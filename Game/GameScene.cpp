@@ -20,12 +20,14 @@ void GameScene::OnInitialize() {
 	sunLight_->direction = Vector3(0.0f, -1.0f, 0.0f).Normalized();
 	RenderManager::GetInstance()->SetSunLight(sunLight_);
 
+	blockParticles_ = std::make_shared<BlockParticles>();
+	blockParticles_->Initialize(player_.get());
 
 	bulletManager_ = std::make_shared<BulletManager>();
 	bulletManager_->Initialize();
 
 	blockManager_ = std::make_shared<BlockManager>();
-	blockManager_->Initialize();
+	blockManager_->Initialize(blockParticles_.get());
 
 	enemyManager_ = std::make_shared<EnemyManager>();
 	enemyManager_->Initialize();
@@ -46,6 +48,14 @@ void GameScene::OnInitialize() {
 
 void GameScene::OnUpdate() {
 
+	Input* input = Input::GetInstance();
+
+	if (input->IsKeyTrigger(DIK_P)) {
+		blockParticles_->Emit({ 0.0f,5.0f,0.0f });
+	}
+
+	blockParticles_->Update();
+
 	blockManager_->Update();
 	enemyManager_->Update();
 	player_->Update();
@@ -54,7 +64,6 @@ void GameScene::OnUpdate() {
 
 	CollisionManager::GetInstance()->CheckCollision();
 
-	Input* input = Input::GetInstance();
 
 	//auto mouseMoveX = input->GetMouseMoveX();
 	//auto mouseMoveY = input->GetMouseMoveY();

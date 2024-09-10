@@ -8,6 +8,8 @@
 
 #include "Engine/Collision/Collider.h"
 
+class BlockParticles;
+
 class Block : public GameObject {
 public:
 	virtual void Initialize(const Vector3& position) = 0;
@@ -26,7 +28,11 @@ class NormalBlock :public Block {
 public:
 	void Initialize(const Vector3& position) override;
 	void Update() override;
+
+	void SetBlockParticles(BlockParticles* blockParticles) { blockParticle_ = blockParticles; }
+
 private:
+	BlockParticles* blockParticle_ = nullptr;
 	void OnCollision(const CollisionInfo& info) override;
 	void UpdateTransform()override;
 };

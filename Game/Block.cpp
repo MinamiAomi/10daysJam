@@ -3,6 +3,8 @@
 #include "Framework/AssetManager.h"
 #include "CollisionAttribute.h"
 
+#include "BlockParticles.h"
+
 void NormalBlock::Initialize(const Vector3& position) {
 	SetName("NormalBlock");
 	model_.SetModel(AssetManager::GetInstance()->FindModel("block"));
@@ -25,9 +27,11 @@ void NormalBlock::Update() {
 void NormalBlock::OnCollision(const CollisionInfo& info) {
 	if (info.gameObject->GetName() == "PlayerBullet") {
 		isAlive_ = false;
+		blockParticle_->Emit(transform.translate);
 	}
 	if (info.gameObject->GetName() == "Player") {
 		isAlive_ = false;
+		blockParticle_->Emit(transform.translate);
 	}
 }
 
