@@ -3,7 +3,7 @@
 #include "GameProperty.h"
 
 void BlockManager::Initialize() {
-	//Reset();
+	Reset();
 }
 
 void BlockManager::Update() {
@@ -58,12 +58,7 @@ void BlockManager::Reset() {
 	for (uint32_t y = 0; y < GameProperty::MaxBlockColumn; y++) {
 		for (uint32_t x = 0; x < GameProperty::MaxBlockRow; x++) {
 			Vector3 position(startX + x * distance, y * -distance, 0.0f);
-			if (y % 2 == 0) {
-				Create(position, BlockType::kNormal);
-			}
-			else {
-				Create(position, BlockType::kExplosion);
-			}
+			Create(position, BlockType::kNormal);
 		}
 	}
 }
