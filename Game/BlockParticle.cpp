@@ -14,7 +14,6 @@ void BlockParticle::Emit(const Vector3& position,const Math::Sphere& sphere,int 
 	std::string str = "blockParticle_";
 	model_.SetModel(AssetManager::GetInstance()->FindModel(str + std::to_string(index)));
 	model_.SetColor({ 1.0f,0.0f,0.0f });
-	SetIsActive(isAlive_);
 	transform.translate = position;
 	transform.rotate = Quaternion::identity;
 	collSphere_ = sphere;
