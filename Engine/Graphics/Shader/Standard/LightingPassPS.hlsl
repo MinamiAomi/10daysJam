@@ -47,7 +47,7 @@ PSOutput main(PSInput input) {
         output.color.a = 1.0f;
         return output;
     }
-   
+
     float32_t3 position = GetWorldPosition(input.texcoord);
     float32_t3 normal = g_Normal.SampleLevel(g_DefaultSampler, input.texcoord, 0) * 2.0f - 1.0f;
     float32_t3 albedo = g_Albedo.SampleLevel(g_DefaultSampler, input.texcoord, 0).xyz;
@@ -75,6 +75,7 @@ PSOutput main(PSInput input) {
     //reflectedLight.directSpecular += SpecularIBL(geometry.normal, geometry.viewDirection, material.specularReflectance, material.specularRoughness);
 
     float32_t3 color = reflectedLight.directDiffuse + reflectedLight.directSpecular;
+    //color = albedo;
 
     output.color.rgb = color;
     output.color.a = 1.0f;

@@ -15,6 +15,7 @@
 #include "Game/BlockManager.h"
 #include "Game/EnemyManager.h"
 #include "Game/Player.h"
+#include "Game/FollowCamera.h"
 
 class GameScene :
     public BaseScene {
@@ -32,6 +33,7 @@ private:
     std::shared_ptr<BulletManager> bulletManager_;
     std::shared_ptr<BlockManager> blockManager_;
     std::shared_ptr<EnemyManager> enemyManager_;
+    std::shared_ptr<FollowCamera> followCamera_;
     std::shared_ptr<Player> player_;
 
 };

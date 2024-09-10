@@ -21,6 +21,27 @@ void BlockManager::Update() {
 	}
 }
 
+void BlockManager::Create(const Vector3& position, const BlockType::Type& type) {
+	switch (type) {
+	case BlockType::kNormal:
+	{
+		auto block = std::make_shared<NormalBlock>();
+		block->Initialize(position);
+		blocks_.emplace_back(block);
+	}
+	break;
+	case BlockType::kExplosion:
+	{
+		auto block = std::make_shared<ExplosionBlock>();
+		block->Initialize(position);
+		blocks_.emplace_back(block);
+	}
+	break;
+	default:
+		break;
+	}
+}
+
 void BlockManager::Reset() {
 	blocks_.clear();
 
@@ -36,10 +57,13 @@ void BlockManager::Reset() {
 	}
 	for (uint32_t y = 0; y < GameProperty::MaxBlockColumn; y++) {
 		for (uint32_t x = 0; x < GameProperty::MaxBlockRow; x++) {
-			auto block = std::make_shared<Block>();
 			Vector3 position(startX + x * distance, y * -distance, 0.0f);
-			block->Initialize(position);
-			blocks_.emplace_back(block);
+			if (y % 2 == 0) {
+				Create(position, BlockType::kNormal);
+			}
+			else {
+				Create(position, BlockType::kExplosion);
+			}
 		}
 	}
 }

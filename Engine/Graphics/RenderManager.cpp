@@ -3,6 +3,7 @@
 #include "Core/ShaderManager.h"
 #include "DefaultTextures.h"
 #include "GameWindow.h"
+#include "ImGuiManager.h"
 
 #include "Framework/Engine.h"
 
@@ -52,12 +53,20 @@ void RenderManager::Initialize() {
     //computeShaderTester_.Dispatch(commandContext_);
     //commandContext_.Finish(true);
 
+    auto imguiManager = ImGuiManager::GetInstance();
+    imguiManager->Initialize(window->GetHWND(), finalImageBuffer_.GetRTVFormat());
+    imguiManager->NewFrame();
+
     timer_.Initialize();
 
     frameCount_ = 0;
 }
 
 void RenderManager::Finalize() {
+    auto imguiManager = ImGuiManager::GetInstance();
+    imguiManager->Shutdown();
+
+
     DefaultTexture::Finalize();
 }
 
@@ -111,6 +120,9 @@ void RenderManager::Render() {
 
     postEffect_.Render(commandContext_, fxaa_.GetResult());
 
+    auto imguiManager = ImGuiManager::GetInstance();
+    imguiManager->Render(commandContext_);
+
     auto& swapChainBuffer = swapChain_.GetColorBuffer(targetSwapChainBufferIndex);
 
     commandContext_.CopyBuffer(swapChainBuffer, finalImageBuffer_);
@@ -132,5 +144,7 @@ void RenderManager::Render() {
     graphics_->GetReleasedObjectTracker().FrameIncrementForRelease();
 
     timer_.KeepFrameRate(60);
+
+    imguiManager->NewFrame();
 
 }

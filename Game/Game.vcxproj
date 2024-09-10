@@ -22,6 +22,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="FollowCamera.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -35,6 +36,7 @@
     <ClInclude Include="BlockParticles.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="FollowCamera.h" />
     <ClInclude Include="GameProperty.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="CollisionAttribute.h" />

@@ -8,6 +8,8 @@
 #include "CollisionAttribute.h"
 #include "Engine/Math/MathUtils.h"
 #include "Game/GameProperty.h"
+#include "Engine/Graphics/ImGuiManager.h"
+#include "Engine/File/JsonHelper.h"
 
 void Player::Initialize() {
 	SetName("Player");
@@ -18,52 +20,74 @@ void Player::Initialize() {
 	collider_->SetCollisionAttribute(CollisionAttribute::Player);
 	collider_->SetCollisionMask(CollisionAttribute::PlayerBullet | CollisionAttribute::EnemyBullet | CollisionAttribute::Block);
 	collider_->SetIsActive(true);
-
 	Reset();
 }
 
 void Player::Reset() {
 	fireTime_ = 0.0f;
 	invincibleTime_ = 0.0f;
-	velocity_ = 0.2f;
-	angle_ = 270.0f;
-	currentVector_ = { 0.0f,1.0f,0.0f };
+	JSON_OPEN("Resources/Data/Player/player.json");
+	JSON_LOAD(speed_);
+	JSON_LOAD(initializePosition_);
+	JSON_LOAD(directionSpeed_);
+	JSON_CLOSE();
 
-	transform.translate.y = initializePosition_;
-
+	currentVector_ = { 0.0f,-1.0f,0.0f };
+	velocity_ = currentVector_ * speed_;
+	transform.translate = initializePosition_;
+	transform.rotate = Quaternion::MakeLookRotation(-currentVector_, Vector3::forward);
 	UpdateTransform();
 }
 
 void Player::Move() {
 	auto input = Input::GetInstance();
 	auto gamepad = input->GetXInputState();
-	float AngularVelocity = 2.0f;  // Steering speed
-	//float velocity_ = 0.1f;        // Movement speed
-	// 
 	// Move
 	{
 		Vector3 move{};
-
-		// Handle input for movement direction
+		Vector3 directionAcceleration{};
+		// ゲームパッドのスティックで移動を処理
 		if (std::abs(gamepad.Gamepad.sThumbLX) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.x = gamepad.Gamepad.sThumbLX / 32767.0f; }
 		if (std::abs(gamepad.Gamepad.sThumbLY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.y = gamepad.Gamepad.sThumbLY / 32767.0f; }
-		if (input->IsKeyPressed(DIK_A)) { angle_ -= AngularVelocity; }
-		if (input->IsKeyPressed(DIK_D)) { angle_ += AngularVelocity; }
-		float angle = angle_ * Math::ToRadian;
-		move = { std::cosf(angle),std::sinf(angle),0.0f };
-		/*if (move != Vector3::zero) {
 
-			currentVector_ = Vector3::Slerp(AngularVelocity, currentVector_, move.Normalized()).Normalized();
-		}*/
+		// Aキーが押されている間、加速を適用
+		if (input->IsKeyPressed(DIK_A)) {
+			directionAcceleration = Vector3(currentVector_.y, -currentVector_.x, currentVector_.z) * directionSpeed_;
+			UpdateRotate(velocity_.Normalized());
+		}
 
-		transform.translate += move * velocity_;
-		Quaternion rotate = Quaternion::MakeForXAxis(Math::HalfPi);
-		transform.rotate = Quaternion::MakeLookRotation(move) * rotate;
+		// Dキーが押されている間、加速を適用
+		if (input->IsKeyPressed(DIK_D)) {
+			directionAcceleration = Vector3(-currentVector_.y, currentVector_.x, currentVector_.z) * directionSpeed_;
+			UpdateRotate(velocity_.Normalized());
+		}
 
-		// Limit player movement within stage bounds
-		//transform.translate.x = std::clamp(transform.translate.x, -GameProperty::GameStageSize.x, GameProperty::GameStageSize.x);
+		// Wキーで前進
+		if (input->IsKeyPressed(DIK_W)) {
+			directionAcceleration = Vector3(currentVector_.x, currentVector_.y, currentVector_.z) * -directionSpeed_;  // 後退
+		}
+
+		// Sキーで後退
+		if (input->IsKeyPressed(DIK_S)) {
+			directionAcceleration = Vector3(currentVector_.x, currentVector_.y, currentVector_.z) * directionSpeed_;  // 前進
+		}
+
+		// 速度に加速度を加算
+		velocity_ += directionAcceleration;
+		// プレイヤーの位置を更新
+		transform.translate += velocity_;
 	}
+}
 
+void Player::UpdateRotate(const Vector3& vector) {
+	// 速度ベクトルを正規化して向きを計算
+	currentVector_ = (vector).Normalized();
+	// 向きを調整
+	float dotProduct = Dot(currentVector_, Vector3::down);
+	if (dotProduct < 0.999f) {
+		//回転クッソ怪しい
+		transform.rotate = Quaternion::MakeLookRotation(-currentVector_, Vector3::forward);
+	}
 }
 
 void Player::FireBullet() {
@@ -105,8 +129,13 @@ void Player::UpdateTransform() {
 }
 
 void Player::OnCollision(const CollisionInfo& collisionInfo) {
-	if (collisionInfo.gameObject->GetName() == "Block") {
+	if (collisionInfo.gameObject->GetName() == "NormalBlock") {
 		transform.translate += collisionInfo.depth * collisionInfo.normal;
+		UpdateTransform();
+	}
+	if (collisionInfo.gameObject->GetName() == "ExplosionBlock") {
+		velocity_ += Vector3(collisionInfo.normal.x, collisionInfo.normal.y, 0.0f) * 0.3f;
+		UpdateRotate(velocity_.Normalized());
 		UpdateTransform();
 	}
 	if (collisionInfo.gameObject->GetName() == "EnemyBullet") {
@@ -115,11 +144,37 @@ void Player::OnCollision(const CollisionInfo& collisionInfo) {
 	}
 }
 
+void Player::Debug() {
+	ImGui::Begin("GameObject");
+	if (ImGui::BeginMenu("Player")) {
+		ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
+		ImGui::DragFloat3("currentVector", &currentVector_.x, 0.1f);
+		if (ImGui::TreeNode("Property")) {
+			ImGui::DragFloat3("initializePosition", &initializePosition_.x, 0.1f);
+			ImGui::DragFloat("speed", &speed_, 0.01f);
+			ImGui::DragFloat("directionSpeed_", &directionSpeed_, 0.01f);
+			if (ImGui::Button("Save")) {
+				JSON_OPEN("Resources/Data/Player/player.json");
+				JSON_SAVE(speed_);
+				JSON_SAVE(initializePosition_);
+				JSON_SAVE(directionSpeed_);
+				JSON_CLOSE();
+			}
+
+			ImGui::TreePop();
+		}
+		ImGui::EndMenu();
+	}
+	ImGui::End();
+}
+
 
 void Player::Update() {
 	Move();
 	FireBullet();
 	UpdateInvincible();
 	UpdateTransform();
-
+#ifdef _DEBUG
+	Debug();
+#endif // _DEBUG
 }

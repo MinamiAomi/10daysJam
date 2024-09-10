@@ -52,6 +52,7 @@
     <ClCompile Include="BlockParticle.cpp">
       <Filter>Game\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="FollowCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameBase.h" />
@@ -88,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="BlockParticle.h">
       <Filter>Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowCamera.h">
+      <Filter>Game\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
