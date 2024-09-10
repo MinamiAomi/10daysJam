@@ -10,6 +10,7 @@
 #include "Game/GameProperty.h"
 #include "Engine/Graphics/ImGuiManager.h"
 #include "Engine/File/JsonHelper.h"
+#include "Map.h"
 
 void Player::Initialize(Map* map) {
 	SetName("Player");

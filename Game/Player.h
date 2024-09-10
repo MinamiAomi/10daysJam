@@ -9,7 +9,8 @@
 #include "Engine/Collision/Collider.h"
 #include "BulletManager.h"
 #include "MapCollider.h"
-#include "Map.h"
+
+class Map;
 
 class Player : public GameObject {
 public:
