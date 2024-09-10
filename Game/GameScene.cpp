@@ -119,6 +119,7 @@ void GameScene::OnUpdate() {
 		blockManager_->Reset();
 		enemyManager_->Reset();
 		player_->Reset();
+		followCamera_->Reset();
 	}
 
 
