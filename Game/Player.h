@@ -8,10 +8,12 @@
 
 #include "Engine/Collision/Collider.h"
 #include "BulletManager.h"
+#include "MapCollider.h"
+#include "Map.h"
 
 class Player : public GameObject {
 public:
-	void Initialize();
+	void Initialize(Map* map);
 	void Update();
 
 	void Reset();
@@ -24,6 +26,7 @@ private:
 	void OnCollision(const CollisionInfo& collisionInfo);
 	ModelInstance model_;
 	std::shared_ptr<BoxCollider> collider_;
+	std::shared_ptr<MapCollider> mapCollider_;
 
 	float initializePosition_ = 4.0f;
 	float velocity_ = 0.2f;

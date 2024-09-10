@@ -31,12 +31,13 @@ void GameScene::OnInitialize() {
 	enemyManager_->Initialize();
 	enemyManager_->SetBulletManager(bulletManager_);
 
-	player_ = std::make_shared<Player>();
-	player_->Initialize();
-	player_->SetBulletManager(bulletManager_);
-
 	map_ = std::make_shared<Map>();
 	map_->Initialize();
+
+	player_ = std::make_shared<Player>();
+	player_->Initialize(map_.get());
+	player_->SetBulletManager(bulletManager_);
+
 }
 
 void GameScene::OnUpdate() {
@@ -46,6 +47,7 @@ void GameScene::OnUpdate() {
 	player_->Update();
 	bulletManager_->Update();
 
+	map_->CheckCollision();
 	CollisionManager::GetInstance()->CheckCollision();
 
 	Input* input = Input::GetInstance();

@@ -24,22 +24,22 @@ void BlockManager::Update() {
 void BlockManager::Reset() {
 	blocks_.clear();
 
-	float distance = 2.0f;
-	float startX = 0.0f;
-	uint32_t num = GameProperty::MaxBlockRow;
-	// 奇数or偶数
-	if (num % 2 == 0) {
-		startX = -(float(GameProperty::MaxBlockRow) * 0.5f - 0.5f) * distance;
-	}
-	else {
-		startX = -(float(GameProperty::MaxBlockRow) * 0.5f) * distance;
-	}
-	for (uint32_t y = 0; y < GameProperty::MaxBlockColumn; y++) {
-		for (uint32_t x = 0; x < GameProperty::MaxBlockRow; x++) {
-			auto block = std::make_shared<Block>();
-			Vector3 position(startX + x * distance, y * -distance, 0.0f);
-			block->Initialize(position);
-			blocks_.emplace_back(block);
-		}
-	}
+	//float distance = 2.0f;
+	//float startX = 0.0f;
+	//uint32_t num = GameProperty::MaxBlockRow;
+	//// 奇数or偶数
+	//if (num % 2 == 0) {
+	//	startX = -(float(GameProperty::MaxBlockRow) * 0.5f - 0.5f) * distance;
+	//}
+	//else {
+	//	startX = -(float(GameProperty::MaxBlockRow) * 0.5f) * distance;
+	//}
+	//for (uint32_t y = 0; y < GameProperty::MaxBlockColumn; y++) {
+	//	for (uint32_t x = 0; x < GameProperty::MaxBlockRow; x++) {
+	//		auto block = std::make_shared<Block>();
+	//		Vector3 position(startX + x * distance, y * -distance, 0.0f);
+	//		block->Initialize(position);
+	//		blocks_.emplace_back(block);
+	//	}
+	//}
 }
