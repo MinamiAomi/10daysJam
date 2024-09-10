@@ -16,7 +16,7 @@ void EnemyManager::Initialize() {
 void EnemyManager::Update() {
 	time_--;
 	if (time_ <= 0) {
-		Create();
+		//Create();
 	}
 	for (auto it = enemies_.begin(); it != enemies_.end(); ) {
 		auto& enemy = *it;
