@@ -13,7 +13,7 @@ void PlayerBullet::Initialize(const Vector3& position, const Vector3& velocity) 
 	isAlive_ = true;
 
 	collider_ = std::make_shared<SphereCollider>();
-	collider_->SetGameObject(this->shared_from_this());
+	collider_->SetGameObject(this);
 	collider_->SetCallback([this](const CollisionInfo& collisionInfo) { OnCollision(collisionInfo); });
 	collider_->SetCollisionAttribute(CollisionAttribute::PlayerBullet);
 	collider_->SetCollisionMask(CollisionAttribute::Enemy);
@@ -63,7 +63,7 @@ void EnemyBullet::Initialize(const Vector3& position, const Vector3& velocity) {
 	isAlive_ = true;
 
 	collider_ = std::make_shared<SphereCollider>();
-	collider_->SetGameObject(this->shared_from_this());
+	collider_->SetGameObject(this);
 	collider_->SetCallback([this](const CollisionInfo& collisionInfo) { OnCollision(collisionInfo); });
 	collider_->SetCollisionAttribute(CollisionAttribute::EnemyBullet);
 	collider_->SetCollisionMask(CollisionAttribute::Player);

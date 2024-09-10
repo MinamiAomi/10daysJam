@@ -15,6 +15,7 @@
 #include "Game/BlockManager.h"
 #include "Game/EnemyManager.h"
 #include "Game/Player.h"
+#include "Game/Map.h"
 #include "Game/FollowCamera.h"
 
 class GameScene :
@@ -35,5 +36,7 @@ private:
     std::shared_ptr<EnemyManager> enemyManager_;
     std::shared_ptr<FollowCamera> followCamera_;
     std::shared_ptr<Player> player_;
+    
+    std::shared_ptr<Map> map_;
 
 };

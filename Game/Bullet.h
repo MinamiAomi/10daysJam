@@ -7,6 +7,7 @@
 #include "Graphics/Skeleton.h"
 
 #include "Engine/Collision/Collider.h"
+
 class Bullet : public GameObject {
 public:
 	virtual void Initialize(const Vector3& position, const Vector3& velocity) = 0;

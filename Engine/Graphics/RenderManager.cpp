@@ -127,6 +127,8 @@ void RenderManager::Render() {
 
     commandContext_.CopyBuffer(swapChainBuffer, finalImageBuffer_);
 
+    // ImGuiを描画
+
     commandContext_.TransitionResource(swapChainBuffer, D3D12_RESOURCE_STATE_PRESENT);
 
     // コマンドリスト完成(クローズ)
@@ -142,6 +144,8 @@ void RenderManager::Render() {
     commandContext_.Finish(false);
 
     graphics_->GetReleasedObjectTracker().FrameIncrementForRelease();
+
+    imguiManager->NewFrame();
 
     timer_.KeepFrameRate(60);
 

@@ -39,6 +39,8 @@ void GameScene::OnInitialize() {
 	followCamera_->Initialize();
 	followCamera_->SetPlayer(player_);
 	followCamera_->SetCamera(camera_);
+	map_ = std::make_shared<Map>();
+	map_->Initialize();
 }
 
 void GameScene::OnUpdate() {

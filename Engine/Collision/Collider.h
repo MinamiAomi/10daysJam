@@ -12,13 +12,13 @@ class SphereCollider;
 class BoxCollider;
 
 struct CollisionInfo {
-    std::shared_ptr<GameObject> gameObject;
+    GameObject* gameObject;
     Vector3 normal;
     float depth;
 };
 
 struct RayCastInfo {
-    std::shared_ptr<GameObject> gameObject;
+    GameObject* gameObject;
     float nearest;
 };
 class Collider {
@@ -34,7 +34,7 @@ public:
     virtual bool IsCollision(BoxCollider* collider, CollisionInfo& collisionInfo) = 0;
     virtual bool RayCast(const Vector3& origin, const Vector3& diff, uint32_t mask, RayCastInfo& nearest) = 0;
 
-    void SetGameObject(const std::shared_ptr<GameObject>& gameObject) { gameObject_ = gameObject; }
+    void SetGameObject(GameObject* gameObject) { gameObject_ = gameObject; }
     void SetCallback(Callback callback) { callback_ = callback; }
     void SetCollisionAttribute(uint32_t attribute) { collisionAttribute_ = attribute; }
     void SetCollisionMask(uint32_t mask) { collisionMask_ = mask; }
@@ -42,14 +42,14 @@ public:
 
     void OnCollision(const CollisionInfo& collisionInfo);
 
-    std::shared_ptr<GameObject> GetGameObject() { return gameObject_.lock(); }
+    GameObject* GetGameObject() { return gameObject_; }
     bool IsActive() const { return isActive_; }
 
 protected:
     bool CanCollision(Collider* other) const;
     bool CanCollision(uint32_t mask) const;
 
-    std::weak_ptr<GameObject> gameObject_;
+    GameObject* gameObject_;
 
     Callback callback_;
     uint32_t collisionAttribute_ = 0xFFFFFFFF;
