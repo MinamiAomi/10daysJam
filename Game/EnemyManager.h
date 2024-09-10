@@ -20,6 +20,6 @@ private:
 	Random::RandomNumberGenerator rnd_;
 	std::list<std::shared_ptr<Enemy>> enemies_;      
 	std::shared_ptr<BulletManager> bulletManager_;
-	int32_t interval_ = 60;
+	int32_t interval_ = 90;
 	int32_t time_ = 0;
 };

@@ -16,6 +16,9 @@
     <Filter Include="Game\Map">
       <UniqueIdentifier>{feb422a7-8a42-4759-b3c3-226ff9c9c406}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Particle">
+      <UniqueIdentifier>{39f5bae8-408d-4888-baa0-79113bc71721}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -57,6 +60,16 @@
     </ClCompile>
     <ClCompile Include="MapCollider.cpp">
       <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="BlockParticles.cpp">
+      <Filter>Game\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockParticle.cpp">
+      <Filter>Game\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +123,12 @@
     </ClInclude>
     <ClInclude Include="MapCollider.h">
       <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockParticles.h">
+      <Filter>Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockParticle.h">
+      <Filter>Game\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
