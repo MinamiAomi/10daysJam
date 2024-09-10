@@ -8,7 +8,7 @@ void NormalEnemy::Initialize(const Vector3& position) {
 	SetName("Enemy");
 	model_.SetModel(AssetManager::GetInstance()->FindModel("enemy"));
 	collider_ = std::make_shared<SphereCollider>();
-	collider_->SetGameObject(this->shared_from_this());
+	collider_->SetGameObject(this);
 	collider_->SetCallback([this](const CollisionInfo& collisionInfo) { OnCollision(collisionInfo); });
 	collider_->SetCollisionAttribute(CollisionAttribute::Enemy);
 	collider_->SetCollisionMask(CollisionAttribute::Player | CollisionAttribute::PlayerBullet);

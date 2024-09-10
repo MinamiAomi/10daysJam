@@ -52,6 +52,12 @@
     <ClCompile Include="MapBlock.cpp">
       <Filter>Game\Map</Filter>
     </ClCompile>
+    <ClCompile Include="MapSection.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCollider.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -97,6 +103,12 @@
       <Filter>Game\Map</Filter>
     </ClInclude>
     <ClInclude Include="MapBlock.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapProperty.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCollider.h">
       <Filter>Game\Map</Filter>
     </ClInclude>
   </ItemGroup>
