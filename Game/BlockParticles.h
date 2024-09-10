@@ -20,6 +20,7 @@ public:
 	void Update();
 private:
 	Player* player_ = nullptr;
+	Random::RandomNumberGenerator rnd_;
 	std::array<BlockParticle, kBlockParticleNum> blockParticles_;
 	std::vector<Math::Sphere> blockParticleSpheres_;
 	std::vector<Vector3> blockParticlesPositions_;

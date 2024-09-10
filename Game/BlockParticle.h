@@ -13,7 +13,7 @@ public:
 	static const int kTime_ = 180;
 
 	void Initialize();
-	void Emit(const Vector3& position, const Math::Sphere& sphere, int index);
+	void Emit(const Vector3& position, const Vector3& velocity, const Math::Sphere& sphere, int index);
 	void Update();
 
 	bool GetIsAlive() { return isAlive_; };
@@ -27,5 +27,6 @@ private:
 	int time_ = 0;
 	int index_ = 0;
 	ModelInstance model_;
+	std::shared_ptr<Material> material_;
 	Math::Sphere collSphere_;
 };
