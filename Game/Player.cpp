@@ -13,7 +13,7 @@ void Player::Initialize() {
 	SetName("Player");
 	model_.SetModel(AssetManager::GetInstance()->FindModel("player"));
 	collider_ = std::make_shared<BoxCollider>();
-	collider_->SetGameObject(this->shared_from_this());
+	collider_->SetGameObject(this);
 	collider_->SetCallback([this](const CollisionInfo& collisionInfo) { OnCollision(collisionInfo); });
 	collider_->SetCollisionAttribute(CollisionAttribute::Player);
 	collider_->SetCollisionMask(CollisionAttribute::PlayerBullet | CollisionAttribute::EnemyBullet | CollisionAttribute::Block);
