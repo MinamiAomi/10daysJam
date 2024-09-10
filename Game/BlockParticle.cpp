@@ -37,13 +37,13 @@ void BlockParticle::Update() {
 		transform.rotate *= Quaternion::MakeFromAngleAxis(rotationSpeed,{1.0f,1.0f,1.0f});
 	}
 	//床にはねる ここをマップチップに
-	if (transform.translate.y <= 1.0f + collSphere_.radius) {
+	/*if (transform.translate.y <= 1.0f + collSphere_.radius) {
 		transform.translate.y = 1.0f + collSphere_.radius;
 		if (-velocity_.y <= collSphere_.radius) {
 			isGround_ = true;
 		}
 		velocity_ = -velocity_ * 0.5f;
-	}
+	}*/
 	model_.SetIsActive(isAlive_);
 
 	UpdateTransform();
