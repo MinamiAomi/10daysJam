@@ -27,5 +27,6 @@ private:
 	int time_ = 0;
 	int index_ = 0;
 	ModelInstance model_;
+	std::shared_ptr<Material> material_;
 	Math::Sphere collSphere_;
 };

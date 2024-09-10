@@ -13,6 +13,9 @@ void BlockParticles::Initialize(Player* player) {
 	player_ = player;
 	Utility::Positions("blockParticlePosition.txt", blockParticlesPositions_);
 	Utility::Spheres("blockParticleSphere.txt", blockParticleSpheres_);
+	for (int i = 0; i < kBlockParticleNum; i++) {
+		blockParticles_[i].Initialize();	
+	}
 }
 
 void BlockParticles::Emit(const Vector3& position)
