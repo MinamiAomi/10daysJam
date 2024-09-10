@@ -13,5 +13,6 @@ struct Tile {
 
 namespace MapProperty {
     static const uint32_t kMapColumn = 12;
+    static const float kBlockSize = 2.0f;
     using RowData = std::array<Tile::Enum, kMapColumn>;
 }
