@@ -116,7 +116,7 @@ void GameScene::OnUpdate() {
 	//}
 	if (input->IsKeyTrigger(DIK_R)) {
 		bulletManager_->Reset();
-		//blockManager_->Reset();
+		blockManager_->Reset();
 		enemyManager_->Reset();
 		player_->Reset();
 	}
