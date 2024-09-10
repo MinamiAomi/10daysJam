@@ -11,7 +11,7 @@
 #include "Engine/Graphics/ImGuiManager.h"
 #include "Engine/File/JsonHelper.h"
 
-void Player::Initialize() {
+void Player::Initialize(Map* map) {
 	SetName("Player");
 	model_.SetModel(AssetManager::GetInstance()->FindModel("player"));
 	collider_ = std::make_shared<BoxCollider>();
@@ -20,6 +20,15 @@ void Player::Initialize() {
 	collider_->SetCollisionAttribute(CollisionAttribute::Player);
 	collider_->SetCollisionMask(CollisionAttribute::PlayerBullet | CollisionAttribute::EnemyBullet | CollisionAttribute::Block);
 	collider_->SetIsActive(true);
+  
+  mapCollider_ = std::make_shared<MapCollider>();
+    mapCollider_->SetMode(MapCollider::Break);
+    mapCollider_->SetSize({ 2.0f, 4.0f });
+    mapCollider_->SetPosition(transform.translate.GetXY());
+    mapCollider_->SetRotate(transform.rotate.EulerAngle().z);
+    mapCollider_->SetIsActive(true);
+    map->AddCollider(mapCollider_);
+  
 	Reset();
 }
 
@@ -96,41 +105,44 @@ void Player::UpdateRotate(const Vector3& vector) {
 }
 
 void Player::FireBullet() {
-	auto input = Input::GetInstance();
-	auto gamepad = input->GetXInputState();
-	// Bullet
-	{
-		// インターバルカウント
-		if (fireTime_ > 0.0f) {
-			fireTime_ -= 1.0f;
-		}
-		// 弾発射
-		if (input->IsKeyPressed(DIK_SPACE) &&
-			fireTime_ <= 0.0f) {
-			bulletManager_->FireBullet(transform.translate, { 0.0f,-0.5f,0.0f }, CollisionAttribute::PlayerBullet);
-			fireTime_ = fireInterval_;
-		}
-		bulletManager_->Update();
-	}
+    auto input = Input::GetInstance();
+    auto gamepad = input->GetXInputState();
+    // Bullet
+    {
+        // インターバルカウント
+        if (fireTime_ > 0.0f) {
+            fireTime_ -= 1.0f;
+        }
+        // 弾発射
+        if (input->IsKeyPressed(DIK_SPACE) &&
+            fireTime_ <= 0.0f) {
+            bulletManager_->FireBullet(transform.translate, { 0.0f,-0.5f,0.0f }, CollisionAttribute::PlayerBullet);
+            fireTime_ = fireInterval_;
+        }
+        bulletManager_->Update();
+    }
 }
 
 void Player::UpdateInvincible() {
-	if (invincibleTime_ > 0.0f) {
-		invincibleTime_ -= 1.0f;
-	}
-	else {
-		model_.SetColor({ 1.0f, 1.0f, 1.0f });
-	}
+    if (invincibleTime_ > 0.0f) {
+        invincibleTime_ -= 1.0f;
+    }
+    else {
+        model_.SetColor({ 1.0f, 1.0f, 1.0f });
+    }
 }
 
 void Player::UpdateTransform() {
 
-	transform.UpdateMatrix();
-	// 怪しい
-	collider_->SetSize({ 2.0f,4.0f,2.0f });
-	collider_->SetCenter(transform.worldMatrix.GetTranslate());
-	collider_->SetOrientation(transform.worldMatrix.GetRotate());
-	model_.SetWorldMatrix(transform.worldMatrix);
+    transform.UpdateMatrix();
+    // 怪しい
+    collider_->SetSize({ 2.0f,4.0f,2.0f });
+    collider_->SetCenter(transform.worldMatrix.GetTranslate());
+    collider_->SetOrientation(transform.worldMatrix.GetRotate());
+    model_.SetWorldMatrix(transform.worldMatrix);
+
+    mapCollider_->SetPosition(transform.translate.GetXY());
+    mapCollider_->SetRotate(transform.rotate.EulerAngle().z);
 }
 
 void Player::OnCollision(const CollisionInfo& collisionInfo) {

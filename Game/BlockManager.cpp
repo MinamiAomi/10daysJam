@@ -49,21 +49,21 @@ void BlockManager::Create(const Vector3& position, const BlockType::Type& type) 
 
 void BlockManager::Reset() {
 	blocks_.clear();
+  //float distance = 2.0f;
+	//float startX = 0.0f;
+	//uint32_t num = GameProperty::MaxBlockRow;
+	//// 奇数or偶数
+	//if (num % 2 == 0) {
+	//	startX = -(float(GameProperty::MaxBlockRow) * 0.5f - 0.5f) * distance;
+	//}
+	//else {
+	//	startX = -(float(GameProperty::MaxBlockRow) * 0.5f) * distance;
+	//}
+	//for (uint32_t y = 0; y < GameProperty::MaxBlockColumn; y++) {
+	//	for (uint32_t x = 0; x < GameProperty::MaxBlockRow; x++) {
+	//		Vector3 position(startX + x * distance, y * -distance, 0.0f);
+	//		Create(position, BlockType::kNormal);
+	//	}
+	//}
 
-	float distance = 2.0f;
-	float startX = 0.0f;
-	uint32_t num = GameProperty::MaxBlockRow;
-	// 奇数or偶数
-	if (num % 2 == 0) {
-		startX = -(float(GameProperty::MaxBlockRow) * 0.5f - 0.5f) * distance;
-	}
-	else {
-		startX = -(float(GameProperty::MaxBlockRow) * 0.5f) * distance;
-	}
-	for (uint32_t y = 0; y < GameProperty::MaxBlockColumn; y++) {
-		for (uint32_t x = 0; x < GameProperty::MaxBlockRow; x++) {
-			Vector3 position(startX + x * distance, y * -distance, 0.0f);
-			Create(position, BlockType::kNormal);
-		}
-	}
 }
