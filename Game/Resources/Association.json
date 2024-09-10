@@ -6,6 +6,7 @@
         "playerBullet": "playerBullet.gltf",
         "enemy": "enemy.gltf",
         "enemyBullet": "enemyBullet.gltf",
-        "block": "block.gltf"
+        "block": "block.gltf",
+        "gravity": "gravity.gltf"
     } 
 }

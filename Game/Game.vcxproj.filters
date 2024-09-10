@@ -72,6 +72,8 @@
       <Filter>Game\Particle</Filter>
     </ClCompile>
     <ClCompile Include="FollowCamera.cpp" />
+    <ClCompile Include="MapBomb.cpp" />
+    <ClCompile Include="MapGravity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -133,6 +135,12 @@
     </ClInclude>
     <ClInclude Include="FollowCamera.h">
       <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBomb.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapGravity.h">
+      <Filter>Game\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -43,7 +43,7 @@ void ExplosionBlock::Initialize(const Vector3& position) {
 	SetName("ExplosionBlock");
 	model_.SetModel(AssetManager::GetInstance()->FindModel("block"));
 	collider_ = std::make_shared<BoxCollider>();
-	collider_->SetGameObject(this->shared_from_this());
+	collider_->SetGameObject(this);
 	collider_->SetCallback([this](const CollisionInfo& collisionInfo) { OnCollision(collisionInfo); });
 	collider_->SetCollisionAttribute(CollisionAttribute::Block);
 	collider_->SetCollisionMask(CollisionAttribute::Player | CollisionAttribute::PlayerBullet);

@@ -28,7 +28,9 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapBlock.cpp" />
+    <ClCompile Include="MapBomb.cpp" />
     <ClCompile Include="MapCollider.cpp" />
+    <ClCompile Include="MapGravity.cpp" />
     <ClCompile Include="MapSection.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="BulletManager.cpp" />
@@ -48,7 +50,9 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapBlock.h" />
+    <ClInclude Include="MapBomb.h" />
     <ClInclude Include="MapCollider.h" />
+    <ClInclude Include="MapGravity.h" />
     <ClInclude Include="MapProperty.h" />
     <ClInclude Include="MapSection.h" />
     <ClInclude Include="MapTileBase.h" />

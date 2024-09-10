@@ -16,6 +16,8 @@ public:
 
 	void Reset();
 	void SetBulletManager(std::shared_ptr<BulletManager> bulletManager) { bulletManager_ = bulletManager; }
+
+	void AddGravity(const Vector3& vector);
 private:
 	void Move();
 	void UpdateRotate(const Vector3& vector);
@@ -33,6 +35,8 @@ private:
 	float speed_;
 	// 方向
 	float directionSpeed_;
+	// 重力
+	float gravity_;
 
 #pragma region Invincible
 	// インターバル

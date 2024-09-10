@@ -12,13 +12,13 @@ void BlockParticle::Initialize() {
 
 void BlockParticle::Emit(const Vector3& position) {
 	isAlive_ = true;
-	SetIsActive(isAlive_);
+	//SetIsActive(isAlive_);
 	transform.translate = position;
 	UpdateTransform();
 }
 
 void BlockParticle::Update() {
-	SetIsActive(isAlive_);
+	//SetIsActive(isAlive_);
 	UpdateTransform();
 }
 

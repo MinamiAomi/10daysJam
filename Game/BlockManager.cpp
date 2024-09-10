@@ -3,7 +3,7 @@
 #include "GameProperty.h"
 
 void BlockManager::Initialize() {
-	Reset();
+	//Reset();
 }
 
 void BlockManager::Update() {

@@ -30,6 +30,7 @@ void Player::Reset() {
 	JSON_LOAD(speed_);
 	JSON_LOAD(initializePosition_);
 	JSON_LOAD(directionSpeed_);
+	JSON_LOAD(gravity_);
 	JSON_CLOSE();
 
 	currentVector_ = { 0.0f,-1.0f,0.0f };
@@ -37,6 +38,10 @@ void Player::Reset() {
 	transform.translate = initializePosition_;
 	transform.rotate = Quaternion::MakeLookRotation(-currentVector_, Vector3::forward);
 	UpdateTransform();
+}
+
+void Player::AddGravity(const Vector3& vector) {
+	velocity_ += vector * gravity_;
 }
 
 void Player::Move() {
@@ -152,12 +157,14 @@ void Player::Debug() {
 		if (ImGui::TreeNode("Property")) {
 			ImGui::DragFloat3("initializePosition", &initializePosition_.x, 0.1f);
 			ImGui::DragFloat("speed", &speed_, 0.01f);
-			ImGui::DragFloat("directionSpeed_", &directionSpeed_, 0.01f);
+			ImGui::DragFloat("directionSpeed", &directionSpeed_, 0.01f);
+			ImGui::DragFloat("gravity", &gravity_, 0.01f);
 			if (ImGui::Button("Save")) {
 				JSON_OPEN("Resources/Data/Player/player.json");
 				JSON_SAVE(speed_);
 				JSON_SAVE(initializePosition_);
 				JSON_SAVE(directionSpeed_);
+				JSON_SAVE(gravity_);
 				JSON_CLOSE();
 			}
 
