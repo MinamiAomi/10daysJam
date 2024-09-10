@@ -6,7 +6,6 @@
         "playerBullet": "playerBullet.gltf",
         "enemy": "enemy.gltf",
         "enemyBullet": "enemyBullet.gltf",
-        "block": "block.gltf",
         "blockParticle_0": "blockParticle_0.obj",
         "blockParticle_1": "blockParticle_1.obj",
         "blockParticle_2": "blockParticle_2.obj",
@@ -27,5 +26,7 @@
         "blockParticle_17": "blockParticle_17.obj",
         "blockParticle_18": "blockParticle_18.obj",
         "blockParticle_19": "blockParticle_19.obj"
+        "block": "block.gltf",
+        "gravity": "gravity.gltf"
     } 
 }

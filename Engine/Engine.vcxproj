@@ -184,6 +184,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="File\JsonConverter.cpp" />
+    <ClCompile Include="File\JsonHelper.cpp" />
     <ClCompile Include="Framework\Engine.cpp" />
     <ClCompile Include="Framework\AssetManager.cpp" />
     <ClCompile Include="Framework\ThreadPool.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Externals\ImGui\imgui_stdlib.h" />
     <ClInclude Include="File\JsonConverter.h" />
+    <ClInclude Include="File\JsonHelper.h" />
     <ClInclude Include="Framework\AssetManager.h" />
     <ClInclude Include="Framework\ThreadPool.h" />
     <ClInclude Include="GameObject\GameObject.h" />

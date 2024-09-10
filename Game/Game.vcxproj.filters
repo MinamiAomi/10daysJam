@@ -10,11 +10,11 @@
     <Filter Include="Game\Object">
       <UniqueIdentifier>{290ad31e-91cf-4cd6-b3fe-027fa36fb487}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Component">
-      <UniqueIdentifier>{787af317-f60c-4c1f-8130-6e0279e570de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Externals">
       <UniqueIdentifier>{dca3c85e-ef89-4b02-a25e-66b266dd535f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Map">
+      <UniqueIdentifier>{feb422a7-8a42-4759-b3c3-226ff9c9c406}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Particle">
       <UniqueIdentifier>{39f5bae8-408d-4888-baa0-79113bc71721}</UniqueIdentifier>
@@ -22,8 +22,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="GameBase.cpp" />
-    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Player.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
@@ -42,6 +40,27 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBase.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapBlock.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapSection.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapCollider.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
     <ClCompile Include="EnemyManager.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
@@ -52,10 +71,11 @@
     <ClCompile Include="BlockParticle.cpp">
       <Filter>Game\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="FollowCamera.cpp" />
+    <ClCompile Include="MapBomb.cpp" />
+    <ClCompile Include="MapGravity.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameBase.h" />
-    <ClInclude Include="GameScene.h" />
     <ClInclude Include="Player.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
@@ -83,11 +103,44 @@
     <ClInclude Include="GameProperty.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBase.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MapSection.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTileBase.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBlock.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapProperty.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapCollider.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
     <ClInclude Include="BlockParticles.h">
       <Filter>Game\Particle</Filter>
     </ClInclude>
     <ClInclude Include="BlockParticle.h">
       <Filter>Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowCamera.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBomb.h">
+      <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapGravity.h">
+      <Filter>Game\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
