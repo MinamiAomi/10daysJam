@@ -28,7 +28,6 @@ void GameScene::OnInitialize() {
 	blockParticles_ = std::make_shared<BlockParticles>();
 	blockParticles_->Initialize();
 
-
 	map_->SetPlayer(player_);
 	map_->SetBlockParticles(blockParticles_);
 	map_->SetScore(score_);
