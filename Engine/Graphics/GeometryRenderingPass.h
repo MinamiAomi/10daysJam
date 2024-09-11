@@ -15,7 +15,8 @@ public:
     struct RootIndex {
         enum Parameters {
             Scene,
-            Instance,
+            InstanceOrOffset,
+            Instances,
             Material,
             BindlessTexture,
 
@@ -39,4 +40,5 @@ private:
 
     RootSignature rootSignature_;
     PipelineState pipelineState_;
+    StructuredBuffer instancingBuffer_;
 };

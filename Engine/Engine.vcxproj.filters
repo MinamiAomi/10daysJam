@@ -875,6 +875,12 @@
     <None Include="Graphics\Shader\Particle\UpdateParticleCS.hlsl">
       <Filter>Graphics\Shader\Particle</Filter>
     </None>
+    <None Include="Graphics\Shader\Standard\GeometryPassInstancingPS.hlsl">
+      <Filter>Graphics\Shader\Standard</Filter>
+    </None>
+    <None Include="Graphics\Shader\Standard\GeometryPassInstancingVS.hlsl">
+      <Filter>Graphics\Shader\Standard</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Externals\ImGui\LICENSE.txt">

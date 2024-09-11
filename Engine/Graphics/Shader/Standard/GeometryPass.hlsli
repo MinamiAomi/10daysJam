@@ -12,15 +12,27 @@ struct Instance {
     float4x4 worldMatrix;
     float4x4 worldInverseTransposeMatrix;
 };
+struct InstanceOffset {
+    uint32_t offset;
+};
+#ifndef USE_INSTANCING
+// GeometryPassVS
 ConstantBuffer<Instance> g_Instance : register(b1);
+#else
+// GeometryPassInstancingVS
+StructuredBuffer<Instance> g_Instances : register(t1);
+ConstantBuffer<InstanceOffset> g_InstanceOffset : register(b1);
+#endif
 
 struct Material {
     float3 albedo;
     float metallic;
     float roughness;
     uint albedoMapIndex;
+#ifndef USE_INSTANCING
     uint metallicRoughnessMapIndex;
     uint normalMapIndex;
+#endif
 };
 ConstantBuffer<Material> g_Material : register(b2);
 

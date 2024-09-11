@@ -31,6 +31,7 @@ void GeometryRenderingPass::Initialize(uint32_t width, uint32_t height) {
     RootSignatureDescHelper rootSignatureDesc;
     rootSignatureDesc.AddConstantBufferView(0);
     rootSignatureDesc.AddConstantBufferView(1);
+    rootSignatureDesc.AddDescriptorTable().AddSRVDescriptors(1, 1);
     rootSignatureDesc.AddConstantBufferView(2);
     rootSignatureDesc.AddDescriptorTable().AddSRVDescriptors(BINDLESS_RESOURCE_MAX, 0, 1);
     rootSignatureDesc.AddStaticSampler(0, D3D12_FILTER_MIN_MAG_MIP_POINT);
@@ -129,6 +130,15 @@ void GeometryRenderingPass::Render(CommandContext& commandContext, const Camera&
     commandContext.ClearColor(normal_);
     commandContext.ClearDepth(depth_);
 
+    auto& modelMap = modelSorter.GetModelInstanceMap();
+    auto& instanceList = modelSorter.GetDrawModels();
+    if (instanceList.empty()) {
+        return;
+    }
+    
+
+
+
     D3D12_CPU_DESCRIPTOR_HANDLE rtvs[] = {
         albedo_.GetRTV(),
         metallicRoughness_.GetRTV(),
@@ -155,7 +165,7 @@ void GeometryRenderingPass::Render(CommandContext& commandContext, const Camera&
         InstanceData instanceData;
         instanceData.worldMatrix = /*model->GetRootNode().localMatrix **/ instance->GetWorldMatrix();
         instanceData.worldInverseTransposeMatrix = instanceData.worldMatrix.Inverse().Transpose();
-        commandContext.SetDynamicConstantBufferView(RootIndex::Instance, sizeof(instanceData), &instanceData);
+        commandContext.SetDynamicConstantBufferView(RootIndex::InstanceOrOffset, sizeof(instanceData), &instanceData);
 
         auto instanceMaterial = instance->GetMaterial();
 
