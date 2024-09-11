@@ -67,20 +67,24 @@ namespace {
 
 void Map::Initialize() {
 
-	Load();
+    Load();
 
-	for (uint32_t i = 0; i < 10; ++i) {
-		uint32_t addSectionIndex = rng_.NextUIntRange(0, (uint32_t)sections_.size() - 1);
-		AddSection(addSectionIndex);
-	}
+    Generate();
 }
 
 void Map::Update() {
-	for (auto& [key, tile] : tileInstanceList_) {
-		if (tile->IsActive()) {
-			tile->OnUpdate();
-		}
-	}
+    for (auto& [key, tile] : tileInstanceList_) {
+        if (tile->IsActive()) {
+            tile->OnUpdate();
+        }
+    }
+}
+
+void Map::Generate() {
+    for (uint32_t i = 0; i < 10; ++i) {
+        uint32_t addSectionIndex = rng_.NextUIntRange(0, (uint32_t)sections_.size() - 1);
+        AddSection(addSectionIndex);
+    }
 }
 
 void Map::CheckCollision() {
@@ -168,6 +172,17 @@ void Map::RemoveCollider(const std::shared_ptr<MapCollider>& collider) {
     colliders_.remove(collider);
 }
 
+Map::PosKey Map::CalcTilePosition(const Vector2& worldPosition) {
+    float invBlockSize = 1.0f / MapProperty::kBlockSize;
+    Vector2 tilePosition = { (worldPosition.x + MapProperty::kMapColumn) * invBlockSize, worldPosition.y * -invBlockSize };
+    tilePosition.x = std::max(tilePosition.x, 0.0f);
+    tilePosition.y = std::max(tilePosition.y, 0.0f);
+    PosKey posKey((uint16_t)tilePosition.y, (uint16_t)tilePosition.x);
+    posKey.row = std::min((uint16_t)posKey.row, (uint16_t)(tileData_.size() - 1));
+    posKey.column = std::min((uint16_t)posKey.column, (uint16_t)(MapProperty::kMapColumn - 1));
+    return posKey;
+}
+
 void Map::Load() {
     nlohmann::json json;
     {
@@ -188,54 +203,54 @@ void Map::Load() {
 }
 
 void Map::AddSection(uint32_t sectionIndex) {
-	assert(sectionIndex < sections_.size());
-	// 追加する区画の種類
-	sectionOrder_.emplace_back(sectionIndex);
-	auto& section = *sections_[sectionIndex];
-	// 追加するタイルデータ
-	const auto& addTileData = section.GetTileData();
-	// 現状の行
-	uint16_t baseRow = (uint16_t)tileData_.size();
-	// 追加
-	tileData_.insert(tileData_.end(), addTileData.begin(), addTileData.end());
-	// タイルのインスタンスを追加
-	for (uint16_t row = 0; row < addTileData.size(); ++row) {
-		for (uint16_t column = 0; column < MapProperty::kMapColumn; ++column) {
-			auto tile = addTileData[row][column];
-			uint16_t mapRow = row + baseRow, mapColumn = column;
-			auto tileInstance = CreateTileInstance(tile, mapRow, mapColumn);
-			if (tileInstance) {
-				tileInstanceList_[PosKey(mapRow, mapColumn)] = std::move(tileInstance);
-			}
-		}
-	}
+    assert(sectionIndex < sections_.size());
+    // 追加する区画の種類
+    sectionOrder_.emplace_back(sectionIndex);
+    auto& section = *sections_[sectionIndex];
+    // 追加するタイルデータ
+    const auto& addTileData = section.GetTileData();
+    // 現状の行
+    uint16_t baseRow = (uint16_t)tileData_.size();
+    // 追加
+    tileData_.insert(tileData_.end(), addTileData.begin(), addTileData.end());
+    // タイルのインスタンスを追加
+    for (uint16_t row = 0; row < addTileData.size(); ++row) {
+        for (uint16_t column = 0; column < MapProperty::kMapColumn; ++column) {
+            auto tile = addTileData[row][column];
+            uint16_t mapRow = row + baseRow, mapColumn = column;
+            auto tileInstance = CreateTileInstance(tile, mapRow, mapColumn);
+            if (tileInstance) {
+                tileInstanceList_[PosKey(mapRow, mapColumn)] = std::move(tileInstance);
+            }
+        }
+    }
 }
 
 std::unique_ptr<MapTileBase> Map::CreateTileInstance(Tile::Enum tile, uint16_t row, uint16_t column) {
-	std::unique_ptr<MapTileBase> instance;
-	switch (tile) {
-	case Tile::Block:
-	{
-		auto block = std::make_unique<MapBlock>(*this, row, column);
-		//block->SetPlayer();
+    std::unique_ptr<MapTileBase> instance;
+    switch (tile) {
+    case Tile::Block:
+    {
+        auto block = std::make_unique<MapBlock>(*this, row, column);
+        //block->SetPlayer();
         block->SetBlockParticles(blockParticles_);
-		instance = std::move(block);
-		break;
-	}
-	case Tile::Gravity:
-	{
-		auto block = std::make_unique<MapGravity>(*this, row, column);
-		block->SetPlayer(player_);
-		instance = std::move(block);
-		break;
-	}
-	case Tile::Air:
-	default:
-		break;
-	}
+        instance = std::move(block);
+        break;
+    }
+    case Tile::Gravity:
+    {
+        auto block = std::make_unique<MapGravity>(*this, row, column);
+        block->SetPlayer(player_);
+        instance = std::move(block);
+        break;
+    }
+    case Tile::Air:
+    default:
+        break;
+    }
 
-	if (instance) {
-		instance->OnInitialize();
-	}
-	return instance;
+    if (instance) {
+        instance->OnInitialize();
+    }
+    return instance;
 }
