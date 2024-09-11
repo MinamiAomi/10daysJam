@@ -6,7 +6,7 @@
 
 void BlockManager::Initialize(BlockParticles* blockParticles) {
 	blockParticles_ = blockParticles;
-	Reset();
+	//Reset();
 }
 
 void BlockManager::Update() {

@@ -21,15 +21,15 @@ void Player::Initialize(Map* map) {
 	collider_->SetCollisionAttribute(CollisionAttribute::Player);
 	collider_->SetCollisionMask(CollisionAttribute::PlayerBullet | CollisionAttribute::EnemyBullet | CollisionAttribute::Block);
 	collider_->SetIsActive(true);
-  
-  mapCollider_ = std::make_shared<MapCollider>();
-    mapCollider_->SetMode(MapCollider::Break);
-    mapCollider_->SetSize({ 2.0f, 4.0f });
-    mapCollider_->SetPosition(transform.translate.GetXY());
-    mapCollider_->SetRotate(transform.rotate.EulerAngle().z);
-    mapCollider_->SetIsActive(true);
-    map->AddCollider(mapCollider_);
-  
+
+	mapCollider_ = std::make_shared<MapCollider>();
+	mapCollider_->SetMode(MapCollider::Break);
+	mapCollider_->SetSize({ 2.0f, 4.0f });
+	mapCollider_->SetPosition(transform.translate.GetXY());
+	mapCollider_->SetRotate(transform.rotate.EulerAngle().z);
+	mapCollider_->SetIsActive(true);
+	map->AddCollider(mapCollider_);
+
 	Reset();
 }
 
@@ -41,6 +41,8 @@ void Player::Reset() {
 	JSON_LOAD(initializePosition_);
 	JSON_LOAD(directionSpeed_);
 	JSON_LOAD(gravity_);
+	JSON_LOAD(resistance_);
+	JSON_LOAD(maxSpeed_);
 	JSON_CLOSE();
 
 	currentVector_ = { 0.0f,-1.0f,0.0f };
@@ -67,30 +69,52 @@ void Player::Move() {
 
 		// Aキーが押されている間、加速を適用
 		if (input->IsKeyPressed(DIK_A)) {
-			directionAcceleration = Vector3(currentVector_.y, -currentVector_.x, currentVector_.z) * directionSpeed_;
-			UpdateRotate(velocity_.Normalized());
+			directionAcceleration += Vector3(currentVector_.y, -currentVector_.x, currentVector_.z) * directionSpeed_;
+			if (velocity_.Length() != 0.0f) {
+				UpdateRotate(velocity_.Normalized());
+			}
 		}
 
 		// Dキーが押されている間、加速を適用
 		if (input->IsKeyPressed(DIK_D)) {
-			directionAcceleration = Vector3(-currentVector_.y, currentVector_.x, currentVector_.z) * directionSpeed_;
-			UpdateRotate(velocity_.Normalized());
+			directionAcceleration += Vector3(-currentVector_.y, currentVector_.x, currentVector_.z) * directionSpeed_;
+			if (velocity_.Length() != 0.0f) {
+				UpdateRotate(velocity_.Normalized());
+			}
 		}
 
-		// Wキーで前進
+		// Wキーで減速
 		if (input->IsKeyPressed(DIK_W)) {
-			directionAcceleration = Vector3(currentVector_.x, currentVector_.y, currentVector_.z) * -directionSpeed_;  // 後退
+			// 速度があったら減速
+			if (velocity_.Length() != 0.0f) {
+				directionAcceleration += velocity_.Normalized() * -directionSpeed_;
+				// 0.0fに近かったら止まる
+				if (velocity_.Length() - directionAcceleration.Length() <= 0.01f) {
+					directionAcceleration = Vector3::zero;
+					velocity_ = Vector3::zero;
+				}
+			}
 		}
-
-		// Sキーで後退
+		// Sキーで加速
 		if (input->IsKeyPressed(DIK_S)) {
-			directionAcceleration = Vector3(currentVector_.x, currentVector_.y, currentVector_.z) * directionSpeed_;  // 前進
+			// 速度があったら加速
+			if (velocity_.Length() != 0.0f) {
+				directionAcceleration += velocity_.Normalized() * directionSpeed_;
+			}
+			else if (currentVector_.Length() != 0.0f) {
+				directionAcceleration += currentVector_.Normalize() * directionSpeed_;
+			}
 		}
-
 		// 速度に加速度を加算
 		velocity_ += directionAcceleration;
+		// 空気抵抗的な
+		velocity_ *= resistance_;
 		// プレイヤーの位置を更新
 		transform.translate += velocity_;
+		// 速度のclamp
+		if (velocity_.Length() >= maxSpeed_) {
+			velocity_ = velocity_.Normalize() * maxSpeed_;
+		}
 	}
 }
 
@@ -106,44 +130,44 @@ void Player::UpdateRotate(const Vector3& vector) {
 }
 
 void Player::FireBullet() {
-    auto input = Input::GetInstance();
-    auto gamepad = input->GetXInputState();
-    // Bullet
-    {
-        // インターバルカウント
-        if (fireTime_ > 0.0f) {
-            fireTime_ -= 1.0f;
-        }
-        // 弾発射
-        if (input->IsKeyPressed(DIK_SPACE) &&
-            fireTime_ <= 0.0f) {
-            bulletManager_->FireBullet(transform.translate, { 0.0f,-0.5f,0.0f }, CollisionAttribute::PlayerBullet);
-            fireTime_ = fireInterval_;
-        }
-        bulletManager_->Update();
-    }
+	auto input = Input::GetInstance();
+	auto gamepad = input->GetXInputState();
+	// Bullet
+	{
+		// インターバルカウント
+		if (fireTime_ > 0.0f) {
+			fireTime_ -= 1.0f;
+		}
+		// 弾発射
+		if (input->IsKeyPressed(DIK_SPACE) &&
+			fireTime_ <= 0.0f) {
+			bulletManager_->FireBullet(transform.translate, { 0.0f,-0.5f,0.0f }, CollisionAttribute::PlayerBullet);
+			fireTime_ = fireInterval_;
+		}
+		bulletManager_->Update();
+	}
 }
 
 void Player::UpdateInvincible() {
-    if (invincibleTime_ > 0.0f) {
-        invincibleTime_ -= 1.0f;
-    }
-    else {
-        model_.SetColor({ 1.0f, 1.0f, 1.0f });
-    }
+	if (invincibleTime_ > 0.0f) {
+		invincibleTime_ -= 1.0f;
+	}
+	else {
+		model_.SetColor({ 1.0f, 1.0f, 1.0f });
+	}
 }
 
 void Player::UpdateTransform() {
 
-    transform.UpdateMatrix();
-    // 怪しい
-    collider_->SetSize({ 2.0f,4.0f,2.0f });
-    collider_->SetCenter(transform.worldMatrix.GetTranslate());
-    collider_->SetOrientation(transform.worldMatrix.GetRotate());
-    model_.SetWorldMatrix(transform.worldMatrix);
+	transform.UpdateMatrix();
+	// 怪しい
+	collider_->SetSize({ 2.0f,4.0f,2.0f });
+	collider_->SetCenter(transform.worldMatrix.GetTranslate());
+	collider_->SetOrientation(transform.worldMatrix.GetRotate());
+	model_.SetWorldMatrix(transform.worldMatrix);
 
-    mapCollider_->SetPosition(transform.translate.GetXY());
-    mapCollider_->SetRotate(transform.rotate.EulerAngle().z);
+	mapCollider_->SetPosition(transform.translate.GetXY());
+	mapCollider_->SetRotate(transform.rotate.EulerAngle().z);
 }
 
 void Player::OnCollision(const CollisionInfo& collisionInfo) {
@@ -172,12 +196,16 @@ void Player::Debug() {
 			ImGui::DragFloat("speed", &speed_, 0.01f);
 			ImGui::DragFloat("directionSpeed", &directionSpeed_, 0.01f);
 			ImGui::DragFloat("gravity", &gravity_, 0.01f);
+			ImGui::DragFloat("resistance", &resistance_, 0.01f);
+			ImGui::DragFloat("maxSpeed", &maxSpeed_, 0.01f);
 			if (ImGui::Button("Save")) {
 				JSON_OPEN("Resources/Data/Player/player.json");
 				JSON_SAVE(speed_);
 				JSON_SAVE(initializePosition_);
 				JSON_SAVE(directionSpeed_);
 				JSON_SAVE(gravity_);
+				JSON_SAVE(resistance_);
+				JSON_SAVE(maxSpeed_);
 				JSON_CLOSE();
 			}
 

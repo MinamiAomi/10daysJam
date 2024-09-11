@@ -41,6 +41,10 @@ private:
 	float directionSpeed_;
 	// 重力
 	float gravity_;
+	// 抵抗
+	float resistance_;
+	// 最大速度
+	float maxSpeed_;
 
 #pragma region Invincible
 	// インターバル
