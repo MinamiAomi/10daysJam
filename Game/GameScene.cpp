@@ -26,6 +26,7 @@ void GameScene::OnInitialize() {
 	map_ = std::make_shared<Map>();
 
 	blockParticles_ = std::make_shared<BlockParticles>();
+	blockParticles_->SetMap(map_.get());
 	blockParticles_->Initialize();
 
 
