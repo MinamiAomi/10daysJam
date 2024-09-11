@@ -115,6 +115,18 @@ void Player::Move() {
 		if (velocity_.Length() >= maxSpeed_) {
 			velocity_ = velocity_.Normalize() * maxSpeed_;
 		}
+		// プレイヤーの移動制限
+		if (transform.translate.x <= -MapProperty::kSideLimit) {
+			transform.translate.x = -MapProperty::kSideLimit;
+			// 速度リセット
+			velocity_ = Vector3::zero;
+		}
+		if (transform.translate.x >= MapProperty::kSideLimit) {
+			transform.translate.x = MapProperty::kSideLimit;
+			// 速度リセット
+			velocity_ = Vector3::zero;
+
+		}
 	}
 }
 

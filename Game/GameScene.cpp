@@ -33,10 +33,12 @@ void GameScene::OnInitialize() {
 	enemyManager_->Initialize();
 	enemyManager_->SetBulletManager(bulletManager_);
 
+	player_ = std::make_shared<Player>();
 	map_ = std::make_shared<Map>();
+	
+	map_->SetPlayer(player_);
 	map_->Initialize();
 
-	player_ = std::make_shared<Player>();
 	player_->Initialize(map_.get());
 	player_->SetBulletManager(bulletManager_);
 
@@ -44,9 +46,6 @@ void GameScene::OnInitialize() {
 	followCamera_->Initialize();
 	followCamera_->SetPlayer(player_);
 	followCamera_->SetCamera(camera_);
-	map_ = std::make_shared<Map>();
-	map_->SetPlayer(player_);
-	map_->Initialize();
 }
 
 void GameScene::OnUpdate() {
