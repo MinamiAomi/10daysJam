@@ -15,8 +15,8 @@ void BlockParticle::Emit(const Vector3& position,const Vector3& velocity,const M
 	isAlive_ = true;
 	std::string str = "blockParticle_";
 	model_.SetModel(AssetManager::GetInstance()->FindModel(str + std::to_string(index)));
-	material_->albedo = { 0.2f,0.2f,0.2f };
-	model_.SetMaterial(material_);
+	material_->albedo = { 1.0f,1.0f,1.0f };
+	//model_.SetMaterial(material_);
 	transform.translate = position;
 	transform.rotate = Quaternion::identity;
 	collSphere_ = sphere;
@@ -32,13 +32,13 @@ void BlockParticle::Update() {
 	if (time_ <= 0) {
 		isAlive_ = false;
 	}
-	/*static const Vector3 accelaration = {0.0f, -0.01f,0.0f };
+	static const Vector3 accelaration = {0.0f, -0.01f,0.0f };
 	velocity_ += accelaration;
 	transform.translate += velocity_;
 	if (!isGround_) {
 		float rotationSpeed = 1.0f * Math::ToRadian * (float(index_ % 2) * 2.0f - 1.0f);
 		transform.rotate *= Quaternion::MakeFromAngleAxis(rotationSpeed,{1.0f,1.0f,1.0f});
-	}*/
+	}
 	//床にはねる ここをマップチップに
 	/*if (transform.translate.y <= 1.0f + collSphere_.radius) {
 		transform.translate.y = 1.0f + collSphere_.radius;
