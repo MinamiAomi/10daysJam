@@ -51,6 +51,11 @@ void Player::Reset() {
 	UpdateTransform();
 }
 
+void Player::SetGameClearPosPosition(float distance) {
+
+	transform.translate.z = distance;
+}
+
 void Player::AddGravity(const Vector3& vector) {
 	velocity_ += vector * gravity_;
 }

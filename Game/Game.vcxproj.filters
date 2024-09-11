@@ -25,29 +25,11 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Block.cpp">
-      <Filter>Game\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="BlockManager.cpp">
-      <Filter>Game\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>Game\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="BulletManager.cpp">
-      <Filter>Game\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Game\Object</Filter>
-    </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameBase.cpp">
       <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyManager.cpp">
-      <Filter>Game\Object</Filter>
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>Game\Map</Filter>
@@ -71,34 +53,31 @@
     <ClCompile Include="BlockParticle.cpp">
       <Filter>Game\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="FollowCamera.cpp" />
-    <ClCompile Include="MapBomb.cpp" />
-    <ClCompile Include="MapGravity.cpp" />
-    <ClCompile Include="Score.cpp" />
+    <ClCompile Include="MapBomb.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapGravity.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowCamera.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClearCamera.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleCamera.cpp">
+      <Filter>Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProperty.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
     <ClInclude Include="CollisionAttribute.h">
-      <Filter>Game\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Block.h">
-      <Filter>Game\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockManager.h">
-      <Filter>Game\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>Game\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletManager.h">
-      <Filter>Game\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Game\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyManager.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
     <ClInclude Include="GameProperty.h">
@@ -144,6 +123,12 @@
       <Filter>Game\Map</Filter>
     </ClInclude>
     <ClInclude Include="Score.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClearCamera.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleCamera.h">
       <Filter>Game\Object</Filter>
     </ClInclude>
   </ItemGroup>

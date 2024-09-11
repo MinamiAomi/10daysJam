@@ -14,6 +14,9 @@ void Score::Update() {
 	if (time_ > limitTime_) {
 		isClear_ = true;
 	}
+	score_ = blockCount_ * depthCount_;
+
+	ConversionSeconds();
 #ifdef _DEBUG
 	Debug();
 #endif // _DEBUG
@@ -43,6 +46,7 @@ void Score::Debug() {
 		ImGui::DragInt("score", &score_);
 		ImGui::DragInt("blockCount", &blockCount_);
 		ImGui::DragInt("depthCount", &depthCount_);
+		ImGui::DragInt("second", &second_);
 		if (ImGui::TreeNode("Property")) {
 			ImGui::DragInt("limitTime_", &limitTime_);
 			if (ImGui::Button("Save")) {
@@ -56,4 +60,8 @@ void Score::Debug() {
 		ImGui::EndMenu();
 	}
 	ImGui::End();
+}
+
+void Score::ConversionSeconds() {
+	second_ = (limitTime_ - time_) / 60;
 }

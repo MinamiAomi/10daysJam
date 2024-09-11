@@ -7,7 +7,6 @@
 #include "Graphics/Skeleton.h"
 
 #include "Engine/Collision/Collider.h"
-#include "BulletManager.h"
 #include "MapCollider.h"
 
 class Map;
@@ -18,6 +17,8 @@ public:
 	void Update();
 
 	void Reset();
+
+	void SetGameClearPosPosition(float distance);
 
 	void AddGravity(const Vector3& vector);
 private:

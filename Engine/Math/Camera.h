@@ -9,6 +9,17 @@ public:
         Orthographic
     };
 
+    union Projection {
+        struct Perspective {
+            float fovY;
+            float aspectRaito;
+        } perspective;
+        struct Orthographic {
+            float width;
+            float height;
+        } orthographic;
+    };
+
     Camera(ProjectionType projectionType = Perspective);
 
     void UpdateMatrices();
@@ -24,6 +35,7 @@ public:
     const Vector3& GetPosition() const { return position_; }
     const Quaternion& GetRotate() const { return rotate_; }
     const Matrix4x4& GetViewMatrix() const { return viewMatrix_; }
+    const Projection& GetProjection() const { return projection_; }
     const Matrix4x4& GetProjectionMatrix() const { return projectionMatrix_; }
     const Matrix4x4& GetViewProjectionMatrix() const { return viewProjectionMatrix_; }
 
@@ -36,16 +48,7 @@ private:
     Quaternion rotate_;
     
     ProjectionType projectionType_;
-    union Projection {
-        struct Perspective {
-            float fovY;
-            float aspectRaito;
-        } perspective;
-        struct Orthographic {
-            float width;
-            float height;
-        } orthographic;
-    } projection_;
+    Projection projection_;
     float nearClip_;
     float farClip_;
 

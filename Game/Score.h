@@ -14,8 +14,10 @@ public:
 	bool GetIsClear() { return isClear_; }
 private:
 	void Debug();
+	void ConversionSeconds();
 	int limitTime_;
 	int time_;
+	int second_;
 	bool isClear_;
 
 	int score_;

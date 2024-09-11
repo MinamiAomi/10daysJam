@@ -7,6 +7,7 @@
 
 #include "CollisionAttribute.h"
 #include "Player.h"
+#include "Score.h"
 
 void MapGravity::OnInitialize() {
 	transform.SetParent(&map_.transform);
@@ -40,6 +41,7 @@ void MapGravity::OnBreak() {
 	mapModel_.SetIsActive(false);
 	gravityModel_.SetIsActive(false);
 	collider_->SetIsActive(false);
+	score_->AddScore(int(row_));
 }
 
 void MapGravity::OnCollision(const CollisionInfo& collisionInfo) {

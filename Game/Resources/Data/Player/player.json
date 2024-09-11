@@ -3,10 +3,10 @@
     "gravity_": 0.05000000074505806,
     "initializePosition_": [
         0.0,
-        10.0,
+        50.0,
         0.0
     ],
     "maxSpeed_": 2.0,
     "resistance_": 0.9950000047683716,
-    "speed_": 0.5
+    "speed_": 0.0
 }
