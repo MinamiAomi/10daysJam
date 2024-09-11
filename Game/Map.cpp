@@ -81,6 +81,10 @@ void Map::Update() {
 }
 
 void Map::Generate() {
+    sectionOrder_.clear();
+    tileInstanceList_.clear();
+    tileData_.clear();
+
     for (uint32_t i = 0; i < 10; ++i) {
         uint32_t addSectionIndex = rng_.NextUIntRange(0, (uint32_t)sections_.size() - 1);
         AddSection(addSectionIndex);
