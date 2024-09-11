@@ -39,6 +39,7 @@ void MapGravity::OnBreak() {
 	isActive_ = false;
 	mapModel_.SetIsActive(false);
 	gravityModel_.SetIsActive(false);
+	collider_->SetIsActive(false);
 }
 
 void MapGravity::OnCollision(const CollisionInfo& collisionInfo) {

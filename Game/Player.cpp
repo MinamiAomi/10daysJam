@@ -24,7 +24,7 @@ void Player::Initialize(Map* map) {
 
 	mapCollider_ = std::make_shared<MapCollider>();
 	mapCollider_->SetMode(MapCollider::Break);
-	mapCollider_->SetSize({ 2.0f, 4.0f });
+	mapCollider_->SetSize({ colliderSize_.x, colliderSize_.y });
 	mapCollider_->SetPosition(transform.translate.GetXY());
 	mapCollider_->SetRotate(transform.rotate.EulerAngle().z);
 	mapCollider_->SetIsActive(true);
@@ -34,7 +34,6 @@ void Player::Initialize(Map* map) {
 }
 
 void Player::Reset() {
-	fireTime_ = 0.0f;
 	invincibleTime_ = 0.0f;
 	JSON_OPEN("Resources/Data/Player/player.json");
 	JSON_LOAD(speed_);
@@ -73,6 +72,9 @@ void Player::Move() {
 			if (velocity_.Length() != 0.0f) {
 				UpdateRotate(velocity_.Normalized());
 			}
+			else {
+				UpdateRotate((currentVector_ + directionAcceleration).Normalized());
+			}
 		}
 
 		// Dキーが押されている間、加速を適用
@@ -80,6 +82,9 @@ void Player::Move() {
 			directionAcceleration += Vector3(-currentVector_.y, currentVector_.x, currentVector_.z) * directionSpeed_;
 			if (velocity_.Length() != 0.0f) {
 				UpdateRotate(velocity_.Normalized());
+			}
+			else {
+				UpdateRotate((currentVector_ + directionAcceleration).Normalized());
 			}
 		}
 
@@ -102,7 +107,7 @@ void Player::Move() {
 				directionAcceleration += velocity_.Normalized() * directionSpeed_;
 			}
 			else if (currentVector_.Length() != 0.0f) {
-				directionAcceleration += currentVector_.Normalize() * directionSpeed_;
+				directionAcceleration += currentVector_.Normalized() * directionSpeed_;
 			}
 		}
 		// 速度に加速度を加算
@@ -113,7 +118,7 @@ void Player::Move() {
 		transform.translate += velocity_;
 		// 速度のclamp
 		if (velocity_.Length() >= maxSpeed_) {
-			velocity_ = velocity_.Normalize() * maxSpeed_;
+			velocity_ = velocity_.Normalized() * maxSpeed_;
 		}
 		// プレイヤーの移動制限
 		if (transform.translate.x <= -MapProperty::kSideLimit) {
@@ -141,25 +146,6 @@ void Player::UpdateRotate(const Vector3& vector) {
 	}
 }
 
-void Player::FireBullet() {
-	auto input = Input::GetInstance();
-	auto gamepad = input->GetXInputState();
-	// Bullet
-	{
-		// インターバルカウント
-		if (fireTime_ > 0.0f) {
-			fireTime_ -= 1.0f;
-		}
-		// 弾発射
-		if (input->IsKeyPressed(DIK_SPACE) &&
-			fireTime_ <= 0.0f) {
-			bulletManager_->FireBullet(transform.translate, { 0.0f,-0.5f,0.0f }, CollisionAttribute::PlayerBullet);
-			fireTime_ = fireInterval_;
-		}
-		bulletManager_->Update();
-	}
-}
-
 void Player::UpdateInvincible() {
 	if (invincibleTime_ > 0.0f) {
 		invincibleTime_ -= 1.0f;
@@ -173,7 +159,7 @@ void Player::UpdateTransform() {
 
 	transform.UpdateMatrix();
 	// 怪しい
-	collider_->SetSize({ 2.0f,4.0f,2.0f });
+	collider_->SetSize(colliderSize_);
 	collider_->SetCenter(transform.worldMatrix.GetTranslate());
 	collider_->SetOrientation(transform.worldMatrix.GetRotate());
 	model_.SetWorldMatrix(transform.worldMatrix);
@@ -231,7 +217,6 @@ void Player::Debug() {
 
 void Player::Update() {
 	Move();
-	FireBullet();
 	UpdateInvincible();
 	UpdateTransform();
 #ifdef _DEBUG

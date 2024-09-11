@@ -18,19 +18,18 @@ public:
 	void Update();
 
 	void Reset();
-	void SetBulletManager(std::shared_ptr<BulletManager> bulletManager) { bulletManager_ = bulletManager; }
 
 	void AddGravity(const Vector3& vector);
 private:
 	void Move();
 	void UpdateRotate(const Vector3& vector);
-	void FireBullet();
 	void UpdateInvincible();
 	void UpdateTransform();
 	void OnCollision(const CollisionInfo& collisionInfo);
 	void Debug();
 	ModelInstance model_;
 	std::shared_ptr<BoxCollider> collider_;
+	Vector3 colliderSize_ = { 3.0f,6.0f,3.0f };
 	std::shared_ptr<MapCollider> mapCollider_;
 
 	Vector3 initializePosition_;
@@ -52,11 +51,4 @@ private:
 	float invincibleInterval_ = 30.0f;
 #pragma endregion
 
-
-#pragma region Bullet
-	std::shared_ptr<BulletManager> bulletManager_;
-	// インターバル
-	float fireInterval_ = 30.0f;
-	float fireTime_ = 0.0f;
-#pragma endregion 
 };

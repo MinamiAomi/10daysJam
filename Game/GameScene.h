@@ -32,9 +32,6 @@ private:
     Vector3 euler_;
     std::shared_ptr<DirectionalLight> sunLight_;
 
-    std::shared_ptr<BulletManager> bulletManager_;
-    std::shared_ptr<BlockManager> blockManager_;
-    std::shared_ptr<EnemyManager> enemyManager_;
     std::shared_ptr<FollowCamera> followCamera_;
     std::shared_ptr<Player> player_;
     std::shared_ptr<BlockParticles> blockParticles_;

@@ -74,6 +74,7 @@
     <ClCompile Include="FollowCamera.cpp" />
     <ClCompile Include="MapBomb.cpp" />
     <ClCompile Include="MapGravity.cpp" />
+    <ClCompile Include="Score.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -141,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="MapGravity.h">
       <Filter>Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>Game\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

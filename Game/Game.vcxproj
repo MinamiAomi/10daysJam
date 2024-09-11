@@ -34,6 +34,7 @@
     <ClCompile Include="MapSection.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="BulletManager.cpp" />
+    <ClCompile Include="Score.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
@@ -58,6 +59,7 @@
     <ClInclude Include="MapTileBase.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="BulletManager.h" />
+    <ClInclude Include="Score.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
