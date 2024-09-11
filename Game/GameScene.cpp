@@ -20,9 +20,6 @@ void GameScene::OnInitialize() {
 	sunLight_->direction = Vector3(0.0f, -1.0f, 0.0f).Normalized();
 	RenderManager::GetInstance()->SetSunLight(sunLight_);
 
-	blockParticles_ = std::make_shared<BlockParticles>();
-	blockParticles_->Initialize(player_.get());
-
 	bulletManager_ = std::make_shared<BulletManager>();
 	bulletManager_->Initialize();
 
@@ -35,6 +32,10 @@ void GameScene::OnInitialize() {
 
 	player_ = std::make_shared<Player>();
 	map_ = std::make_shared<Map>();
+
+	blockParticles_ = std::make_shared<BlockParticles>();
+	blockParticles_->SetMap(map_.get());
+	blockParticles_->Initialize();
 	
 	map_->SetPlayer(player_);
 	map_->SetBlockParticles(blockParticles_);

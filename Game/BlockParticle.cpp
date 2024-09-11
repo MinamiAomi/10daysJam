@@ -4,6 +4,7 @@
 
 #include "CollisionAttribute.h"
 #include "GameProperty.h"
+#include "Map.h"
 
 void BlockParticle::Initialize() {
 	SetName("BlockParticle");
@@ -31,13 +32,13 @@ void BlockParticle::Update() {
 	if (time_ <= 0) {
 		isAlive_ = false;
 	}
-	static const Vector3 accelaration = {0.0f, -0.01f,0.0f };
+	/*static const Vector3 accelaration = {0.0f, -0.01f,0.0f };
 	velocity_ += accelaration;
 	transform.translate += velocity_;
 	if (!isGround_) {
 		float rotationSpeed = 1.0f * Math::ToRadian * (float(index_ % 2) * 2.0f - 1.0f);
 		transform.rotate *= Quaternion::MakeFromAngleAxis(rotationSpeed,{1.0f,1.0f,1.0f});
-	}
+	}*/
 	//床にはねる ここをマップチップに
 	/*if (transform.translate.y <= 1.0f + collSphere_.radius) {
 		transform.translate.y = 1.0f + collSphere_.radius;
