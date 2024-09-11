@@ -37,6 +37,7 @@ void GameScene::OnInitialize() {
 	map_ = std::make_shared<Map>();
 	
 	map_->SetPlayer(player_);
+	map_->SetBlockParticles(blockParticles_);
 	map_->Initialize();
 
 	player_->Initialize(map_.get());
@@ -56,7 +57,6 @@ void GameScene::OnUpdate() {
 		blockParticles_->Emit({ 0.0f,5.0f,0.0f });
 	}
 
-	blockParticles_->Update();
 
 	blockManager_->Update();
 	enemyManager_->Update();
@@ -67,6 +67,7 @@ void GameScene::OnUpdate() {
 	map_->CheckCollision();
 	CollisionManager::GetInstance()->CheckCollision();
 
+	blockParticles_->Update();
 
 	//auto mouseMoveX = input->GetMouseMoveX();
 	//auto mouseMoveY = input->GetMouseMoveY();

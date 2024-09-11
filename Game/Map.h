@@ -14,6 +14,7 @@
 #include "Math/Random.h"
 
 #include "Player.h"
+#include "BlockParticles.h"
 
 class Map {
 public:
@@ -26,6 +27,7 @@ public:
 	void RemoveCollider(const std::shared_ptr<MapCollider>& collider);
 
 	void SetPlayer(std::shared_ptr<Player> player) { player_ = player; }
+	void SetBlockParticles(std::shared_ptr<BlockParticles> blockParticles) { blockParticles_ = blockParticles; }
 
 	// マップのベースのトランスフォーム
 	Transform transform;
@@ -60,4 +62,6 @@ private:
 	Random::RandomNumberGenerator rng_;
 	// プレイヤー
 	std::shared_ptr<Player> player_;
+	//Particles
+	std::shared_ptr<BlockParticles> blockParticles_;
 };

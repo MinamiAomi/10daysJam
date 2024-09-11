@@ -218,6 +218,7 @@ std::unique_ptr<MapTileBase> Map::CreateTileInstance(Tile::Enum tile, uint16_t r
 	{
 		auto block = std::make_unique<MapBlock>(*this, row, column);
 		//block->SetPlayer();
+        block->SetBlockParticles(blockParticles_);
 		instance = std::move(block);
 		break;
 	}

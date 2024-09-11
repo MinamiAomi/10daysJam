@@ -26,4 +26,5 @@ void MapBlock::OnUpdate() {
 void MapBlock::OnBreak() {
     isActive_ = false;
     model_.SetIsActive(false);
+    blockParticles_->Emit(transform.translate);
 }
