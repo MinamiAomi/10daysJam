@@ -236,7 +236,7 @@ std::unique_ptr<MapTileBase> Map::CreateTileInstance(Tile::Enum tile, uint16_t r
     case Tile::Block:
     {
         auto block = std::make_unique<MapBlock>(*this, row, column);
-        //block->SetPlayer();
+        block->SetScore(score_);
         block->SetBlockParticles(blockParticles_);
         instance = std::move(block);
         break;
@@ -244,6 +244,7 @@ std::unique_ptr<MapTileBase> Map::CreateTileInstance(Tile::Enum tile, uint16_t r
     case Tile::Gravity:
     {
         auto block = std::make_unique<MapGravity>(*this, row, column);
+        block->SetScore(score_);
         block->SetPlayer(player_);
         instance = std::move(block);
         break;
