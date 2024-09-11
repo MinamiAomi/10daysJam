@@ -15,6 +15,7 @@
 
 #include "Player.h"
 #include "BlockParticles.h"
+#include "Score.h"
 
 class Map {
 public:
@@ -39,13 +40,22 @@ public:
 	void RemoveCollider(const std::shared_ptr<MapCollider>& collider);
 
 	void SetPlayer(std::shared_ptr<Player> player) { player_ = player; }
+	void SetScore(std::shared_ptr<Score> score) { score_ = score; }
 	void SetBlockParticles(std::shared_ptr<BlockParticles> blockParticles) { blockParticles_ = blockParticles; }
 
-	PosKey CalcTilePosition(const Vector2& worldPosition);
+	PosKey CalcTilePosition(const Vector2& worldPosition) const;
+
+	const std::vector<MapProperty::RowData>& GetTileData() const { return tileData_; }
+
+	const std::map<PosKey, std::unique_ptr<MapTileBase>>& GetTileInstanceList() const { return tileInstanceList_; }
+
+
 
 	// マップのベースのトランスフォーム
 	Transform transform;
 
+	// マップの縦の長さ
+	float GetMapRow() { return float(tileData_.size())* MapProperty::kBlockSize; }
 private:
 
 	void Load();
@@ -68,4 +78,6 @@ private:
 	std::shared_ptr<Player> player_;
 	//Particles
 	std::shared_ptr<BlockParticles> blockParticles_;
+	// Score
+	std::shared_ptr<Score> score_;
 };

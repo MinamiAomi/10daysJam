@@ -173,7 +173,7 @@ void Map::RemoveCollider(const std::shared_ptr<MapCollider>& collider) {
     colliders_.remove(collider);
 }
 
-Map::PosKey Map::CalcTilePosition(const Vector2& worldPosition) {
+Map::PosKey Map::CalcTilePosition(const Vector2& worldPosition) const {
     float invBlockSize = 1.0f / MapProperty::kBlockSize;
     Vector2 tilePosition = { (worldPosition.x + MapProperty::kMapColumn) * invBlockSize, worldPosition.y * -invBlockSize };
     tilePosition.x = std::max(tilePosition.x, 0.0f);
@@ -233,7 +233,7 @@ std::unique_ptr<MapTileBase> Map::CreateTileInstance(Tile::Enum tile, uint16_t r
     case Tile::Block:
     {
         auto block = std::make_unique<MapBlock>(*this, row, column);
-        //block->SetPlayer();
+        block->SetScore(score_);
         block->SetBlockParticles(blockParticles_);
         instance = std::move(block);
         break;
@@ -241,6 +241,7 @@ std::unique_ptr<MapTileBase> Map::CreateTileInstance(Tile::Enum tile, uint16_t r
     case Tile::Gravity:
     {
         auto block = std::make_unique<MapGravity>(*this, row, column);
+        block->SetScore(score_);
         block->SetPlayer(player_);
         instance = std::move(block);
         break;

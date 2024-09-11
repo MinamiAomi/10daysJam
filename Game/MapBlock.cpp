@@ -4,6 +4,7 @@
 
 #include "MapProperty.h"
 #include "Map.h"
+#include "Score.h"
 
 void MapBlock::OnInitialize() {
 
@@ -27,4 +28,5 @@ void MapBlock::OnBreak() {
     isActive_ = false;
     model_.SetIsActive(false);
     blockParticles_->Emit(transform.translate);
+    score_->AddScore(int(row_));
 }
