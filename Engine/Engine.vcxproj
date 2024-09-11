@@ -190,6 +190,8 @@
     <ClCompile Include="Framework\ThreadPool.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="Graphics\Animation.cpp" />
+    <ClCompile Include="Graphics\App\SkyRenderer.cpp" />
+    <ClCompile Include="Graphics\App\Voronoi.cpp" />
     <ClCompile Include="Graphics\ParticleCore.cpp" />
     <ClCompile Include="Graphics\Raytracing\Denoiser.cpp" />
     <ClCompile Include="Graphics\Raytracing\TestRTRenderer.cpp" />
@@ -270,6 +272,8 @@
     <ClCompile Include="Math\MathUtils.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\SceneTransition.cpp" />
+    <ClInclude Include="Graphics\App\SkyRenderer.h" />
+    <ClInclude Include="Graphics\App\Voronoi.h" />
     <ClInclude Include="Graphics\ParticleCore.h" />
     <ClInclude Include="Graphics\Raytracing\Denoiser.h" />
     <ClInclude Include="Graphics\Raytracing\TestRTRenderer.h" />

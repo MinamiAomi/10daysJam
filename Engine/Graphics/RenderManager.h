@@ -27,6 +27,7 @@
 #include "Raytracing/TestRTRenderer.h"
 #include "ParticleCore.h"
 #include "Sky.h"
+#include "App/SkyRenderer.h"
 
 #ifdef _DEBUG
 #define SHADER_DIRECTORY "../Engine/Graphics/Shader"
@@ -95,6 +96,9 @@ private:
     Timer timer_;
     std::weak_ptr<const Camera> camera_;
     std::weak_ptr<const DirectionalLight> sunLight_;
+
+    ColorBuffer skyTexture_;
+    SkyRenderer skyRenderer_;
 
     UINT64 frameCount_ = 0;
     bool raymarching_ = false;
