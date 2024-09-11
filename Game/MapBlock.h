@@ -5,6 +5,8 @@
 #include "Math/Transform.h"
 #include "Graphics/Model.h"
 
+#include "Game/BlockParticles.h"
+
 class MapBlock :
     public MapTileBase, GameObject {
 public:
@@ -14,7 +16,10 @@ public:
     void OnUpdate() override;
     void OnBreak() override;
 
+    void SetBlockParticles(std::shared_ptr<BlockParticles> blockParticles) { blockParticles_ = blockParticles; }
+
 private:
     ModelInstance model_;
+    std::shared_ptr<BlockParticles> blockParticles_;
 
 };

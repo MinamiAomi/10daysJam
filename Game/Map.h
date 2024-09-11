@@ -14,23 +14,10 @@
 #include "Math/Random.h"
 
 #include "Player.h"
+#include "BlockParticles.h"
 
 class Map {
 public:
-	void Initialize();
-	void Update();
-
-	void CheckCollision();
-
-	void AddCollider(const std::shared_ptr<MapCollider>& collider);
-	void RemoveCollider(const std::shared_ptr<MapCollider>& collider);
-
-	void SetPlayer(std::shared_ptr<Player> player) { player_ = player; }
-
-	// マップのベースのトランスフォーム
-	Transform transform;
-
-private:
 	// 位置をmapのキーにするためのクラス
 	struct PosKey {
 		uint16_t row, column;
@@ -41,6 +28,25 @@ private:
 			return (row * MapProperty::kMapColumn + column) < (rhs.row * MapProperty::kMapColumn + rhs.column);
 		}
 	};
+
+	void Initialize();
+	void Update();
+	void Generate();
+
+	void CheckCollision();
+
+	void AddCollider(const std::shared_ptr<MapCollider>& collider);
+	void RemoveCollider(const std::shared_ptr<MapCollider>& collider);
+
+	void SetPlayer(std::shared_ptr<Player> player) { player_ = player; }
+	void SetBlockParticles(std::shared_ptr<BlockParticles> blockParticles) { blockParticles_ = blockParticles; }
+
+	PosKey CalcTilePosition(const Vector2& worldPosition);
+
+	// マップのベースのトランスフォーム
+	Transform transform;
+
+private:
 
 	void Load();
 	void AddSection(uint32_t sectionIndex);
@@ -60,4 +66,6 @@ private:
 	Random::RandomNumberGenerator rng_;
 	// プレイヤー
 	std::shared_ptr<Player> player_;
+	//Particles
+	std::shared_ptr<BlockParticles> blockParticles_;
 };
