@@ -19,6 +19,8 @@ public:
 	void Emit(const Vector3& position);
 	void Update();
 
+	void Reset();
+
 	void SetMap(const Map* map) { map_ = map; }
 private:
 	const Map* map_ = nullptr;

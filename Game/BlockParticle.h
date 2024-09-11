@@ -17,6 +17,8 @@ public:
 	void Emit(const Vector3& position, const Vector3& velocity, const Math::Sphere& sphere, int index);
 	void Update();
 
+	void Reset();
+
 	bool GetIsAlive() { return isAlive_; };
 	void SetMap(const Map* map) { map_ = map; }
 private:

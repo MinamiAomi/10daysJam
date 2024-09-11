@@ -49,3 +49,10 @@ void BlockParticles::Update() {
 	}
 }
 
+void BlockParticles::Reset()
+{
+	for (int i = 0; i < kBlockParticleNum; i++) {
+		blockParticles_[i].Reset();
+	}
+}
+

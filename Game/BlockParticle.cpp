@@ -52,6 +52,12 @@ void BlockParticle::Update() {
 	UpdateTransform();
 }
 
+void BlockParticle::Reset()
+{
+	isAlive_ = false;
+	model_.SetIsActive(false);
+}
+
 void BlockParticle::UpdateTransform() {
 	transform.UpdateMatrix();
 	model_.SetWorldMatrix(transform.worldMatrix);
