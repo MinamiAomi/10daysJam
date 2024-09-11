@@ -39,14 +39,23 @@ void BlockParticle::Update() {
 		float rotationSpeed = 1.0f * Math::ToRadian * (float(index_ % 2) * 2.0f - 1.0f);
 		transform.rotate *= Quaternion::MakeFromAngleAxis(rotationSpeed,{1.0f,1.0f,1.0f});
 	}
-	//床にはねる ここをマップチップに
-	/*if (transform.translate.y <= 1.0f + collSphere_.radius) {
-		transform.translate.y = 1.0f + collSphere_.radius;
-		if (-velocity_.y <= collSphere_.radius) {
-			isGround_ = true;
+
+	Map::PosKey posKey = map_->CalcTilePosition(Vector2{ transform.translate.x,transform.translate.y - collSphere_.radius });
+	const auto& tileData = map_->GetTileData();
+	if (tileData[posKey.row][posKey.column] == Tile::Enum::Block) {
+		const auto& tileInstance = map_->GetTileInstanceList();
+		const auto& tile = tileInstance.at(posKey);
+
+		//床にはねる ここをマップチップに
+		if (tile->IsActive() == true) {
+			transform.translate.y = -posKey.row * MapProperty::kBlockSize + collSphere_.radius;
+			if (-velocity_.y <= collSphere_.radius) {
+				isGround_ = true;
+			}
+			velocity_ = -velocity_ * 0.2f;
 		}
-		velocity_ = -velocity_ * 0.5f;
-	}*/
+	}
+
 	model_.SetIsActive(isAlive_);
 
 	UpdateTransform();

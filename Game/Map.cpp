@@ -176,7 +176,7 @@ void Map::RemoveCollider(const std::shared_ptr<MapCollider>& collider) {
     colliders_.remove(collider);
 }
 
-Map::PosKey Map::CalcTilePosition(const Vector2& worldPosition) {
+Map::PosKey Map::CalcTilePosition(const Vector2& worldPosition) const {
     float invBlockSize = 1.0f / MapProperty::kBlockSize;
     Vector2 tilePosition = { (worldPosition.x + MapProperty::kMapColumn) * invBlockSize, worldPosition.y * -invBlockSize };
     tilePosition.x = std::max(tilePosition.x, 0.0f);
