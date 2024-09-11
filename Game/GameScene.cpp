@@ -24,10 +24,20 @@ void GameScene::OnInitialize() {
 	blockParticles_ = std::make_shared<BlockParticles>();
 	blockParticles_->Initialize(player_.get());
 
-	player_ = std::make_shared<Player>();
-	map_ = std::make_shared<Map>();
+	bulletManager_ = std::make_shared<BulletManager>();
+	bulletManager_->Initialize();
+
+	blockManager_ = std::make_shared<BlockManager>();
+	blockManager_->Initialize(blockParticles_.get());
+
+	enemyManager_ = std::make_shared<EnemyManager>();
+	enemyManager_->Initialize();
+	enemyManager_->SetBulletManager(bulletManager_);
 	score_ = std::make_shared<Score>();
 
+	player_ = std::make_shared<Player>();
+	map_ = std::make_shared<Map>();
+	
 	map_->SetPlayer(player_);
 	map_->SetBlockParticles(blockParticles_);
 	map_->SetScore(score_);
@@ -66,13 +76,10 @@ void GameScene::OnUpdate() {
 		CollisionManager::GetInstance()->CheckCollision();
 		blockParticles_->Update();
 
-		// クリアチェック
+		// �N���A�`�F�b�N
 		if (score_->GetIsClear()) {
 			gameClearCamera_->SetCameraPosition(-(float(map_->GetMapRow()) + MapProperty::kBlockSize * 2.0f));
 			player_->SetGameClearPosPosition(gameClearCamera_->GetEndCameraPos().z + 80.0f);
-			GameProperty::state_ = GameProperty::kResult;
-		}
-
 		// リセット
 		if (input->IsKeyTrigger(DIK_R)) {
 			player_->Reset();
@@ -103,6 +110,9 @@ void GameScene::OnUpdate() {
 	break;
 	default:
 		break;
+		enemyManager_->Reset();
+		player_->Reset();
+		followCamera_->Reset();
 	}
 }
 

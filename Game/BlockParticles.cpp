@@ -8,13 +8,14 @@
 #include "Game/Player.h"
 
 #include "Engine/Utility/Utility.h"
+#include "Map.h"
 
-void BlockParticles::Initialize(Player* player) {
-	player_ = player;
+void BlockParticles::Initialize() {
 	Utility::Positions("blockParticlePosition.txt", blockParticlesPositions_);
 	Utility::Spheres("blockParticleSphere.txt", blockParticleSpheres_);
 	for (int i = 0; i < kBlockParticleNum; i++) {
 		blockParticles_[i].Initialize();	
+		blockParticles_[i].SetMap(map_);
 	}
 }
 
@@ -45,6 +46,13 @@ void BlockParticles::Update() {
 		if (blockParticles_[i].GetIsAlive()) {
 			blockParticles_[i].Update();
 		}
+	}
+}
+
+void BlockParticles::Reset()
+{
+	for (int i = 0; i < kBlockParticleNum; i++) {
+		blockParticles_[i].Reset();
 	}
 }
 

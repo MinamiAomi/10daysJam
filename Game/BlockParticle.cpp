@@ -4,6 +4,7 @@
 
 #include "CollisionAttribute.h"
 #include "GameProperty.h"
+#include "Map.h"
 
 void BlockParticle::Initialize() {
 	SetName("BlockParticle");
@@ -14,8 +15,8 @@ void BlockParticle::Emit(const Vector3& position,const Vector3& velocity,const M
 	isAlive_ = true;
 	std::string str = "blockParticle_";
 	model_.SetModel(AssetManager::GetInstance()->FindModel(str + std::to_string(index)));
-	material_->albedo = { 0.2f,0.2f,0.2f };
-	model_.SetMaterial(material_);
+	material_->albedo = { 1.0f,1.0f,1.0f };
+	//model_.SetMaterial(material_);
 	transform.translate = position;
 	transform.rotate = Quaternion::identity;
 	collSphere_ = sphere;
@@ -49,6 +50,12 @@ void BlockParticle::Update() {
 	model_.SetIsActive(isAlive_);
 
 	UpdateTransform();
+}
+
+void BlockParticle::Reset()
+{
+	isAlive_ = false;
+	model_.SetIsActive(false);
 }
 
 void BlockParticle::UpdateTransform() {

@@ -7,6 +7,7 @@
 #include "Graphics/Skeleton.h"
 
 #include "Engine/Collision/Collider.h"
+class Map;
 class BlockParticle : public GameObject{
 public:
 
@@ -16,7 +17,10 @@ public:
 	void Emit(const Vector3& position, const Vector3& velocity, const Math::Sphere& sphere, int index);
 	void Update();
 
+	void Reset();
+
 	bool GetIsAlive() { return isAlive_; };
+	void SetMap(const Map* map) { map_ = map; }
 private:
 	void UpdateTransform();
 
@@ -29,4 +33,5 @@ private:
 	ModelInstance model_;
 	std::shared_ptr<Material> material_;
 	Math::Sphere collSphere_;
+	const Map* map_ = nullptr;
 };

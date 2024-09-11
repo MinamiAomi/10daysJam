@@ -10,16 +10,20 @@
 
 #include "Engine/Collision/Collider.h"
 #include "Game/BlockParticle.h"
-class Player;
+class Map;
 class BlockParticles {
 public:
 	static const uint32_t kEmitOneBlockPaticleNum = 20;
 	static const uint32_t kBlockParticleNum = kEmitOneBlockPaticleNum * 64;
-	void Initialize(Player* player);
+	void Initialize();
 	void Emit(const Vector3& position);
 	void Update();
+
+	void Reset();
+
+	void SetMap(const Map* map) { map_ = map; }
 private:
-	Player* player_ = nullptr;
+	const Map* map_ = nullptr;
 	Random::RandomNumberGenerator rnd_;
 	std::array<BlockParticle, kBlockParticleNum> blockParticles_;
 	std::vector<Math::Sphere> blockParticleSpheres_;
