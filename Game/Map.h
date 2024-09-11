@@ -41,7 +41,13 @@ public:
 	void SetPlayer(std::shared_ptr<Player> player) { player_ = player; }
 	void SetBlockParticles(std::shared_ptr<BlockParticles> blockParticles) { blockParticles_ = blockParticles; }
 
-	PosKey CalcTilePosition(const Vector2& worldPosition);
+	PosKey CalcTilePosition(const Vector2& worldPosition) const;
+
+	const std::vector<MapProperty::RowData>& GetTileData() const { return tileData_; }
+
+	const std::map<PosKey, std::unique_ptr<MapTileBase>>& GetTileInstanceList() const { return tileInstanceList_; }
+
+
 
 	// マップのベースのトランスフォーム
 	Transform transform;
