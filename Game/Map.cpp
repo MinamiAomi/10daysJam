@@ -160,9 +160,6 @@ void Map::CheckCollision() {
                 }
             }
         }
-
-
-
     }
 }
 
