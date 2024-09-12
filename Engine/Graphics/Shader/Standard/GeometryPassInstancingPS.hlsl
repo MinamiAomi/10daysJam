@@ -22,13 +22,13 @@ PSOutput main(PSInput input) {
 
     Instance instance = g_Instances[input.instanceId + g_InstanceOffset.offset];
     
-    float3 albedo = g_BindlessTextures[instance.albedoMapIndex].Sample(g_Sampler, input.texcoord).xyz;
-    albedo *= instance.albedo;
-    output.albedo.xyz = albedo;
-    /*output.albedo.w = instance.alpha;
+    float4 albedo = g_BindlessTextures[instance.albedoMapIndex].Sample(g_Sampler, input.texcoord);
+    albedo.xyz *= instance.albedo.xyz;
+    output.albedo.xyz = albedo.xyz;
+    output.albedo.w = albedo.w * instance.alpha;
     if (output.albedo.w == 0.0f) {
         discard;
-    }*/
+    }
     output.albedo.w = 1.0f;
     
     float2 metallicRoughness = float2(instance.metallic, instance.roughness);
