@@ -15,9 +15,8 @@ public:
     struct RootIndex {
         enum Parameters {
             Scene,
-            InstanceOrOffset,
+            InstanceOffset,
             Instances,
-            Material,
             BindlessTexture,
 
             NumRootParameters

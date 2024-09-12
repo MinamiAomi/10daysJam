@@ -29,7 +29,7 @@ namespace {
     // aiSceneからメッシュ配列を解析する
     std::vector<Model::Mesh> ParseMeshes(const aiScene* scene, const std::vector<Material>& materials, std::vector<Model::Vertex>& vertices, std::vector<Model::Index>& indices, std::map<std::string, Model::JointWeightData>& skinClusterData) {
         std::vector<Model::Mesh> meshes(scene->mNumMeshes);
-        
+
         vertices.clear();
         indices.clear();
 
@@ -47,7 +47,7 @@ namespace {
                 destVertex.position = { srcPosition.x, srcPosition.y, srcPosition.z };
                 Vector3 tmpNormal = { srcNormal.x, srcNormal.y, srcNormal.z };
                 Vector3 tmpTangent;
-                
+
                 if (srcMesh->HasTangentsAndBitangents()) {
                     aiVector3D& srcTangent = srcMesh->mTangents[vertexIndex];
                     tmpTangent = { srcTangent.x, srcTangent.y, srcTangent.z };
@@ -87,7 +87,7 @@ namespace {
                 aiBone* bone = srcMesh->mBones[boneIndex];
                 std::string jointName = bone->mName.C_Str();
                 Model::JointWeightData& jointWeightData = skinClusterData[jointName];
-                
+
                 aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();
                 aiVector3D translate, scale;
                 aiQuaternion rotate;
@@ -105,10 +105,10 @@ namespace {
             materials;
             destMesh.material = (uint32_t)srcMesh->mMaterialIndex;
 
-            ++meshIndex;        
+            ++meshIndex;
         }
         return meshes;
-        
+
     }
     // aiSceneからPBRマテリアル配列を解析する
     std::vector<Material> ParseMaterials(const aiScene* scene, const std::filesystem::path& directory) {
@@ -121,6 +121,12 @@ namespace {
             if (srcMaterial->Get(AI_MATKEY_BASE_COLOR, albedo) == aiReturn_SUCCESS) {
                 destMaterial.albedo = { albedo.r, albedo.g, albedo.b };
             }
+            else {
+                if (srcMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, albedo) == aiReturn_SUCCESS) {
+                    destMaterial.albedo = { albedo.r, albedo.g, albedo.b };
+                }
+            }
+
             float metallic{};
             if (srcMaterial->Get(AI_MATKEY_METALLIC_FACTOR, metallic) == aiReturn_SUCCESS) {
                 destMaterial.metallic = metallic;

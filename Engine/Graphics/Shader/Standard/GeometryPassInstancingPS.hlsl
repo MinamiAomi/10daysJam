@@ -1,4 +1,3 @@
-#define USE_INSTANCING
 #include "GeometryPass.hlsli"
 
 // 法線マップ、MetalliccRoughnessマップ不使用
@@ -8,9 +7,7 @@ struct PSInput {
     float3 worldPosition : POSITION0;
     float3 normal : NORMAL0;
     float2 texcoord : TEXCOORD0;
-    #ifdef USE_INSTANCING
     uint instanceId : SV_INSTANCEID;
-#endif
 };
 
 struct PSOutput {
@@ -23,18 +20,18 @@ PSOutput main(PSInput input) {
 
     PSOutput output;
 
-#ifndef USE_INSTANCING
-    Instance instance = g_Instance;
-#else
     Instance instance = g_Instances[input.instanceId + g_InstanceOffset.offset];
-#endif
     
-    float3 albedo = g_BindlessTextures[g_Material.albedoMapIndex].Sample(g_Sampler, input.texcoord).xyz;
-    albedo *= g_Material.albedo;
+    float3 albedo = g_BindlessTextures[instance.albedoMapIndex].Sample(g_Sampler, input.texcoord).xyz;
+    albedo *= instance.albedo;
     output.albedo.xyz = albedo;
+    /*output.albedo.w = instance.alpha;
+    if (output.albedo.w == 0.0f) {
+        discard;
+    }*/
     output.albedo.w = 1.0f;
     
-    float2 metallicRoughness = float2(g_Material.metallic, g_Material.roughness);
+    float2 metallicRoughness = float2(instance.metallic, instance.roughness);
     output.metallicRoughness = metallicRoughness;
     
     float3 normal = normalize(input.normal);
