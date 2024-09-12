@@ -47,6 +47,10 @@ void GameScene::OnInitialize() {
 	gameClearCamera_->SetCamera(camera_);
 
 	GameProperty::state_ = GameProperty::kInGame;
+
+	particles_ = std::make_shared<Particles>();
+	particles_->SetCamera(camera_.get());
+	particles_->Initialize();
 }
 
 void GameScene::OnUpdate() {
@@ -54,7 +58,10 @@ void GameScene::OnUpdate() {
 	Input* input = Input::GetInstance();
 
 	if (input->IsKeyTrigger(DIK_P)) {
-		blockParticles_->Emit({ 0.0f,5.0f,0.0f });
+		particles_->SetEmit(true);
+	}
+	else {
+		particles_->SetEmit(false);
 	}
 
 	switch (GameProperty::state_) {
@@ -66,6 +73,7 @@ void GameScene::OnUpdate() {
 		map_->CheckCollision();
 		CollisionManager::GetInstance()->CheckCollision();
 		blockParticles_->Update();
+		particles_->Update();
 		// リセット
 		if (input->IsKeyTrigger(DIK_R)) {
 			player_->Reset();

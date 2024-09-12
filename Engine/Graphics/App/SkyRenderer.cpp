@@ -107,6 +107,12 @@ void SkyRenderer::Render(CommandContext& commandContext, const Camera& camera, M
 		switchNum_++;
 		t = (-y_ - switchNum_ * float(transitionHeight)) / float(transitionHeight);
 	}
+
+	if (t <= 0.0f) {
+		switchNum_--;
+		t = (-y_ - switchNum_ * float(transitionHeight)) / float(transitionHeight);
+	}
+
 	//遷移
 	if (switchNum_ % 4 == 0) {
 		topColor_ = color_;

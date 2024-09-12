@@ -25,8 +25,8 @@ private:
     PipelineState pipelineState_;
 
     Voronoi voronoi_;
-    Vector3 color_;
-    Vector3 toColor_;
+    Vector3 color_ = {1.0f,1.0f,1.0f};
+    Vector3 toColor_ = { 0.0f,0.0f,0.0f };
 
     Vector3 topColor_;
     Vector3 bottomColor_;

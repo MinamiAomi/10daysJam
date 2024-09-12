@@ -38,6 +38,7 @@ Texture2D<float32_t3> g_Normal : register(t2);
 Texture2D<float32_t> g_Depth : register(t3);
 TextureCube<float32_t3> g_Irradiance : register(t4);
 TextureCube<float32_t3> g_Radiance : register(t5);
+Texture2D<float32_t4> g_SkyTexture : register(t6);
 
 SamplerState g_DefaultSampler : register(s0);
 SamplerState g_CubeMapSampler : register(s1);

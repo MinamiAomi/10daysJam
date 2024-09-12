@@ -38,6 +38,7 @@ public:
     const Projection& GetProjection() const { return projection_; }
     const Matrix4x4& GetProjectionMatrix() const { return projectionMatrix_; }
     const Matrix4x4& GetViewProjectionMatrix() const { return viewProjectionMatrix_; }
+    const Matrix4x4& GetBillbordMatrix() const { return billbordMatrix_; }
 
     Vector3 GetForward() const { return rotate_ * Vector3::forward; }
     Vector3 GetRight() const { return rotate_ * Vector3::right; }
@@ -55,6 +56,7 @@ private:
     Matrix4x4 viewMatrix_;
     Matrix4x4 projectionMatrix_;
     Matrix4x4 viewProjectionMatrix_;
+    Matrix4x4 billbordMatrix_;
 
     bool needUpdateing_;
 };

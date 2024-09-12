@@ -1,6 +1,8 @@
 #include "Player.h"
 
 #include <numbers>
+#include "Engine/Graphics/App/SkyRenderer.h"
+
 
 #include "Input/input.h"
 #include "Framework/AssetManager.h"
@@ -11,6 +13,7 @@
 #include "Engine/Graphics/ImGuiManager.h"
 #include "Engine/File/JsonHelper.h"
 #include "Map.h"
+
 
 void Player::Initialize(Map* map) {
 	SetName("Player");
@@ -222,6 +225,7 @@ void Player::Debug() {
 
 void Player::Update() {
 	Move();
+	SkyRenderer::y_ = transform.translate.y;
 	UpdateInvincible();
 	UpdateTransform();
 #ifdef _DEBUG
