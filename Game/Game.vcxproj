@@ -29,6 +29,7 @@
     <ClCompile Include="MapCollider.cpp" />
     <ClCompile Include="MapGravity.cpp" />
     <ClCompile Include="MapSection.cpp" />
+    <ClCompile Include="Particles.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="TitleCamera.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="MapProperty.h" />
     <ClInclude Include="MapSection.h" />
     <ClInclude Include="MapTileBase.h" />
+    <ClInclude Include="Particles.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="TitleCamera.h" />

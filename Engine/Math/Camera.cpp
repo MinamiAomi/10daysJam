@@ -8,7 +8,7 @@ Camera::Camera(ProjectionType projectionType) {
 	projection_.perspective.fovY = 45.0f * Math::ToRadian;
 	projection_.perspective.aspectRaito = 720.0f / 1280.0f;
 	nearClip_ = 0.1f;
-	farClip_ = 1000.0f;
+	farClip_ = 300.0f;
 
 	needUpdateing_ = true;
 
@@ -30,6 +30,11 @@ void Camera::UpdateMatrices() {
 		}
 
 		viewProjectionMatrix_ = viewMatrix_ * projectionMatrix_;
+		billbordMatrix_ = viewMatrix_;
+		billbordMatrix_.m[3][0] = 0.0f;
+		billbordMatrix_.m[3][1] = 0.0f;
+		billbordMatrix_.m[3][2] = 0.0f;
+		billbordMatrix_ = billbordMatrix_.Inverse();
 	}
 }
 

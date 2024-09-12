@@ -7,7 +7,12 @@ struct Scene {
     float3 bottomColor;
 };
 
+struct Y{
+    float y;
+};
+
 ConstantBuffer<Scene> g_Scene : register(b0);
+ConstantBuffer<Y> g_y : register(b1);
 
 Texture2D<float4> g_Texture : register(t0);
 SamplerState g_Sampler : register(s0);
@@ -48,7 +53,9 @@ PSOutput main(PSInput input) {
         output.color.rgb = HSVToRGB(hsv.xyz);
     }
 
-    output.color.rgb += g_Texture.Sample(g_Sampler, input.texcoord * 6.5f).rgb;
+    float32_t2 uv =  input.texcoord * 6.5f;
+    uv.y -= g_y.y * 0.001f;
+    output.color.rgb += g_Texture.Sample(g_Sampler, uv).rgb;
     
     return output;
 }

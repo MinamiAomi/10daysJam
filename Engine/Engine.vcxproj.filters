@@ -88,6 +88,9 @@
     <Filter Include="Graphics\App">
       <UniqueIdentifier>{fcaab30d-f9ea-43e4-83bb-ba6df292388f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Shader\App">
+      <UniqueIdentifier>{e7808fd4-61a7-47e1-94c5-2b3d19c5c9a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene\SceneManager.cpp">
@@ -886,5 +889,16 @@
     <Text Include="Externals\ImGui\LICENSE.txt">
       <Filter>Externals\ImGui</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Graphics\Shader\App\SkyPS.hlsl">
+      <Filter>Graphics\Shader\App</Filter>
+    </FxCompile>
+    <FxCompile Include="Graphics\Shader\App\SkyVS.hlsl">
+      <Filter>Graphics\Shader\App</Filter>
+    </FxCompile>
+    <FxCompile Include="Graphics\Shader\App\VoronoiCS.hlsl">
+      <Filter>Graphics\Shader\App</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

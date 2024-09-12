@@ -16,6 +16,7 @@
 #include "Game/FollowCamera.h"
 #include "Game/BlockParticles.h"
 #include "Game/Score.h"
+#include "Game/Particles.h"
 
 #include "GameClearCamera.h"
 
@@ -29,12 +30,13 @@ public:
 
 private:
 	std::shared_ptr<Camera> camera_;
-	Vector3 euler_;
 	std::shared_ptr<DirectionalLight> sunLight_;
 
 	std::shared_ptr<FollowCamera> followCamera_;
 	std::shared_ptr<Player> player_;
 	std::shared_ptr<BlockParticles> blockParticles_;
+
+	std::shared_ptr<Particles> particles_;
 	std::shared_ptr<Score> score_;
 
 

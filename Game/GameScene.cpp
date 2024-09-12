@@ -29,6 +29,7 @@ void GameScene::OnInitialize() {
 	blockParticles_->SetMap(map_.get());
 	blockParticles_->Initialize();
 
+	map_->SetCamera(camera_);
 	map_->SetPlayer(player_);
 	map_->SetBlockParticles(blockParticles_);
 	map_->SetScore(score_);
@@ -50,6 +51,10 @@ void GameScene::OnInitialize() {
 	gameClearCamera_->SetCamera(camera_);
 
 	GameProperty::state_ = GameProperty::kInGame;
+
+	particles_ = std::make_shared<Particles>();
+	particles_->SetCamera(camera_.get());
+	particles_->Initialize();
 }
 
 void GameScene::OnUpdate() {
@@ -57,7 +62,10 @@ void GameScene::OnUpdate() {
 	Input* input = Input::GetInstance();
 
 	if (input->IsKeyTrigger(DIK_P)) {
-		blockParticles_->Emit({ 0.0f,5.0f,0.0f });
+		particles_->SetEmit(true);
+	}
+	else {
+		particles_->SetEmit(false);
 	}
 
 	switch (GameProperty::state_) {
@@ -65,10 +73,12 @@ void GameScene::OnUpdate() {
 	{
 		player_->Update();
 		followCamera_->Update();
+		map_->Update();
 		score_->Update();
 		map_->CheckCollision();
 		CollisionManager::GetInstance()->CheckCollision();
 		blockParticles_->Update();
+		particles_->Update();
 		// リセット
 		if (input->IsKeyTrigger(DIK_R)) {
 			player_->Reset();
@@ -89,6 +99,7 @@ void GameScene::OnUpdate() {
 		// カメラが動いているとき
 		if (!gameClearCamera_->GetIsEasing()) {
 			gameClearCamera_->Update();
+			map_->Update();
 		}
 		else {
 			// クリアしたら

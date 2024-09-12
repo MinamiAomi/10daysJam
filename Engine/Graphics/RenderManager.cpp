@@ -36,7 +36,7 @@ void RenderManager::Initialize() {
     lineDrawer_.Initialize(lightingRenderingPass_.GetResult().GetRTVFormat());
     //particleCore_.Initialize(lightingRenderingPass_.GetResult().GetRTVFormat());
 
-    //bloom_.Initialize(&lightingRenderingPass_.GetResult());
+    bloom_.Initialize(&lightingRenderingPass_.GetResult());
     fxaa_.Initialize(&lightingRenderingPass_.GetResult());
     postEffect_.Initialize(finalImageBuffer_);
 
@@ -89,6 +89,13 @@ void RenderManager::Render() {
 
     //particleCore_.Dispatch(commandContext_);
 
+    //空
+    commandContext_.TransitionResource(skyTexture_, D3D12_RESOURCE_STATE_RENDER_TARGET);
+    commandContext_.SetRenderTarget(skyTexture_.GetRTV());
+    commandContext_.SetViewportAndScissorRect(0, 0, skyTexture_.GetWidth(), skyTexture_.GetHeight());
+    float skyScale = camera->GetFarClip() * 2.0f;
+    skyRenderer_.Render(commandContext_, *camera, Matrix4x4::MakeAffineTransform({ skyScale, skyScale, skyScale }, Quaternion::identity, camera->GetPosition()));
+
     if (camera && sunLight) {
         // 影、スペキュラ
         modelSorter_.Sort(*camera);
@@ -97,7 +104,7 @@ void RenderManager::Render() {
         //testRTRenderer_.Render(commandContext_, *camera, modelSorter_);
 
         geometryRenderingPass_.Render(commandContext_, *camera, modelSorter_);
-        lightingRenderingPass_.Render(commandContext_, geometryRenderingPass_, *camera, *sunLight);
+        lightingRenderingPass_.Render(commandContext_, geometryRenderingPass_, *camera, *sunLight, skyTexture_);
 
         commandContext_.TransitionResource(lightingRenderingPass_.GetResult(), D3D12_RESOURCE_STATE_RENDER_TARGET);
         commandContext_.TransitionResource(geometryRenderingPass_.GetDepth(), D3D12_RESOURCE_STATE_DEPTH_READ);
@@ -113,14 +120,9 @@ void RenderManager::Render() {
         //particleCore_.Render(commandContext_, *camera);
     }
 
-    //空
-    commandContext_.TransitionResource(skyTexture_, D3D12_RESOURCE_STATE_RENDER_TARGET);
-    commandContext_.SetRenderTarget(skyTexture_.GetRTV());
-    commandContext_.SetViewportAndScissorRect(0, 0, skyTexture_.GetWidth(), skyTexture_.GetHeight());
-    float skyScale = camera->GetFarClip() * 2.0f;
-    skyRenderer_.Render(commandContext_, *camera, Matrix4x4::MakeAffineTransform({ skyScale, skyScale, skyScale }, Quaternion::identity, camera->GetPosition()));
 
-    //bloom_.Render(commandContext_);
+
+    bloom_.Render(commandContext_);
     fxaa_.Render(commandContext_);
 
     commandContext_.TransitionResource(finalImageBuffer_, D3D12_RESOURCE_STATE_RENDER_TARGET);

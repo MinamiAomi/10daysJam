@@ -30,3 +30,7 @@ void MapBlock::OnBreak() {
     blockParticles_->Emit(transform.translate);
     score_->AddScore(int(row_));
 }
+
+void MapBlock::OnSwitchingCulling() {
+    model_.SetIsActive(!model_.IsActive());
+}

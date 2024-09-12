@@ -13,6 +13,7 @@ public:
 	void OnInitialize() override;
 	void OnUpdate() override;
 	void OnBreak() override;
+	void OnSwitchingCulling() override;
 
 private:
 	ModelInstance model_;
