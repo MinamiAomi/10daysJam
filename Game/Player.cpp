@@ -107,11 +107,8 @@ void Player::Move() {
 		}
 		// Sキーで加速
 		if (input->IsKeyPressed(DIK_S)) {
-			// 速度があったら加速
-			if (velocity_.Length() != 0.0f) {
-				directionAcceleration += velocity_.Normalized() * directionSpeed_;
-			}
-			else if (currentVector_.Length() != 0.0f) {
+			// プレイヤーの方向に加速
+			if (currentVector_.Length() != 0.0f) {
 				directionAcceleration += currentVector_.Normalized() * directionSpeed_;
 			}
 		}

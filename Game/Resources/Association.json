@@ -27,6 +27,8 @@
         "blockParticle_18": "blockParticle_18.gltf",
         "blockParticle_19": "blockParticle_19.gltf",
         "block": "block.gltf",
-        "gravity": "gravity.gltf"
+        "gravity": "gravity.gltf",
+        "onePlace": "onePlace.gltf",
+        "tenPlace": "tenPlace.gltf"
     } 
 }

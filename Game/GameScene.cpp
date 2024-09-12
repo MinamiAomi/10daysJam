@@ -35,13 +35,15 @@ void GameScene::OnInitialize() {
 	map_->Initialize();
 
 	player_->Initialize(map_.get());
-	score_->Initialize();
 
 	followCamera_ = std::make_shared<FollowCamera>();
 	followCamera_->Initialize();
 	followCamera_->SetPlayer(player_);
 	followCamera_->SetCamera(camera_);
 
+	score_->SetParent(followCamera_->transform_);
+	score_->Initialize();
+	
 	gameClearCamera_ = std::make_shared<GameClearCamera>();
 	gameClearCamera_->Initialize();
 	gameClearCamera_->SetCamera(camera_);

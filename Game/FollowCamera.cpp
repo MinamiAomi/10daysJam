@@ -8,19 +8,20 @@ void FollowCamera::Initialize() {
 }
 
 void FollowCamera::Update() {
-	camera_->SetPosition({ offset_.x,offset_.y + player_->transform.worldMatrix.GetTranslate().y ,offset_.z });
+	transform_.translate = { offset_.x,offset_.y + player_->transform.worldMatrix.GetTranslate().y ,transform_.translate.z };
+	camera_->SetPosition(transform_.translate);
 	camera_->UpdateMatrices();
-
+	transform_.UpdateMatrix();
 #ifdef _DEBUG
 	Debug();
 #endif // _DEBUG
-
 }
 
 void FollowCamera::Reset() {
 	JSON_OPEN("Resources/Data/FollowCamera/followCamera.json");
 	JSON_LOAD(offset_);
 	JSON_CLOSE();
+	transform_.translate = offset_;
 }
 
 void FollowCamera::Debug() {

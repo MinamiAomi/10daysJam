@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "GameObject/GameObject.h"
 #include "Math/Camera.h"
 #include "Player.h"
 
@@ -16,6 +17,7 @@ public:
 
 	std::shared_ptr<Camera> GetCamera() { return camera_; }
 	void SetCamera(std::shared_ptr<Camera> camera) { camera_ = camera; }
+	Transform transform_;
 private:
 	void Debug();
 	Vector3 offset_;
