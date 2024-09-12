@@ -29,6 +29,18 @@
         "block": "block.gltf",
         "gravity": "gravity.gltf",
         "onePlace": "onePlace.gltf",
-        "tenPlace": "tenPlace.gltf"
+        "tenPlace": "tenPlace.gltf",
+        "scoreOnePlace": "scoreOnePlace.gltf",
+        "scoreTenPlace": "scoreTenPlace.gltf",
+        "number_0": "number_0.gltf",
+        "number_1": "number_1.gltf",
+        "number_2": "number_2.gltf",
+        "number_3": "number_3.gltf",
+        "number_4": "number_4.gltf",
+        "number_5": "number_5.gltf",
+        "number_6": "number_6.gltf",
+        "number_7": "number_7.gltf",
+        "number_8": "number_8.gltf",
+        "number_9": "number_9.gltf"
     } 
 }

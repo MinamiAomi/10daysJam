@@ -41,6 +41,7 @@ void GameScene::OnInitialize() {
 	followCamera_->SetPlayer(player_);
 	followCamera_->SetCamera(camera_);
 
+	score_->SetPlayer(player_);
 	score_->SetParent(followCamera_->transform_);
 	score_->Initialize();
 	
