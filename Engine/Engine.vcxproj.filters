@@ -85,6 +85,9 @@
     <Filter Include="Graphics\Particle">
       <UniqueIdentifier>{2aa45c89-c217-4e1c-9837-b064e6d61eb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\App">
+      <UniqueIdentifier>{fcaab30d-f9ea-43e4-83bb-ba6df292388f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene\SceneManager.cpp">
@@ -358,6 +361,12 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="File\JsonHelper.cpp" />
+    <ClCompile Include="Graphics\App\SkyRenderer.cpp">
+      <Filter>Graphics\App</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\App\Voronoi.cpp">
+      <Filter>Graphics\App</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\BaseScene.h">
@@ -693,6 +702,12 @@
     <ClInclude Include="File\JsonHelper.h">
       <Filter>File</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\App\SkyRenderer.h">
+      <Filter>Graphics\App</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\App\Voronoi.h">
+      <Filter>Graphics\App</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Graphics\Shader\Lighting.hlsli">
@@ -859,6 +874,12 @@
     </None>
     <None Include="Graphics\Shader\Particle\UpdateParticleCS.hlsl">
       <Filter>Graphics\Shader\Particle</Filter>
+    </None>
+    <None Include="Graphics\Shader\Standard\GeometryPassInstancingPS.hlsl">
+      <Filter>Graphics\Shader\Standard</Filter>
+    </None>
+    <None Include="Graphics\Shader\Standard\GeometryPassInstancingVS.hlsl">
+      <Filter>Graphics\Shader\Standard</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

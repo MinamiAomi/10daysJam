@@ -9,7 +9,7 @@
 void MapBlock::OnInitialize() {
 
     transform.SetParent(&map_.transform);
-    transform.translate = { MapProperty::kBlockSize * (float)column_ - (float)MapProperty::kMapColumn, -MapProperty::kBlockSize * (float)row_, 0.0f };
+    transform.translate = { MapProperty::kBlockSize * (float)column_ - (float)MapProperty::kMapColumn + MapProperty::kBlockSize * 0.5f, -MapProperty::kBlockSize * (float)row_, 0.0f };
     transform.scale = Vector3::one;
     transform.rotate = Quaternion::identity;
     transform.UpdateMatrix();

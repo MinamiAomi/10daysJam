@@ -58,6 +58,8 @@ void RenderManager::Initialize() {
     imguiManager->NewFrame();
 
     timer_.Initialize();
+    skyTexture_.Create(L"SkyTexture", lightingRenderingPass_.GetResult().GetWidth(), lightingRenderingPass_.GetResult().GetHeight(), DXGI_FORMAT_R8G8B8A8_UNORM);
+    skyRenderer_.Initialize(skyTexture_.GetRTVFormat());
 
     frameCount_ = 0;
 }
@@ -110,6 +112,13 @@ void RenderManager::Render() {
 
         //particleCore_.Render(commandContext_, *camera);
     }
+
+    //空
+    commandContext_.TransitionResource(skyTexture_, D3D12_RESOURCE_STATE_RENDER_TARGET);
+    commandContext_.SetRenderTarget(skyTexture_.GetRTV());
+    commandContext_.SetViewportAndScissorRect(0, 0, skyTexture_.GetWidth(), skyTexture_.GetHeight());
+    float skyScale = camera->GetFarClip() * 2.0f;
+    skyRenderer_.Render(commandContext_, *camera, Matrix4x4::MakeAffineTransform({ skyScale, skyScale, skyScale }, Quaternion::identity, camera->GetPosition()));
 
     //bloom_.Render(commandContext_);
     fxaa_.Render(commandContext_);

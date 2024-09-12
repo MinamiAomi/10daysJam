@@ -14,7 +14,7 @@ class Map;
 class BlockParticles {
 public:
 	static const uint32_t kEmitOneBlockPaticleNum = 20;
-	static const uint32_t kBlockParticleNum = kEmitOneBlockPaticleNum * 64;
+	static const uint32_t kBlockParticleNum = kEmitOneBlockPaticleNum * 128;
 	void Initialize();
 	void Emit(const Vector3& position);
 	void Update();

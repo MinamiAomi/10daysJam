@@ -11,7 +11,7 @@ class Map;
 class BlockParticle : public GameObject{
 public:
 
-	static const int kTime_ = 180;
+	static const int kTime_ = 80;
 
 	void Initialize();
 	void Emit(const Vector3& position, const Vector3& velocity, const Math::Sphere& sphere, int index);
