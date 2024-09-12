@@ -10,24 +10,17 @@ ConstantBuffer<Scene> g_Scene : register(b0);
 
 struct Instance {
     float4x4 worldMatrix;
-    float4x4 worldInverseTransposeMatrix;
-};
-ConstantBuffer<Instance> g_Instance : register(b1);
-
-struct Material {
     float3 albedo;
+    float alpha;
     float metallic;
     float roughness;
     uint albedoMapIndex;
-    uint metallicRoughnessMapIndex;
-    uint normalMapIndex;
+    uint pad;
 };
-ConstantBuffer<Material> g_Material : register(b2);
+struct InstanceOffset {
+    uint32_t offset;
+};
 
-#ifdef ENABLE_SKINNING
-struct Bone {
-    float4x4 boneMatrix;
-    float4x4 boneInverseTransposeMatrix;
-};
-StructuredBuffer<Bone> g_Bones : register(t0);
-#endif // ENABLE_SKINNING
+// GeometryPassInstancingVS
+ConstantBuffer<InstanceOffset> g_InstanceOffset : register(b1);
+StructuredBuffer<Instance> g_Instances : register(t0);

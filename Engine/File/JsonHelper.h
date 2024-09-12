@@ -56,6 +56,8 @@ namespace JsonHelper {
 #define JSON_OBJECT(x) (JsonHelper::Object(x))
 // 引数に与えた変数の名前でセーブ
 #define JSON_SAVE(x) (JsonHelper::Save(x,  STRINGIFY(x)))
+#define JSON_SAVE_BY_NAME(name, x) (JsonHelper::Save(x, name))
 // 引数に与えた変数の名前でロード
 // 読み込めたらTrue
 #define JSON_LOAD(x) (JsonHelper::Load(x,  STRINGIFY(x)))
+#define JSON_LOAD_BY_NAME(name, x) (JsonHelper::Load(x, name))

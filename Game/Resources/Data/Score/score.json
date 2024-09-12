@@ -1,3 +1,10 @@
 {
-    "limitTime_": 36000
+    "limitTime_": 3600,
+    "onePlaceTransformFrame_": 60.0,
+    "tenPlaceTransformFrame_": 60.0,
+    "timerOffset_": [
+        25.0,
+        30.0,
+        90.0
+    ]
 }

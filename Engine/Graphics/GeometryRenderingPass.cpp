@@ -1,5 +1,7 @@
 #include "GeometryRenderingPass.h"
 
+#include <span>
+
 #include "Core/Helper.h"
 #include "Core/Graphics.h"
 #include "Core/ShaderManager.h"
@@ -11,8 +13,8 @@
 #include "RenderManager.h"
 
 namespace {
-    const wchar_t kVertexShader[] = L"Standard/GeometryPassVS.hlsl";
-    const wchar_t kPixelShader[] = L"Standard/GeometryPassPS.hlsl";
+    const wchar_t kVertexShader[] = L"Standard/GeometryPassInstancingVS.hlsl";
+    const wchar_t kPixelShader[] = L"Standard/GeometryPassInstancingPS.hlsl";
 }
 
 void GeometryRenderingPass::Initialize(uint32_t width, uint32_t height) {
@@ -29,9 +31,13 @@ void GeometryRenderingPass::Initialize(uint32_t width, uint32_t height) {
     depth_.Create(L"GeometryRenderingPass Depth", width, height, DXGI_FORMAT_D32_FLOAT);
 
     RootSignatureDescHelper rootSignatureDesc;
+    // Scene
     rootSignatureDesc.AddConstantBufferView(0);
-    rootSignatureDesc.AddConstantBufferView(1);
-    rootSignatureDesc.AddConstantBufferView(2);
+    // InstanceOffset
+    rootSignatureDesc.AddConstants(1, 1);
+    // Instances
+    rootSignatureDesc.AddDescriptorTable().AddSRVDescriptors(1, 0);
+    //
     rootSignatureDesc.AddDescriptorTable().AddSRVDescriptors(BINDLESS_RESOURCE_MAX, 0, 1);
     rootSignatureDesc.AddStaticSampler(0, D3D12_FILTER_MIN_MAG_MIP_POINT);
     rootSignatureDesc.AddFlag(D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
@@ -84,39 +90,26 @@ void GeometryRenderingPass::Render(CommandContext& commandContext, const Camera&
 
     struct InstanceData {
         Matrix4x4 worldMatrix;
-        Matrix4x4 worldInverseTransposeMatrix;
-    };
-
-
-    struct MaterialData {
         Vector3 albedo;
+        float alpha;
         float metallic;
         float roughness;
         uint32_t albedoMapIndex;
-        uint32_t metallicRoughnessMapIndex;
-        uint32_t normalMapIndex;
+        uint32_t pad;
     };
+
 
     uint32_t defaultWhiteTextureIndex = DefaultTexture::White.GetSRV().GetIndex();
-    uint32_t defaultNormalTextureIndex = DefaultTexture::Normal.GetSRV().GetIndex();
 
-    auto ErrorMaterial = [defaultWhiteTextureIndex, defaultNormalTextureIndex]() {
-        MaterialData materialData;
-        materialData.albedo = { 0.988f, 0.059f, 0.753f };
-        materialData.metallic = 0.0f;
-        materialData.roughness = 0.0f;
-        materialData.albedoMapIndex = defaultWhiteTextureIndex;
-        materialData.metallicRoughnessMapIndex = defaultWhiteTextureIndex;
-        materialData.normalMapIndex = defaultNormalTextureIndex;
-        return materialData;
-    };
-    auto SetMaterialData = [](MaterialData& dest, const Material& src) {
-        dest.albedo = src.albedo;
-        dest.metallic = src.metallic;
-        dest.roughness = src.roughness;
-        if (src.albedoMap) { dest.albedoMapIndex = src.albedoMap->GetSRV().GetIndex(); }
-        if (src.metallicRoughnessMap) { dest.metallicRoughnessMapIndex = src.metallicRoughnessMap->GetSRV().GetIndex(); }
-        if (src.normalMap) { dest.normalMapIndex = src.normalMap->GetSRV().GetIndex(); }
+    auto SetMaterial = [defaultWhiteTextureIndex](InstanceData& instance, const Material& material) {
+        instance.albedo = material.albedo;
+        instance.metallic = material.metallic;
+        instance.roughness = material.roughness;
+        uint32_t albedoMapIndex = defaultWhiteTextureIndex;
+        if (material.albedoMap) {
+            albedoMapIndex = material.albedoMap->GetSRV().GetIndex();
+        }
+        instance.albedoMapIndex = albedoMapIndex;
     };
 
     commandContext.TransitionResource(albedo_, D3D12_RESOURCE_STATE_RENDER_TARGET);
@@ -128,6 +121,43 @@ void GeometryRenderingPass::Render(CommandContext& commandContext, const Camera&
     commandContext.ClearColor(metallicRoughness_);
     commandContext.ClearColor(normal_);
     commandContext.ClearDepth(depth_);
+
+    auto& modelMap = modelSorter.GetModelInstanceMap();
+    auto& instanceList = modelSorter.GetDrawModels();
+    if (instanceList.empty()) {
+        return;
+    }
+    // Uploadバッファを割り当てる
+    size_t allocateBufferSize = sizeof(InstanceData) * instanceList.size();
+    auto alloc = commandContext.AllocateDynamicBuffer(LinearAllocatorType::Upload, allocateBufferSize);
+    std::span<InstanceData> instancesData = { static_cast<InstanceData*>(alloc.cpu), instanceList.size() };
+    uint32_t drawCount = 0;
+    // Uploadバッファを埋める
+    for (auto& [model, instances] : modelMap) {
+        for (auto instance : instances) {
+            instancesData[drawCount].worldMatrix = instance->GetWorldMatrix();
+            //instancesData[drawCount].worldInverseTransposeMatrix = instancesData[drawCount].worldMatrix.Inverse().Transpose();
+            if (auto material = instance->GetMaterial()) {
+                SetMaterial(instancesData[drawCount], *material);
+            }
+            else {
+                auto& originalMaterial = model->GetMaterials()[model->GetMeshes()[0].material];
+                SetMaterial(instancesData[drawCount], originalMaterial);
+            }
+            instancesData[drawCount].alpha = instance->GetAlpha();
+            ++drawCount;
+        }
+    }
+
+    // 現状のインスタンシングのバッファじゃ足りないので再生成
+    if (allocateBufferSize > instancingBuffer_.GetBufferSize()) {
+        instancingBuffer_.Create(L"GeoemtryPass InstancingBuffer", drawCount, sizeof(InstanceData));
+    }
+
+
+    // Uploadバッファからコピー
+    commandContext.CopyBufferRegion(instancingBuffer_, 0, alloc.resource, alloc.offset, allocateBufferSize);
+    commandContext.TransitionResource(instancingBuffer_, D3D12_RESOURCE_STATE_GENERIC_READ);
 
     D3D12_CPU_DESCRIPTOR_HANDLE rtvs[] = {
         albedo_.GetRTV(),
@@ -147,42 +177,55 @@ void GeometryRenderingPass::Render(CommandContext& commandContext, const Camera&
     commandContext.SetDynamicConstantBufferView(RootIndex::Scene, sizeof(sceneData), &sceneData);
 
     commandContext.SetBindlessResource(RootIndex::BindlessTexture);
+    commandContext.SetDescriptorTable(RootIndex::Instances, instancingBuffer_.GetSRV());
 
-    auto& instances = modelSorter.GetDrawModels();
-    for (auto instance : instances) {
-        auto model = instance->GetModel();
+    uint32_t instanceOffset = 0;
+    for (auto& [model, instances] : modelMap) {
+        commandContext.SetConstants(RootIndex::InstanceOffset, instanceOffset);
 
-        InstanceData instanceData;
-        instanceData.worldMatrix = /*model->GetRootNode().localMatrix **/ instance->GetWorldMatrix();
-        instanceData.worldInverseTransposeMatrix = instanceData.worldMatrix.Inverse().Transpose();
-        commandContext.SetDynamicConstantBufferView(RootIndex::Instance, sizeof(instanceData), &instanceData);
-
-        auto instanceMaterial = instance->GetMaterial();
-
+        commandContext.SetVertexBuffer(0, model->GetVertexBuffer().GetVertexBufferView());
+        commandContext.SetIndexBuffer(model->GetIndexBuffer().GetIndexBufferView());
+        
         for (auto& mesh : model->GetMeshes()) {
-            MaterialData materialData = ErrorMaterial();
-            // インスタンスのマテリアルを優先
-            if (instanceMaterial) {
-                SetMaterialData(materialData, *instanceMaterial);
-            }
-            // メッシュのマテリアル
-            else if (mesh.material < model->GetMaterials().size()) {
-                SetMaterialData(materialData, model->GetMaterials()[mesh.material]);
-            }
-            commandContext.SetDynamicConstantBufferView(RootIndex::Material, sizeof(materialData), &materialData);
-
-            auto skeleton = instance->GetSkeleton();
-            auto vbv = model->GetVertexBuffer().GetVertexBufferView();
-            if (skeleton) {
-                auto skinCluster = RenderManager::GetInstance()->GetSkinningManager().GetSkinCluster(skeleton.get());
-                if (skinCluster) {
-                    vbv = skinCluster->GetSkinnedVertexBuffer().GetVertexBufferView();
-                }
-            }
-            commandContext.SetVertexBuffer(0, vbv);
-            commandContext.SetIndexBuffer(model->GetIndexBuffer().GetIndexBufferView());
-            commandContext.DrawIndexed((UINT)mesh.indexCount, mesh.indexOffset, mesh.vertexOffset);
+            commandContext.DrawIndexedInstanced((UINT)mesh.indexCount, (UINT)instances.size(), mesh.indexOffset, mesh.vertexOffset);
         }
-
+        instanceOffset += static_cast<uint32_t>(instances.size());
     }
+
+    //    auto& instances = modelSorter.GetDrawModels();
+    //    for (auto instance : instances) {
+    //        auto model = instance->GetModel();
+    //
+    //        InstanceData instanceData;
+    //        instanceData.worldMatrix = /*model->GetRootNode().localMatrix **/ instance->GetWorldMatrix();
+    //        instanceData.worldInverseTransposeMatrix = instanceData.worldMatrix.Inverse().Transpose();
+    //        commandContext.SetDynamicConstantBufferView(RootIndex::InstanceOrOffset, sizeof(instanceData), &instanceData);
+    //
+    //        auto instanceMaterial = instance->GetMaterial();
+    //
+    //        for (auto& mesh : model->GetMeshes()) {
+    //            MaterialData materialData = ErrorMaterial();
+    //            // インスタンスのマテリアルを優先
+    //            if (instanceMaterial) {
+    //                SetMaterialData(materialData, *instanceMaterial);
+    //            }
+    //            // メッシュのマテリアル
+    //            else if (mesh.material < model->GetMaterials().size()) {
+    //                SetMaterialData(materialData, model->GetMaterials()[mesh.material]);
+    //            }
+    //            commandContext.SetDynamicConstantBufferView(RootIndex::Material, sizeof(materialData), &materialData);
+    //
+    //            auto skeleton = instance->GetSkeleton();
+    //            auto vbv = model->GetVertexBuffer().GetVertexBufferView();
+    //            if (skeleton) {
+    //                auto skinCluster = RenderManager::GetInstance()->GetSkinningManager().GetSkinCluster(skeleton.get());
+    //                if (skinCluster) {
+    //                    vbv = skinCluster->GetSkinnedVertexBuffer().GetVertexBufferView();
+    //                }
+    //            }
+    //            commandContext.SetVertexBuffer(0, vbv);
+    //            commandContext.SetIndexBuffer(model->GetIndexBuffer().GetIndexBufferView());
+    //            commandContext.DrawIndexed((UINT)mesh.indexCount, mesh.indexOffset, mesh.vertexOffset);
+    //        }
+    //    }
 }
