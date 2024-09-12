@@ -140,17 +140,18 @@ void Map::CheckCollision() {
                             {  1.0f,  1.0f},
                             {  1.0f, -1.0f},
                     };
-                    Vector2 base = { MapProperty::kBlockSize * (float)column - (float)MapProperty::kMapColumn, -MapProperty::kBlockSize * (float)row };
+                    Vector2 base = { MapProperty::kBlockSize * (float)column - (float)MapProperty::kMapColumn + MapProperty::kBlockSize * 0.5f, -MapProperty::kBlockSize * (float)row };
                     for (auto& vertex : tileVertices) {
                         vertex = vertex + base;
                     }
-
 
                     if (IsCollision(vertices, tileVertices, _countof(vertices), axes, _countof(axes))) {
                         switch (collider->mode_)
                         {
                         case MapCollider::Break:
                             tileInstanceList_[PosKey(row, column)]->OnBreak();
+                            tileInstanceList_.erase(PosKey(row, column));
+                            tileData_[row][column] = Tile::Air;
                             break;
                         default:
                             break;
