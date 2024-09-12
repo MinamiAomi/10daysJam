@@ -54,7 +54,7 @@ namespace {
             }
 
             return false;
-            };
+        };
 
         for (uint32_t i = 0; i < axisCount; ++i) {
             if (std::isnan(axes[i].x) || std::isnan(axes[i].y)) { continue; }
@@ -70,6 +70,8 @@ void Map::Initialize() {
     Load();
 
     Generate();
+    preCullingRangeTop_ = 0;
+    preCullingRangeBottom_ = (uint16_t)(tileData_.size() - 1);
 }
 
 void Map::Update() {
@@ -78,6 +80,9 @@ void Map::Update() {
             tile->OnUpdate();
         }
     }
+
+    CullingTile();
+
 }
 
 void Map::Generate() {
@@ -149,9 +154,22 @@ void Map::CheckCollision() {
                         switch (collider->mode_)
                         {
                         case MapCollider::Break:
-                            tileInstanceList_[PosKey(row, column)]->OnBreak();
-                            tileInstanceList_.erase(PosKey(row, column));
-                            tileData_[row][column] = Tile::Air;
+                            switch (tileData_[row][column])
+                            {
+                                // ブロック
+                            case Tile::Block:
+                                tileInstanceList_[PosKey(row, column)]->OnBreak();
+                                tileInstanceList_.erase(PosKey(row, column));
+                                tileData_[row][column] = Tile::Air;
+                                break;
+                                // 重力
+                            case Tile::Gravity:
+
+                                break;
+                            case Tile::Air:
+                            default:
+                                break;
+                            }
                             break;
                         default:
                             break;
@@ -183,6 +201,64 @@ Map::PosKey Map::CalcTilePosition(const Vector2& worldPosition) const {
     posKey.row = std::min((uint16_t)posKey.row, (uint16_t)(tileData_.size() - 1));
     posKey.column = std::min((uint16_t)posKey.column, (uint16_t)(MapProperty::kMapColumn - 1));
     return posKey;
+}
+
+void Map::CullingTile() {
+    assert(camera_);
+
+    enum SamplePoint {
+        TopNear,
+        TopFar,
+        BottomNear,
+        BottomFar,
+
+        NumPoints
+    };
+
+    Vector3 samplePoints[] = {
+        { 0.0f,  1.0f, 0.0f },
+        { 0.0f,  1.0f, 1.0f },
+        { 0.0f, -1.0f, 0.0f },
+        { 0.0f, -1.0f, 1.0f },
+    };
+
+    auto viewProjectionInverseMatrix = camera_->GetViewProjectionMatrix().Inverse();
+    for (auto& samplePoint : samplePoints) {
+        samplePoint = viewProjectionInverseMatrix.ApplyTransformWDivide(samplePoint);
+    }
+
+    auto ClosestPoint = [](const Vector3& origin, const Vector3& diff) {
+        assert(diff.z != 0.0f);
+        float t = (0.0f - origin.z) / diff.z;
+        return origin + t * diff;
+    };
+
+    Vector3 top = ClosestPoint(samplePoints[TopNear], samplePoints[TopFar] - samplePoints[TopNear]);
+    Vector3 bottom = ClosestPoint(samplePoints[BottomNear], samplePoints[BottomFar] - samplePoints[BottomNear]);
+
+    auto curCullingRangeTop = CalcTilePosition({ top.x, top.y + 20.0f }).row;
+    auto curCullingRangeBottom = CalcTilePosition({ bottom.x, bottom.y - 20.0f }).row;
+
+    auto SwitchingCulling = [&](auto cullingStart, auto cullingEnd) {
+        for (auto row = cullingStart; row < cullingEnd; ++row) {
+            for (uint16_t column = 0; column < MapProperty::kMapColumn; ++column) {
+                if (tileData_[row][column] != Tile::Air &&
+                    tileInstanceList_.contains(PosKey(row, column))) {
+                    tileInstanceList_[PosKey(row, column)]->OnSwitchingCulling();
+                }
+            }
+        }
+    };
+
+    if (curCullingRangeTop != preCullingRangeTop_) {
+        SwitchingCulling(std::min(curCullingRangeTop, preCullingRangeTop_), std::max(curCullingRangeTop, preCullingRangeTop_));
+    }
+    if (curCullingRangeBottom != preCullingRangeBottom_) {
+        SwitchingCulling(std::min(curCullingRangeBottom, preCullingRangeBottom_), std::max(curCullingRangeBottom, preCullingRangeBottom_));
+    }
+
+    preCullingRangeTop_ = curCullingRangeTop;
+    preCullingRangeBottom_ = curCullingRangeBottom;
 }
 
 void Map::Load() {

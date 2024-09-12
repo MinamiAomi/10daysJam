@@ -16,6 +16,7 @@ public:
 	void OnInitialize() override;
 	void OnUpdate() override;
 	void OnBreak() override;
+	void OnSwitchingCulling() override;
 
 	void SetBlockParticles(std::shared_ptr<BlockParticles> blockParticles) { blockParticles_ = blockParticles; }
 	void SetScore(std::shared_ptr<Score> score) { score_ = score; }

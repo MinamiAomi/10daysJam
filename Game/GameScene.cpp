@@ -29,6 +29,7 @@ void GameScene::OnInitialize() {
 	blockParticles_->SetMap(map_.get());
 	blockParticles_->Initialize();
 
+	map_->SetCamera(camera_);
 	map_->SetPlayer(player_);
 	map_->SetBlockParticles(blockParticles_);
 	map_->SetScore(score_);
@@ -71,6 +72,7 @@ void GameScene::OnUpdate() {
 	{
 		player_->Update();
 		followCamera_->Update();
+		map_->Update();
 		score_->Update();
 		map_->CheckCollision();
 		CollisionManager::GetInstance()->CheckCollision();

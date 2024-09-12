@@ -12,6 +12,7 @@ public:
     virtual void OnInitialize() {}
     virtual void OnUpdate() {}
     virtual void OnBreak() {}
+    virtual void OnSwitchingCulling() {}
 
     bool IsActive() const { return isActive_; }
     uint16_t GetRow() const { return row_; }
