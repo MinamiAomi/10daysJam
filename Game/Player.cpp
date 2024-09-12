@@ -37,6 +37,10 @@ void Player::Initialize(Map* map) {
 }
 
 void Player::Reset() {
+
+	SkyRenderer::y_ = 0;
+	SkyRenderer::switchNum_ = 0;
+
 	invincibleTime_ = 0.0f;
 	JSON_OPEN("Resources/Data/Player/player.json");
 	JSON_LOAD(speed_);

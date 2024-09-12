@@ -13,6 +13,7 @@ class SkyRenderer {
 public:
    static float y_;
    static const int transitionHeight = 50;
+   static int switchNum_;
 
     void Initialize(DXGI_FORMAT rtvFormat);
     void Render(CommandContext& commandContext, const Camera& camera, Matrix4x4 worldMatrix);
@@ -32,7 +33,5 @@ private:
     Vector3 bottomColor_;
 
     float speed_ = 0.01f;
-
-    int switchNum_ = 0;
 
 };

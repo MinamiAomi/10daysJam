@@ -36,7 +36,7 @@ void RenderManager::Initialize() {
     lineDrawer_.Initialize(lightingRenderingPass_.GetResult().GetRTVFormat());
     //particleCore_.Initialize(lightingRenderingPass_.GetResult().GetRTVFormat());
 
-    //bloom_.Initialize(&lightingRenderingPass_.GetResult());
+    bloom_.Initialize(&lightingRenderingPass_.GetResult());
     fxaa_.Initialize(&lightingRenderingPass_.GetResult());
     postEffect_.Initialize(finalImageBuffer_);
 
@@ -122,7 +122,7 @@ void RenderManager::Render() {
 
 
 
-    //bloom_.Render(commandContext_);
+    bloom_.Render(commandContext_);
     fxaa_.Render(commandContext_);
 
     commandContext_.TransitionResource(finalImageBuffer_, D3D12_RESOURCE_STATE_RENDER_TARGET);

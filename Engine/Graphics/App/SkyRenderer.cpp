@@ -10,6 +10,7 @@ namespace {
 }
 
 float SkyRenderer::y_ = 0.0f;
+int SkyRenderer::switchNum_ = 0;
 
 void SkyRenderer::Initialize(DXGI_FORMAT rtvFormat) {
 #pragma region パラメーター
@@ -22,9 +23,10 @@ void SkyRenderer::Initialize(DXGI_FORMAT rtvFormat) {
 	CD3DX12_DESCRIPTOR_RANGE range{};
 	range.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
 
-	CD3DX12_ROOT_PARAMETER rootParameters[2]{};
+	CD3DX12_ROOT_PARAMETER rootParameters[3]{};
 	rootParameters[0].InitAsConstantBufferView(0);
 	rootParameters[1].InitAsDescriptorTable(1, &range);
+	rootParameters[2].InitAsConstants(1, 1);
 
 	CD3DX12_STATIC_SAMPLER_DESC ssDesc{};
 	ssDesc.Init(0, D3D12_FILTER_MIN_MAG_MIP_LINEAR);
@@ -102,34 +104,43 @@ void SkyRenderer::Render(CommandContext& commandContext, const Camera& camera, M
 	scene.worldMatrix = worldMatrix;
 	scene.worldInverseTransposeMatrix = worldMatrix.Inverse().Transpose();
 
-	float t = (-y_ - switchNum_ * float(transitionHeight)) / float(transitionHeight);
-	if (t >= 1.0f) {
-		switchNum_++;
-		t = (-y_ - switchNum_ * float(transitionHeight)) / float(transitionHeight);
-	}
 
-	if (t <= 0.0f) {
-		switchNum_--;
-		t = (-y_ - switchNum_ * float(transitionHeight)) / float(transitionHeight);
-	}
+	if (y_ <= 0.0f) {
+		float t = (-y_ - switchNum_ * float(transitionHeight)) / float(transitionHeight);
+		if (t >= 1.0f) {
+			switchNum_++;
+			t = (-y_ - switchNum_ * float(transitionHeight)) / float(transitionHeight);
+		}
 
-	//遷移
-	if (switchNum_ % 4 == 0) {
+		if (t <= 0.0f) {
+			switchNum_--;
+			t = (-y_ - switchNum_ * float(transitionHeight)) / float(transitionHeight);
+		}
+
+
+		//遷移
+		if (switchNum_ % 4 == 0) {
+			topColor_ = color_;
+			bottomColor_ = Vector3::Lerp(t, color_, toColor_);
+		}
+		else if (switchNum_ % 4 == 1) {
+			topColor_ = Vector3::Lerp(t, color_, toColor_);
+			bottomColor_ = toColor_;
+		}
+		else if (switchNum_ % 4 == 2) {
+			topColor_ = toColor_;
+			bottomColor_ = Vector3::Lerp(t, toColor_, color_);
+		}
+		else if (switchNum_ % 4 == 3) {
+			topColor_ = Vector3::Lerp(t, toColor_, color_);;
+			bottomColor_ = color_;
+		}
+	}
+	else {
 		topColor_ = color_;
-		bottomColor_ = Vector3::Lerp(t,color_,toColor_);
-	}
-	else if (switchNum_ % 4 == 1) {
-		topColor_ = Vector3::Lerp(t, color_, toColor_);
-		bottomColor_ = toColor_;
-	}
-	else if (switchNum_ % 4 == 2) {
-		topColor_ = toColor_;
-		bottomColor_ = Vector3::Lerp(t, toColor_, color_);
-	}
-	else if (switchNum_ % 4 == 3) {
-		topColor_ = Vector3::Lerp(t, toColor_, color_);;
 		bottomColor_ = color_;
 	}
+	
 
 	scene.topColor = topColor_;
 	scene.bottomColor = bottomColor_;
@@ -201,6 +212,7 @@ void SkyRenderer::Render(CommandContext& commandContext, const Camera& camera, M
 	vertices[index++] = { positions[6], Vector3::back, { 1.0f, 1.0f} };
 
 	commandContext.SetDynamicVertexBuffer(0, vertices.size(), sizeof(Vertex), vertices.data());
+	commandContext.SetConstants(2, y_);
 	commandContext.Draw((UINT)vertices.size());
 }
 

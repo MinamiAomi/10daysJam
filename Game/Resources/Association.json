@@ -29,7 +29,7 @@
         "block": "block.gltf",
         "gravity": "gravity.gltf",
         "onePlace": "onePlace.gltf",
-        "tenPlace": "tenPlace.gltf"
+        "tenPlace": "tenPlace.gltf",
         "particle" : "particle.gltf"
     } 
 }
