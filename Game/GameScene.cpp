@@ -9,6 +9,8 @@
 #include "Engine/Collision/CollisionManager.h"
 #include "GameProperty.h"
 
+#include "Engine/Graphics/ImGuiManager.h"
+
 void GameScene::OnInitialize() {
 
 	camera_ = std::make_shared<Camera>();
@@ -38,14 +40,14 @@ void GameScene::OnInitialize() {
 	player_->Initialize(map_.get());
 
 	followCamera_ = std::make_shared<FollowCamera>();
-	followCamera_->Initialize();
 	followCamera_->SetPlayer(player_);
 	followCamera_->SetCamera(camera_);
+	followCamera_->Initialize();
 
 	score_->SetPlayer(player_);
 	score_->SetParent(followCamera_->transform_);
 	score_->Initialize();
-	
+
 	gameClearCamera_ = std::make_shared<GameClearCamera>();
 	gameClearCamera_->Initialize();
 	gameClearCamera_->SetCamera(camera_);
@@ -97,23 +99,34 @@ void GameScene::OnUpdate() {
 		break;
 	case GameProperty::kResult:
 	{
-		// カメラが動いているとき
-		if (!gameClearCamera_->GetIsEasing()) {
+		// 集計中
+		if (score_->GetState() == Score::State::Result) {
+			gameClearCamera_->SetEasingTime(score_->GetEasingTime());
 			gameClearCamera_->Update();
 			score_->Update();
 			map_->Update();
-		}
-		else {
-			// クリアしたら
-			if (input->IsKeyTrigger(DIK_R)) {
+			// 切り替わる瞬間
+			if (score_->GetState() != Score::State::Result) {
 				player_->Reset();
 				followCamera_->Reset();
 				map_->Generate();
-				score_->Reset();
 				score_->SetParent(followCamera_->transform_);
-				GameProperty::state_ = GameProperty::kInGame;
+				score_->Reset();
 			}
-			player_->Update();
+		}
+		else {
+			GameProperty::state_ = GameProperty::kInGame;
+			//// タイトル画面
+			//if (input->IsKeyTrigger(DIK_R)) {
+			//	player_->Reset();
+			//	followCamera_->Reset();
+			//	map_->Generate();
+			//	score_->Reset();
+			//	score_->SetParent(followCamera_->transform_);
+			//	GameProperty::state_ = GameProperty::kInGame;
+			//}
+			//score_->Update();
+			//player_->Update();
 		}
 	}
 	break;

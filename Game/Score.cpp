@@ -10,6 +10,9 @@
 #include "Player.h"
 
 void Score::Initialize() {
+	isFirst_ = true;
+	score_ = 0;
+
 	onePlace_.transform_.SetParent(&timerTransform_);
 	onePlace_.Initialize("onePlace", 9);
 	tenPlace_.transform_.SetParent(&timerTransform_);
@@ -57,10 +60,30 @@ void Score::Initialize() {
 }
 
 void Score::Update() {
-	if (isStart_) {
+	switch (state_) {
+	case Score::OutGame:
+		if (player_->transform.translate.y <= 0.0f) {
+			//FinalizeOutGameGame();
+			InitializeInGame();
+			state_ = InGame;
+		}
+		//scoreTransform_.translate = scoreOffset_;
+
+		scoreTransform_.UpdateMatrix();
+
+		scoreOnePlace_.UpdateTranslate();
+		scoreTenPlace_.UpdateTranslate();
+		scoreHundredPlace_.UpdateTranslate();
+		scoreThousandPlace_.UpdateTranslate();
+		scoreTenThousandPlace_.UpdateTranslate();
+
+		break;
+	case Score::InGame:
 		time_++;
 		if (time_ > limitTime_) {
 			isClear_ = true;
+			InitializeResultGame();
+			state_ = Result;
 		}
 		score_ = blockCount_ * depthCount_;
 		ConversionSeconds();
@@ -87,14 +110,64 @@ void Score::Update() {
 		depthTenPlace_.UpdateTranslate();
 		depthHundredPlace_.UpdateTranslate();
 		depthThousandPlace_.UpdateTranslate();
-	}
-	else {
-		if (player_->transform.translate.y <= 0.0f) {
-			isStart_ = true;
+
+		break;
+	case Result:
+	{
+		// 1触れ遅らせる
+		if (resultEasingTime_ >= 1.0f) {
+			blockOnePlace_.ActiveModel(10);
+			blockTenPlace_.ActiveModel(10);
+			blockHundredPlace_.ActiveModel(10);
+			blockThousandPlace_.ActiveModel(10);
+
+			depthOnePlace_.ActiveModel(10);
+			depthTenPlace_.ActiveModel(10);
+			depthHundredPlace_.ActiveModel(10);
+			depthThousandPlace_.ActiveModel(10);
+
+			// スコア
+			scoreOnePlace_.ActiveModel(score_ % 10);
+			scoreTenPlace_.ActiveModel((score_ / 10) % 10);
+			scoreHundredPlace_.ActiveModel((score_ / 100) % 10);
+			scoreThousandPlace_.ActiveModel((score_ / 1000) % 10);
+			scoreTenThousandPlace_.ActiveModel((score_ / 10000) % 10);
+
+			scoreTransform_.SetParent(nullptr);
+			scoreTransform_.UpdateMatrix();
+			scoreOnePlace_.UpdateTranslate();
+			scoreTenPlace_.UpdateTranslate();
+			scoreHundredPlace_.UpdateTranslate();
+			scoreThousandPlace_.UpdateTranslate();
+			scoreTenThousandPlace_.UpdateTranslate();
+			state_ = OutGame;
 		}
+
+		resultEasingTime_ += 1.0f / resultTransitionFrame_;
+		resultEasingTime_ = std::clamp(resultEasingTime_,0.0f,1.0f);
+		blockTransform_.translate = Vector3::Lerp(resultEasingTime_, blockOffset_, blockScoreOffset_);
+		depthTransform_.translate = Vector3::Lerp(resultEasingTime_, depthOffset_, depthScoreOffset_);
 		scoreTransform_.translate = scoreOffset_;
 
+		scoreOnePlace_.ActiveModel(rnd_.NextIntRange(0, 9));
+		scoreTenPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
+		scoreHundredPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
+		scoreThousandPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
+		scoreTenThousandPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
+
+		blockTransform_.UpdateMatrix();
+		depthTransform_.UpdateMatrix();
 		scoreTransform_.UpdateMatrix();
+
+		blockOnePlace_.UpdateTranslate();
+		blockTenPlace_.UpdateTranslate();
+		blockHundredPlace_.UpdateTranslate();
+		blockThousandPlace_.UpdateTranslate();
+
+		depthOnePlace_.UpdateTranslate();
+		depthTenPlace_.UpdateTranslate();
+		depthHundredPlace_.UpdateTranslate();
+		depthThousandPlace_.UpdateTranslate();
 
 		scoreOnePlace_.UpdateTranslate();
 		scoreTenPlace_.UpdateTranslate();
@@ -102,37 +175,21 @@ void Score::Update() {
 		scoreThousandPlace_.UpdateTranslate();
 		scoreTenThousandPlace_.UpdateTranslate();
 	}
-
-	
+	break;
+	default:
+		break;
+	}
 #ifdef _DEBUG
 	Debug();
 #endif // _DEBUG
 
 }
 
-void Score::Reset() {
-	JSON_OPEN("Resources/Data/Score/score.json");
-	JSON_LOAD(limitTime_);
-	JSON_LOAD(timerOffset_);
-	JSON_LOAD(blockOffset_);
-	JSON_LOAD(depthOffset_);
-	JSON_CLOSE();
-
-	score_ = 0;
-	time_ = 0;
-	isClear_ = false;
-	isStart_ = false;
-	blockCount_ = 0;
-	preBlockCount_ = blockCount_;
-	depthCount_ = 0;
-	preDepthCount_ = depthCount_;
-	ConversionSeconds();
-	preSecond_ = second_;
-
+void Score::InitializeInGame() {
 	onePlace_.transform_.SetParent(&timerTransform_);
-	onePlace_.Reset("onePlace", limitTime_ % 60);
+	onePlace_.Reset("onePlace", limitTime_ % 10);
 	tenPlace_.transform_.SetParent(&timerTransform_);
-	tenPlace_.Reset("tenPlace", limitTime_ / 600);
+	tenPlace_.Reset("tenPlace", (limitTime_ / 10) % 10);
 
 	blockOnePlace_.Reset("blockOnePlace", 0);
 	blockOnePlace_.transform_.SetParent(&blockTransform_);
@@ -152,16 +209,126 @@ void Score::Reset() {
 	depthThousandPlace_.Reset("depthThousandPlace", 0);
 	depthThousandPlace_.transform_.SetParent(&depthTransform_);
 
-	scoreOnePlace_.Reset("scoreOnePlace", 0);
+	timerTransform_.translate = timerOffset_;
+	blockTransform_.translate = blockOffset_;
+	depthTransform_.translate = depthOffset_;
+
+	timerTransform_.UpdateMatrix();
+	blockTransform_.UpdateMatrix();
+	depthTransform_.UpdateMatrix();
+
+	onePlace_.UpdateTranslate();
+	tenPlace_.UpdateTranslate();
+
+	blockOnePlace_.UpdateTranslate();
+	blockTenPlace_.UpdateTranslate();
+	blockHundredPlace_.UpdateTranslate();
+	blockThousandPlace_.UpdateTranslate();
+
+	depthOnePlace_.UpdateTranslate();
+	depthTenPlace_.UpdateTranslate();
+	depthHundredPlace_.UpdateTranslate();
+	depthThousandPlace_.UpdateTranslate();
+}
+
+void Score::FinalizeInGame() {}
+
+void Score::InitializeResultGame() {
+	scoreTransform_.SetParent(blockTransform_.GetParent());
+	scoreTransform_.translate = scoreOffset_;
+	scoreTransform_.UpdateMatrix();
+	scoreOnePlace_.UpdateTranslate();
+	scoreTenPlace_.UpdateTranslate();
+	scoreHundredPlace_.UpdateTranslate();
+	scoreThousandPlace_.UpdateTranslate();
+	scoreTenThousandPlace_.UpdateTranslate();
+	resultEasingTime_ = 0.0f;
+}
+
+void Score::FinalizeResultGameGame() {
+	/*scoreOnePlace_.Reset("scoreOnePlace", 10);
 	scoreOnePlace_.transform_.SetParent(&scoreTransform_);
-	scoreTenPlace_.Reset("scoreTenPlace", 0);
+	scoreTenPlace_.Reset("scoreTenPlace", 10);
 	scoreTenPlace_.transform_.SetParent(&scoreTransform_);
-	scoreHundredPlace_.Reset("scoreHundredPlace", 0);
+	scoreHundredPlace_.Reset("scoreHundredPlace", 10);
 	scoreHundredPlace_.transform_.SetParent(&scoreTransform_);
-	scoreThousandPlace_.Reset("scoreThousandPlace", 0);
+	scoreThousandPlace_.Reset("scoreThousandPlace", 10);
 	scoreThousandPlace_.transform_.SetParent(&scoreTransform_);
-	scoreTenThousandPlace_.Reset("scoreTenThousandPlace", 0);
-	scoreTenThousandPlace_.transform_.SetParent(&scoreTransform_);
+	scoreTenThousandPlace_.Reset("scoreTenThousandPlace", 10);
+	scoreTenThousandPlace_.transform_.SetParent(&scoreTransform_);*/
+}
+
+void Score::Reset() {
+	JSON_OPEN("Resources/Data/Score/score.json");
+	JSON_LOAD(limitTime_);
+	JSON_LOAD(timerOffset_);
+	JSON_LOAD(blockOffset_);
+	JSON_LOAD(blockScoreOffset_);
+	JSON_LOAD(depthOffset_);
+	JSON_LOAD(depthScoreOffset_);
+	JSON_LOAD(scoreOffset_);
+	JSON_LOAD(resultTransitionFrame_);
+	JSON_CLOSE();
+
+	state_ = OutGame;
+
+	resultEasingTime_ = 0.0f;
+	time_ = 0;
+	isClear_ = false;
+	blockCount_ = 0;
+	preBlockCount_ = blockCount_;
+	depthCount_ = 0;
+	preDepthCount_ = depthCount_;
+	ConversionSeconds();
+	preSecond_ = second_;
+
+	onePlace_.transform_.SetParent(&timerTransform_);
+	onePlace_.Reset("onePlace", 10);
+	tenPlace_.transform_.SetParent(&timerTransform_);
+	tenPlace_.Reset("tenPlace", 10);
+
+	blockOnePlace_.Reset("blockOnePlace", 10);
+	blockOnePlace_.transform_.SetParent(&blockTransform_);
+	blockTenPlace_.Reset("blockTenPlace", 10);
+	blockTenPlace_.transform_.SetParent(&blockTransform_);
+	blockHundredPlace_.Reset("blockHundredPlace", 10);
+	blockHundredPlace_.transform_.SetParent(&blockTransform_);
+	blockThousandPlace_.Reset("blockThousandPlace", 10);
+	blockThousandPlace_.transform_.SetParent(&blockTransform_);
+
+	depthOnePlace_.Reset("depthOnePlace", 10);
+	depthOnePlace_.transform_.SetParent(&depthTransform_);
+	depthTenPlace_.Reset("depthTenPlace", 10);
+	depthTenPlace_.transform_.SetParent(&depthTransform_);
+	depthHundredPlace_.Reset("depthHundredPlace", 10);
+	depthHundredPlace_.transform_.SetParent(&depthTransform_);
+	depthThousandPlace_.Reset("depthThousandPlace", 10);
+	depthThousandPlace_.transform_.SetParent(&depthTransform_);
+	if (isFirst_) {
+		isFirst_ = false;
+		scoreOnePlace_.Reset("scoreOnePlace", 10);
+		scoreOnePlace_.transform_.SetParent(&scoreTransform_);
+		scoreTenPlace_.Reset("scoreTenPlace", 10);
+		scoreTenPlace_.transform_.SetParent(&scoreTransform_);
+		scoreHundredPlace_.Reset("scoreHundredPlace", 10);
+		scoreHundredPlace_.transform_.SetParent(&scoreTransform_);
+		scoreThousandPlace_.Reset("scoreThousandPlace", 10);
+		scoreThousandPlace_.transform_.SetParent(&scoreTransform_);
+		scoreTenThousandPlace_.Reset("scoreTenThousandPlace", 10);
+		scoreTenThousandPlace_.transform_.SetParent(&scoreTransform_);
+	}
+	else {
+		scoreOnePlace_.Reset("scoreOnePlace", score_ % 10);
+		scoreOnePlace_.transform_.SetParent(&scoreTransform_);
+		scoreTenPlace_.Reset("scoreTenPlace", (score_ / 10) % 10);
+		scoreTenPlace_.transform_.SetParent(&scoreTransform_);
+		scoreHundredPlace_.Reset("scoreHundredPlace", (score_ / 100) % 10);
+		scoreHundredPlace_.transform_.SetParent(&scoreTransform_);
+		scoreThousandPlace_.Reset("scoreThousandPlace", (score_ / 1000) % 10);
+		scoreThousandPlace_.transform_.SetParent(&scoreTransform_);
+		scoreTenThousandPlace_.Reset("scoreTenThousandPlace", (score_ / 10000) % 10);
+		scoreTenThousandPlace_.transform_.SetParent(&scoreTransform_);
+	}
 }
 
 void Score::AddScore(int depth) {
@@ -182,13 +349,19 @@ void Score::Debug() {
 			ImGui::DragFloat3("blockOffset_", &blockOffset_.x);
 			ImGui::DragFloat3("depthOffset_", &depthOffset_.x);
 			ImGui::DragFloat3("scoreOffset_", &scoreOffset_.x);
+			ImGui::DragFloat3("blockScoreOffset_", &blockScoreOffset_.x);
+			ImGui::DragFloat3("depthScoreOffset_", &depthScoreOffset_.x);
+			ImGui::DragFloat("resultTransitionFrame_", &resultTransitionFrame_, 0.1f);
 			if (ImGui::Button("Save")) {
 				JSON_OPEN("Resources/Data/Score/score.json");
 				JSON_SAVE(limitTime_);
 				JSON_SAVE(timerOffset_);
 				JSON_SAVE(blockOffset_);
+				JSON_SAVE(blockScoreOffset_);
 				JSON_SAVE(depthOffset_);
+				JSON_SAVE(depthScoreOffset_);
 				JSON_SAVE(scoreOffset_);
+				JSON_SAVE(resultTransitionFrame_);
 				JSON_CLOSE();
 			}
 
@@ -272,7 +445,8 @@ void Score::UpdateScore() {
 		}
 	}
 
-	if (preScore_ != score_) {
+
+	if (preScore_ != score_ && state_ == OutGame) {
 		scoreOnePlace_.ActiveModel(score_ % 10);
 		// 十の桁が動いたら
 		if ((preScore_ / 10) % 10 != (score_ / 10) % 10) {
@@ -336,14 +510,21 @@ void Score::NumPlace::UpdateTranslate() {
 }
 
 void Score::NumPlace::ActiveModel(int num) {
-	for (int i = 0; auto & model: numberModel_) {
-		if (i == num) {
-			model.SetIsActive(true);
+	if (num != 10) {
+		for (int i = 0; auto & model: numberModel_) {
+			if (i == num) {
+				model.SetIsActive(true);
+			}
+			else {
+				model.SetIsActive(false);
+			}
+			i++;
 		}
-		else {
+	}
+	else {
+		for (auto& model : numberModel_) {
 			model.SetIsActive(false);
 		}
-		i++;
 	}
 }
 
