@@ -56,6 +56,8 @@ void Score::Initialize() {
 	scoreTenThousandPlace_.transform_.SetParent(&scoreTransform_);
 	scoreTenThousandPlace_.Initialize("scoreTenThousandPlace", 0);
 
+	m_.SetModel(AssetManager::GetInstance()->FindModel("m"));
+
 	Reset();
 }
 
@@ -90,10 +92,12 @@ void Score::Update() {
 
 		timerTransform_.translate = timerOffset_;
 		blockTransform_.translate = blockOffset_;
+		mTransform_.translate = mOffset_;
 		depthTransform_.translate = depthOffset_;
 
 		timerTransform_.UpdateMatrix();
 		blockTransform_.UpdateMatrix();
+		mTransform_.UpdateMatrix();
 		depthTransform_.UpdateMatrix();
 
 		onePlace_.UpdateTranslate();
@@ -103,6 +107,8 @@ void Score::Update() {
 		blockTenPlace_.UpdateTranslate();
 		blockHundredPlace_.UpdateTranslate();
 		blockThousandPlace_.UpdateTranslate();
+
+		m_.SetWorldMatrix(mTransform_.worldMatrix);
 
 		depthOnePlace_.UpdateTranslate();
 		depthTenPlace_.UpdateTranslate();
@@ -118,6 +124,8 @@ void Score::Update() {
 			blockTenPlace_.ActiveModel(10);
 			blockHundredPlace_.ActiveModel(10);
 			blockThousandPlace_.ActiveModel(10);
+
+			m_.SetIsActive(false);
 
 			depthOnePlace_.ActiveModel(10);
 			depthTenPlace_.ActiveModel(10);
@@ -145,6 +153,7 @@ void Score::Update() {
 		resultEasingTime_ = std::clamp(resultEasingTime_, 0.0f, 1.0f);
 		blockTransform_.translate = Vector3::Lerp(resultEasingTime_, blockOffset_, blockScoreOffset_);
 		depthTransform_.translate = Vector3::Lerp(resultEasingTime_, depthOffset_, depthScoreOffset_);
+		mTransform_.translate = mOffset_;
 		if (resultEasingTime_ < 1.0f) {
 			scoreTransform_.translate = scoreOffset_;
 			scoreOnePlace_.ActiveModel(rnd_.NextIntRange(0, 9));
@@ -157,6 +166,7 @@ void Score::Update() {
 
 		blockTransform_.UpdateMatrix();
 		depthTransform_.UpdateMatrix();
+		mTransform_.UpdateMatrix();
 		scoreTransform_.UpdateMatrix();
 
 		blockOnePlace_.UpdateTranslate();
@@ -164,10 +174,13 @@ void Score::Update() {
 		blockHundredPlace_.UpdateTranslate();
 		blockThousandPlace_.UpdateTranslate();
 
+		m_.SetWorldMatrix(mTransform_.worldMatrix);
+
 		depthOnePlace_.UpdateTranslate();
 		depthTenPlace_.UpdateTranslate();
 		depthHundredPlace_.UpdateTranslate();
 		depthThousandPlace_.UpdateTranslate();
+
 
 		scoreOnePlace_.UpdateTranslate();
 		scoreTenPlace_.UpdateTranslate();
@@ -200,6 +213,10 @@ void Score::InitializeInGame() {
 	blockThousandPlace_.Reset("blockThousandPlace", 0);
 	blockThousandPlace_.transform_.SetParent(&blockTransform_);
 
+	m_.SetWorldMatrix(mTransform_.worldMatrix);
+	m_.SetIsActive(true);
+
+
 	depthOnePlace_.Reset("depthOnePlace", 0);
 	depthOnePlace_.transform_.SetParent(&depthTransform_);
 	depthTenPlace_.Reset("depthTenPlace", 0);
@@ -212,6 +229,7 @@ void Score::InitializeInGame() {
 	timerTransform_.translate = timerOffset_;
 	blockTransform_.translate = blockOffset_;
 	depthTransform_.translate = depthOffset_;
+	mTransform_.translate = depthOffset_;
 
 	timerTransform_.UpdateMatrix();
 	blockTransform_.UpdateMatrix();
@@ -263,8 +281,10 @@ void Score::Reset() {
 	JSON_LOAD(limitTime_);
 	JSON_LOAD(timerOffset_);
 	JSON_LOAD(blockOffset_);
+	JSON_LOAD(mOffset_);
 	JSON_LOAD(blockScoreOffset_);
 	JSON_LOAD(depthOffset_);
+	JSON_LOAD(depthScoreOffset_);
 	JSON_LOAD(depthScoreOffset_);
 	JSON_LOAD(scoreOffset_);
 	JSON_LOAD(resultTransitionFrame_);
@@ -295,6 +315,9 @@ void Score::Reset() {
 	blockHundredPlace_.transform_.SetParent(&blockTransform_);
 	blockThousandPlace_.Reset("blockThousandPlace", 10);
 	blockThousandPlace_.transform_.SetParent(&blockTransform_);
+
+	m_.SetIsActive(false);
+	m_.SetWorldMatrix(mTransform_.worldMatrix);
 
 	depthOnePlace_.Reset("depthOnePlace", 10);
 	depthOnePlace_.transform_.SetParent(&depthTransform_);
@@ -348,6 +371,7 @@ void Score::Debug() {
 			ImGui::DragFloat3("timerOffset_", &timerOffset_.x);
 			ImGui::DragFloat3("blockOffset_", &blockOffset_.x);
 			ImGui::DragFloat3("depthOffset_", &depthOffset_.x);
+			ImGui::DragFloat3("mOffset_", &mOffset_.x);
 			ImGui::DragFloat3("scoreOffset_", &scoreOffset_.x);
 			ImGui::DragFloat3("blockScoreOffset_", &blockScoreOffset_.x);
 			ImGui::DragFloat3("depthScoreOffset_", &depthScoreOffset_.x);
@@ -357,6 +381,7 @@ void Score::Debug() {
 				JSON_SAVE(limitTime_);
 				JSON_SAVE(timerOffset_);
 				JSON_SAVE(blockOffset_);
+				JSON_SAVE(mOffset_);
 				JSON_SAVE(blockScoreOffset_);
 				JSON_SAVE(depthOffset_);
 				JSON_SAVE(depthScoreOffset_);

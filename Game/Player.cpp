@@ -129,6 +129,7 @@ void Player::Move() {
 		velocity_ *= resistance_;
 		// プレイヤーの位置を更新
 		transform.translate += velocity_;
+
 		// 速度のclamp
 		if (velocity_.Length() >= maxSpeed_) {
 			velocity_ = velocity_.Normalized() * maxSpeed_;
@@ -144,7 +145,11 @@ void Player::Move() {
 			// 速度反転
 			velocity_.x *= -1.0f;
 			UpdateRotate(velocity_.Normalized());
-
+		}
+		// 上行かないように
+		if (transform.translate.y >= 100.0f) {
+			velocity_.y *= -1.0f;
+			UpdateRotate(velocity_.Normalized());
 		}
 	}
 }

@@ -9,6 +9,8 @@ void FollowCamera::Initialize() {
 
 void FollowCamera::Update() {
 	transform_.translate = { offset_.x,offset_.y + player_->transform.worldMatrix.GetTranslate().y ,offset_.z };
+	// 上に行かないように
+	transform_.translate.y = (std::min)(transform_.translate.y, offset_.y + 50.0f);
 	transform_.UpdateMatrix();
 	camera_->SetPosition(transform_.translate);
 	camera_->UpdateMatrices();
