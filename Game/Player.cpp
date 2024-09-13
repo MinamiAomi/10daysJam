@@ -18,6 +18,11 @@
 void Player::Initialize(Map* map) {
 	SetName("Player");
 	model_.SetModel(AssetManager::GetInstance()->FindModel("player"));
+	drillMode_.SetModel(AssetManager::GetInstance()->FindModel("playerDrill"));
+	drillTransform_.SetParent(&transform);
+	modelTransform_.SetParent(&transform);
+	modelTransform_.scale = { 1.2f,1.2f,1.2f };
+	modelTransform_.UpdateMatrix();
 	collider_ = std::make_shared<BoxCollider>();
 	collider_->SetGameObject(this);
 	collider_->SetCallback([this](const CollisionInfo& collisionInfo) { OnCollision(collisionInfo); });
@@ -124,6 +129,7 @@ void Player::Move() {
 		velocity_ *= resistance_;
 		// プレイヤーの位置を更新
 		transform.translate += velocity_;
+
 		// 速度のclamp
 		if (velocity_.Length() >= maxSpeed_) {
 			velocity_ = velocity_.Normalized() * maxSpeed_;
@@ -139,7 +145,11 @@ void Player::Move() {
 			// 速度反転
 			velocity_.x *= -1.0f;
 			UpdateRotate(velocity_.Normalized());
-
+		}
+		// 上行かないように
+		if (transform.translate.y >= 100.0f) {
+			velocity_.y *= -1.0f;
+			UpdateRotate(velocity_.Normalized());
 		}
 	}
 }
@@ -161,6 +171,7 @@ void Player::UpdateInvincible() {
 	}
 	else {
 		model_.SetColor({ 1.0f, 1.0f, 1.0f });
+		drillMode_.SetColor({ 1.0f, 1.0f, 1.0f });
 	}
 }
 
@@ -171,7 +182,11 @@ void Player::UpdateTransform() {
 	collider_->SetSize(colliderSize_);
 	collider_->SetCenter(transform.worldMatrix.GetTranslate());
 	collider_->SetOrientation(transform.worldMatrix.GetRotate());
-	model_.SetWorldMatrix(transform.worldMatrix);
+	modelTransform_.UpdateMatrix();
+	model_.SetWorldMatrix(modelTransform_.worldMatrix);
+	drillTransform_.rotate *= Quaternion::MakeForZAxis(30.0f * Math::ToRadian);
+	drillTransform_.UpdateMatrix();
+	drillMode_.SetWorldMatrix(drillTransform_.worldMatrix);
 
 	mapCollider_->SetPosition(transform.translate.GetXY());
 	mapCollider_->SetRotate(transform.rotate.EulerAngle().z);

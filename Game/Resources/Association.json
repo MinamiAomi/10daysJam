@@ -3,6 +3,7 @@
         "box": "box.obj",
         "sphere": "sphere.obj",
         "player": "player.gltf",
+        "playerDrill": "playerDrill.gltf",
         "playerBullet": "playerBullet.gltf",
         "enemy": "enemy.gltf",
         "enemyBullet": "enemyBullet.gltf",
@@ -42,6 +43,13 @@
         "number_7": "number_7.gltf",
         "number_8": "number_8.gltf",
         "number_9": "number_9.gltf",
-        "particle" : "particle.gltf"
-    } 
+        "m": "m.gltf",
+        "particle": "particle.gltf"
+    },
+    "Sound": {
+        "blockBreak": "SE/blockBreak.mp3",
+        "inGame": "BGM/inGame.mp3",
+        "result": "BGM/result.mp3"
+    }
+
 }

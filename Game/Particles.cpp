@@ -52,7 +52,7 @@ void Particles::Emit()
 			particle.position = { 0.0f,0.0f,0.0f };
 			particle.velocity = Vector3{ rng_.NextFloatRange(minDirection_.x,maxDirection_.x),rng_.NextFloatRange(minDirection_.y,maxDirection_.y) ,rng_.NextFloatRange(minDirection_.z,maxDirection_.z) }.Normalize() * 1.0f;
 			particle.spin = 0.0f;
-			particle.spinSpeed = (3.0f * Math::ToRadian) * ((i % 2 + 1) * -1.0f);
+			particle.spinSpeed = (3.0f * Math::ToRadian) * ((i % 2 ) * -1.0f);
 			particle.isCircle = false;
 
 			emitParticles.push_back(particle);
@@ -86,14 +86,14 @@ void Particles::RotateEmit()
 			particle.position = { 0.0f,0.0f,0.0f };
 			particle.velocity = Vector3{ rng_.NextFloatRange(minDirection_.x,maxDirection_.x),rng_.NextFloatRange(minDirection_.y,maxDirection_.y) ,rng_.NextFloatRange(minDirection_.z,maxDirection_.z) }.Normalize() * 1.0f;
 			particle.spin = 0.0f;
-			particle.spinSpeed = (1.0f * Math::ToRadian) * ((i % 2 + 1) * -1.0f);
+			particle.spinSpeed = (1.0f * Math::ToRadian) * ((i % 2 ) * -1.0f);
 			particle.isCircle = false;
 
 			particle.rotate = 0.0f;
 			particle.endRadius = 10.0f;
 			particle.startRadius = 0.0f;
 			particle.rotateCenter = { 0.0f,0.0f,0.0f };
-			particle.ratateSpeed = (2.0f * Math::ToRadian) * ((i % 2 + 1) * -1.0f);
+			particle.ratateSpeed = (2.0f * Math::ToRadian) * ((i % 2 ) * -1.0f);
 
 
 			emitParticles.push_back(particle);
@@ -118,10 +118,10 @@ void Particles::PlayerEmit()
 				particle.acceleration = { 0.0f,0.0f,0.0f };
 				particle.startAlpha = 1.0f;
 				particle.endAlpha = 0.0f;
-				particle.startColor = { 1.0f,1.0f,0.0f };
-				particle.endColor = { 1.0f,1.0f,0.0f };
-				particle.startSize = 0.3f;
-				particle.endSize = 0.3f;
+				particle.startColor = { 1.0f,1.0f + 0.5f * ((i % 2) * -1.0f),0.0f };
+				particle.endColor = { 1.0f,1.0f + 0.5f * ((i % 2) * -1.0f),0.0f };
+				particle.startSize = 0.3f + 0.1f * (i % 2);
+				particle.endSize = 0.3f + 0.1f * (i % 2);
 				particle.lifeTime = 60;
 				particle.existenceTime = 0;
 				particle.position = { 0.0f,0.0f,0.0f };
@@ -134,7 +134,7 @@ void Particles::PlayerEmit()
 				particle.endRadius = 10.0f;
 				particle.startRadius = 0.0f;
 				particle.rotateCenter = emitPlayerTransform_.worldMatrix.GetTranslate();
-				particle.ratateSpeed = (rng_.NextFloatRange(20.0f, 30.0f) * Math::ToRadian) * ((i % 2 + 1) * -1.0f); ;
+				particle.ratateSpeed = (rng_.NextFloatRange(20.0f, 30.0f) * Math::ToRadian) ;
 				particle.playerQuaternion = player_->transform.rotate;
 
 

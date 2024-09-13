@@ -62,6 +62,10 @@ void GameScene::OnInitialize() {
 	particles_->SetCamera(camera_.get());
 	particles_->SetPlayer(player_.get());
 	particles_->Initialize();
+
+	bgm_ = AssetManager::GetInstance()->FindSound("inGame");
+	bgm_.Play(true);
+	result_ = AssetManager::GetInstance()->FindSound("result");
 }
 
 void GameScene::OnUpdate() {
@@ -90,6 +94,8 @@ void GameScene::OnUpdate() {
 		particles_->Update();
 		// リセット
 		if (input->IsKeyTrigger(DIK_R)) {
+			bgm_.Play(true);
+			result_.Stop();
 			player_->Reset();
 			followCamera_->Reset();
 			map_->Generate();
@@ -100,9 +106,11 @@ void GameScene::OnUpdate() {
 
 		// クリアしたか
 		if (score_->GetIsClear()) {
+			bgm_.Stop();
 			gameClearCamera_->SetCameraPosition(-(float(map_->GetMapRow()) + MapProperty::kBlockSize * 2.0f));
 			player_->SetGameClearPosPosition(gameClearCamera_->GetEndCameraPos().z + 80.0f);
 			score_->SetParent(gameClearCamera_->transform_);
+			result_.Play(true);
 			GameProperty::state_ = GameProperty::kResult;
 		}
 		break;
@@ -116,6 +124,8 @@ void GameScene::OnUpdate() {
 			map_->Update();
 			// 切り替わる瞬間
 			if (score_->GetState() != Score::State::Result) {
+				result_.Stop();
+				bgm_.Play(true);
 				player_->Reset();
 				followCamera_->Reset();
 				map_->Generate();
@@ -125,7 +135,6 @@ void GameScene::OnUpdate() {
 				SkyRenderer::y_ = 0;
 				SkyRenderer::switchNum_ = 0;
 			}
-			//player_->Update();
 		}
 		else {
 			GameProperty::state_ = GameProperty::kInGame;
