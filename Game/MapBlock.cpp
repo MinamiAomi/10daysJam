@@ -31,6 +31,3 @@ void MapBlock::OnBreak() {
     score_->AddScore(int(row_));
 }
 
-void MapBlock::OnSwitchingCulling() {
-    model_.SetIsActive(!model_.IsActive());
-}

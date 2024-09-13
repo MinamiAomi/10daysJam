@@ -35,6 +35,11 @@ void GameScene::OnInitialize() {
 	blockParticles_->SetMap(map_.get());
 	blockParticles_->Initialize();
 
+	followCamera_ = std::make_shared<FollowCamera>();
+	followCamera_->SetPlayer(player_);
+	followCamera_->SetCamera(camera_);
+	followCamera_->Initialize();
+
 	map_->SetCamera(camera_);
 	map_->SetPlayer(player_);
 	map_->SetBlockParticles(blockParticles_);
@@ -42,12 +47,7 @@ void GameScene::OnInitialize() {
 	map_->Initialize();
 
 	player_->Initialize(map_.get());
-
-	followCamera_ = std::make_shared<FollowCamera>();
-	followCamera_->SetPlayer(player_);
-	followCamera_->SetCamera(camera_);
-	followCamera_->Initialize();
-
+	
 	score_->SetPlayer(player_);
 	score_->SetParent(followCamera_->transform_);
 	score_->Initialize();

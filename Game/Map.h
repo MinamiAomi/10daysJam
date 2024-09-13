@@ -69,7 +69,7 @@ public:
 private:
     void CullingTile();
     void Load();
-    void AddSection(uint32_t sectionIndex, bool culling = false);
+    void AddSection(uint32_t sectionIndex);
     std::unique_ptr<MapTileBase> CreateTileInstance(Tile::Enum tile, uint16_t row, uint16_t column);
 
     // セクションの順番

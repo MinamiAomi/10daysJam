@@ -54,7 +54,7 @@ namespace {
             }
 
             return false;
-        };
+            };
 
         for (uint32_t i = 0; i < axisCount; ++i) {
             if (std::isnan(axes[i].x) || std::isnan(axes[i].y)) { continue; }
@@ -70,22 +70,24 @@ void Map::Initialize() {
     Load();
 
     Generate();
-    
+
 }
 
 void Map::Update() {
+    // カリング処理
+    CullingTile();
+
     for (auto& [key, tile] : tileInstanceList_) {
         if (tile->IsActive()) {
             tile->OnUpdate();
         }
     }
 
-    CullingTile();
-
+    // ステージ追加処理
     uint16_t lastSectionStart = (uint16_t)tileData_.size() - (uint16_t)sections_[sectionOrder_.back()]->GetHeight();
     if (preCullingRangeBottom_ >= lastSectionStart) {
         uint32_t addSectionIndex = rng_.NextUIntRange(1, (uint32_t)sections_.size() - 1);
-        AddSection(addSectionIndex, true);
+        AddSection(addSectionIndex);
     }
 }
 
@@ -101,8 +103,7 @@ void Map::Generate() {
         AddSection(addSectionIndex);
     }
 
-    preCullingRangeTop_ = 0;
-    preCullingRangeBottom_ = (uint16_t)(tileData_.size() - 1);
+    preCullingRangeTop_ = preCullingRangeBottom_ = 0;
 }
 
 void Map::CheckCollision() {
@@ -240,7 +241,7 @@ void Map::CullingTile() {
         assert(diff.z != 0.0f);
         float t = (0.0f - origin.z) / diff.z;
         return origin + t * diff;
-    };
+        };
 
     Vector3 top = ClosestPoint(samplePoints[TopNear], samplePoints[TopFar] - samplePoints[TopNear]);
     Vector3 bottom = ClosestPoint(samplePoints[BottomNear], samplePoints[BottomFar] - samplePoints[BottomNear]);
@@ -248,22 +249,62 @@ void Map::CullingTile() {
     auto curCullingRangeTop = CalcTilePosition({ top.x, top.y + 20.0f }).row;
     auto curCullingRangeBottom = CalcTilePosition({ bottom.x, bottom.y - 20.0f }).row;
 
-    auto SwitchingCulling = [&](auto cullingStart, auto cullingEnd) {
-        for (auto row = cullingStart; row < cullingEnd; ++row) {
+    // 画面に映るタイルのインスタンスを生成
+
+
+    // 上側の処理
+    // 範囲内を消す
+    if (curCullingRangeTop > preCullingRangeTop_) {
+        for (uint16_t row = preCullingRangeTop_; row < curCullingRangeTop; ++row) {
             for (uint16_t column = 0; column < MapProperty::kMapColumn; ++column) {
-                if (tileData_[row][column] != Tile::Air &&
-                    tileInstanceList_.contains(PosKey(row, column))) {
-                    tileInstanceList_[PosKey(row, column)]->OnSwitchingCulling();
+                if (tileInstanceList_.contains(PosKey(row, column))) {
+                    tileInstanceList_.erase(PosKey(row, column));
                 }
             }
         }
-    };
 
-    if (curCullingRangeTop != preCullingRangeTop_) {
-        SwitchingCulling(std::min(curCullingRangeTop, preCullingRangeTop_), std::max(curCullingRangeTop, preCullingRangeTop_));
     }
-    if (curCullingRangeBottom != preCullingRangeBottom_) {
-        SwitchingCulling(std::min(curCullingRangeBottom, preCullingRangeBottom_), std::max(curCullingRangeBottom, preCullingRangeBottom_));
+    // 範囲内に生成する
+    else if (curCullingRangeTop < preCullingRangeTop_) {
+        for (uint16_t row = curCullingRangeTop; row < preCullingRangeTop_; ++row) {
+            for (uint16_t column = 0; column < MapProperty::kMapColumn; ++column) {
+                if (!tileInstanceList_.contains(PosKey(row, column))) {
+                    auto tile = tileData_[row][column];
+                    auto tileInstance = CreateTileInstance(tile, row, column);
+                    if (tileInstance) {
+                        tileInstanceList_[PosKey(row, column)] = std::move(tileInstance);
+                    }
+                }
+            }
+        }
+    }
+
+
+    // 下側の処理
+    // 範囲内を消す
+    if (curCullingRangeBottom < preCullingRangeBottom_) {
+        for (uint16_t row = curCullingRangeBottom; row < preCullingRangeBottom_; ++row) {
+            for (uint16_t column = 0; column < MapProperty::kMapColumn; ++column) {
+                if (tileInstanceList_.contains(PosKey(row, column))) {
+                    tileInstanceList_.erase(PosKey(row, column));
+                }
+            }
+        }
+
+    }
+    // 範囲内に生成する
+    else if (curCullingRangeBottom > preCullingRangeBottom_) {
+        for (uint16_t row = preCullingRangeBottom_; row < curCullingRangeBottom; ++row) {
+            for (uint16_t column = 0; column < MapProperty::kMapColumn; ++column) {
+                if (!tileInstanceList_.contains(PosKey(row, column))) {
+                    auto tile = tileData_[row][column];
+                    auto tileInstance = CreateTileInstance(tile, row, column);
+                    if (tileInstance) {
+                        tileInstanceList_[PosKey(row, column)] = std::move(tileInstance);
+                    }
+                }
+            }
+        }
     }
 
     preCullingRangeTop_ = curCullingRangeTop;
@@ -289,31 +330,15 @@ void Map::Load() {
 
 }
 
-void Map::AddSection(uint32_t sectionIndex, bool culling) {
+void Map::AddSection(uint32_t sectionIndex) {
     assert(sectionIndex < sections_.size());
     // 追加する区画の種類
     sectionOrder_.emplace_back(sectionIndex);
     auto& section = *sections_[sectionIndex];
     // 追加するタイルデータ
     const auto& addTileData = section.GetTileData();
-    // 現状の行
-    uint16_t baseRow = (uint16_t)tileData_.size();
     // 追加
     tileData_.insert(tileData_.end(), addTileData.begin(), addTileData.end());
-    // タイルのインスタンスを追加
-    for (uint16_t row = 0; row < addTileData.size(); ++row) {
-        for (uint16_t column = 0; column < MapProperty::kMapColumn; ++column) {
-            auto tile = addTileData[row][column];
-            uint16_t mapRow = row + baseRow, mapColumn = column;
-            auto tileInstance = CreateTileInstance(tile, mapRow, mapColumn);
-            if (tileInstance) {
-                if (culling) {
-                    tileInstance->OnSwitchingCulling();
-                }
-                tileInstanceList_[PosKey(mapRow, mapColumn)] = std::move(tileInstance);
-            }
-        }
-    }
 }
 
 std::unique_ptr<MapTileBase> Map::CreateTileInstance(Tile::Enum tile, uint16_t row, uint16_t column) {

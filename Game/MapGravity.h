@@ -16,7 +16,6 @@ public:
 	void OnInitialize() override;
 	void OnUpdate() override;
 	void OnBreak() override;
-	void OnSwitchingCulling() override;
 
 	void SetPlayer(std::shared_ptr<Player> player) { player_ = player; }
 	void SetScore(std::shared_ptr<Score> score) { score_ = score; }
