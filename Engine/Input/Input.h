@@ -74,6 +74,21 @@ public:
         }
     }
 
+    void GetLStick(float& x, float& y) const {
+        if (std::fabs(xInputState_.Gamepad.sThumbLX) <= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+            x = 0.0f;
+        }
+        else {
+            x = static_cast<float>(xInputState_.Gamepad.sThumbLX);
+        }
+        if (std::fabs(xInputState_.Gamepad.sThumbLY) <= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+            y = 0.0f;
+        }
+        else {
+            y = static_cast<float>(xInputState_.Gamepad.sThumbLY);
+        }
+    }
+
     const XINPUT_STATE& GetXInputState() const { return xInputState_; }
     const XINPUT_STATE& GetPreXInputState() const { return preXInputState_; }
 
