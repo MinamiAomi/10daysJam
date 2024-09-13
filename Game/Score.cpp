@@ -63,11 +63,9 @@ void Score::Update() {
 	switch (state_) {
 	case Score::OutGame:
 		if (player_->transform.translate.y <= 0.0f) {
-			//FinalizeOutGameGame();
 			InitializeInGame();
 			state_ = InGame;
 		}
-		//scoreTransform_.translate = scoreOffset_;
 
 		scoreTransform_.UpdateMatrix();
 

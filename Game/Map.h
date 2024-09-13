@@ -17,6 +17,8 @@
 #include "Player.h"
 #include "BlockParticles.h"
 #include "Score.h"
+#include "Audio/AudioSource.h"
+
 
 class Map {
 public:
@@ -97,4 +99,8 @@ private:
     uint16_t preCullingRangeTop_;
     // カリングの下部
     uint16_t preCullingRangeBottom_;
+
+    // SEのリスト
+    std::list<std::unique_ptr<AudioSource>> se_;
+
 };
