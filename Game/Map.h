@@ -114,5 +114,5 @@ private:
     // SEのリスト
     std::list<std::unique_ptr<AudioSource>> se_;
 
-
+    uint32_t breakTiles_;
 };
