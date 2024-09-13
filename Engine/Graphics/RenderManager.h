@@ -26,6 +26,7 @@
 #include "LineDrawer.h"
 #include "Raytracing/TestRTRenderer.h"
 #include "ParticleCore.h"
+#include "ParticleRenderer.h"
 #include "Sky.h"
 #include "App/SkyRenderer.h"
 
@@ -99,6 +100,8 @@ private:
 
     ColorBuffer skyTexture_;
     SkyRenderer skyRenderer_;
+
+    ParticleRenderer particleRenderer_;
 
     UINT64 frameCount_ = 0;
     bool raymarching_ = false;

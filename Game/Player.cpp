@@ -1,7 +1,7 @@
 #include "Player.h"
 
 #include <numbers>
-#include "Engine/Graphics/App/SkyRenderer.h"
+
 
 
 #include "Input/input.h"
@@ -38,8 +38,7 @@ void Player::Initialize(Map* map) {
 
 void Player::Reset() {
 
-	SkyRenderer::y_ = 0;
-	SkyRenderer::switchNum_ = 0;
+
 
 	invincibleTime_ = 0.0f;
 	JSON_OPEN("Resources/Data/Player/player.json");
@@ -227,7 +226,6 @@ void Player::Debug() {
 
 void Player::Update() {
 	Move();
-	SkyRenderer::y_ = transform.translate.y;
 	UpdateInvincible();
 	UpdateTransform();
 #ifdef _DEBUG

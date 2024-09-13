@@ -8,6 +8,7 @@
 
 #include "Engine/Collision/CollisionManager.h"
 #include "GameProperty.h"
+#include "Graphics/App/SkyRenderer.h"
 
 #include "Engine/Graphics/ImGuiManager.h"
 
@@ -17,6 +18,9 @@ void GameScene::OnInitialize() {
 	camera_->SetPosition({ 0.0f, -10.0f, -80.0f });
 	camera_->SetRotate(Quaternion::MakeLookRotation({ 0.0f, 0.0f, 1.0f }));
 	camera_->UpdateMatrices();
+	SkyRenderer::y_ = 0;
+	SkyRenderer::switchNum_ = 0;
+
 	RenderManager::GetInstance()->SetCamera(camera_);
 
 	sunLight_ = std::make_shared<DirectionalLight>();
@@ -56,6 +60,7 @@ void GameScene::OnInitialize() {
 
 	particles_ = std::make_shared<Particles>();
 	particles_->SetCamera(camera_.get());
+	particles_->SetPlayer(player_.get());
 	particles_->Initialize();
 }
 
@@ -64,11 +69,13 @@ void GameScene::OnUpdate() {
 	Input* input = Input::GetInstance();
 
 	if (input->IsKeyTrigger(DIK_P)) {
-		particles_->SetEmit(true);
+		particles_->SetEmitRotate(true);
 	}
 	else {
-		particles_->SetEmit(false);
+		particles_->SetEmitRotate(false);
 	}
+	particles_->SetEmitPlayer(true);
+
 
 	switch (GameProperty::state_) {
 	case GameProperty::kInGame:
@@ -87,6 +94,8 @@ void GameScene::OnUpdate() {
 			followCamera_->Reset();
 			map_->Generate();
 			score_->Reset();
+			SkyRenderer::y_ = 0;
+			SkyRenderer::switchNum_ = 0;
 		}
 
 		// クリアしたか
@@ -112,21 +121,14 @@ void GameScene::OnUpdate() {
 				map_->Generate();
 				score_->SetParent(followCamera_->transform_);
 				score_->Reset();
+				GameProperty::state_ = GameProperty::kInGame;
+				SkyRenderer::y_ = 0;
+				SkyRenderer::switchNum_ = 0;
 			}
+			//player_->Update();
 		}
 		else {
 			GameProperty::state_ = GameProperty::kInGame;
-			//// タイトル画面
-			//if (input->IsKeyTrigger(DIK_R)) {
-			//	player_->Reset();
-			//	followCamera_->Reset();
-			//	map_->Generate();
-			//	score_->Reset();
-			//	score_->SetParent(followCamera_->transform_);
-			//	GameProperty::state_ = GameProperty::kInGame;
-			//}
-			//score_->Update();
-			//player_->Update();
 		}
 	}
 	break;
@@ -134,6 +136,9 @@ void GameScene::OnUpdate() {
 		break;
 	}
 	}
+
+
+	SkyRenderer::y_ = camera_->GetPosition().y;
 }
 
 void GameScene::OnFinalize() {

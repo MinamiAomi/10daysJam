@@ -21,6 +21,9 @@ public:
 	void SetGameClearPosPosition(float distance);
 
 	void AddGravity(const Vector3& vector);
+
+	const Vector3& GetSize()const { return colliderSize_; }
+	const Vector3& GetVelocity() const { return velocity_; }
 private:
 	void Move();
 	void UpdateRotate(const Vector3& vector);

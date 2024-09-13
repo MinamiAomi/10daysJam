@@ -2,6 +2,7 @@ struct Instance {
     float4x4 worldMatrix;
     float3 color;
     float alpha;
+    uint32_t isCircle;
 };
 StructuredBuffer<Instance> instances_ : register(t0);
 
@@ -17,11 +18,15 @@ struct PSOutput {
 
 PSOutput main(PSInput input) {
     PSOutput output;
+    float alpha = 1.0f;
 
-    float alpha = 1.0f - length(input.texcoord);
-    if (alpha < 0.0f) {
-        discard;
+    if(instances_[input.instanceID].isCircle){
+            alpha = 1.0f - length(input.texcoord);
+        if (alpha < 0.0f) {
+            discard;
+        }
     }
+    
     output.color = float4(instances_[input.instanceID].color, instances_[input.instanceID].alpha * alpha);
     
     return output;
