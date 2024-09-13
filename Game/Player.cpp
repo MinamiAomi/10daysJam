@@ -96,7 +96,7 @@ void Player::Move() {
             rStick = rStick.Normalize();
             currentVector_ = Vector3::Lerp(0.2f, currentVector_, rStick).Normalize();
             transform.rotate = Quaternion::MakeLookRotation(-currentVector_, Vector3::forward);
-            directionAcceleration += currentVector_ * directionSpeed_;
+            directionAcceleration += rStick * directionSpeed_;
         }
 
         Vector3 keyBord = { 0.0f,0.0f,0.0f };
@@ -125,7 +125,7 @@ void Player::Move() {
             currentVector_ = Vector3::Lerp(0.2f, currentVector_, keyBord).Normalize();
             transform.rotate = Quaternion::MakeLookRotation(-currentVector_, Vector3::forward);
 
-            directionAcceleration += currentVector_ * directionSpeed_;
+            directionAcceleration += keyBord * directionSpeed_;
         }
         
 
