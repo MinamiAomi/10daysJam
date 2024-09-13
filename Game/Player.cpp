@@ -87,6 +87,20 @@ void Player::Move() {
 		//if (std::abs(gamepad.Gamepad.sThumbLX) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.x = gamepad.Gamepad.sThumbLX / 32767.0f; }
 		//if (std::abs(gamepad.Gamepad.sThumbLY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.y = gamepad.Gamepad.sThumbLY / 32767.0f; }
 
+        Vector3 rStick;
+        input->GetRStick(rStick.x, rStick.y);
+        rStick.x = rStick.x / 32768.0f;
+        rStick.y = rStick.y / 32768.0f;
+        rStick.z = 0.0f;
+        if (rStick.x != 0.0f || rStick.y != 0.0f || rStick.z != 0.0f) {
+            rStick = rStick.Normalize();
+            currentVector_ = Vector3::Lerp(0.2f, currentVector_, rStick);
+            transform.rotate = Quaternion::MakeLookRotation(-currentVector_, Vector3::forward);
+        }
+
+
+        directionAcceleration += rStick * directionSpeed_;
+
         // Aキーが押されている間、加速を適用
         if (input->IsKeyPressed(DIK_A)) {
             directionAcceleration += Vector3(currentVector_.y, -currentVector_.x, currentVector_.z) * directionSpeed_;
@@ -128,6 +142,10 @@ void Player::Move() {
                 directionAcceleration += currentVector_.Normalized() * directionSpeed_;
             }
         }
+
+
+
+
         // 速度に加速度を加算
         velocity_ += directionAcceleration;
         // 空気抵抗的な
