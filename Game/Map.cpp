@@ -9,7 +9,9 @@
 
 #include "MapBlock.h"
 #include "MapGravity.h"
+#include "MapBar.h"
 #include "MapSection.h"
+
 namespace {
 	static const std::filesystem::path kMapDataRootPath = "Resources/Map";
 	static const std::filesystem::path kMapDataFile = "MapData.json";
@@ -372,6 +374,22 @@ std::unique_ptr<MapTileBase> Map::CreateTileInstance(Tile::Enum tile, uint16_t r
 	{
 		auto block = std::make_unique<MapGravity>(*this, row, column);
 		block->SetScore(score_);
+		block->SetPlayer(player_);
+		instance = std::move(block);
+		break;
+	}
+	case Tile::LeftBar:
+	{
+		auto block = std::make_unique<MapBar>(*this, row, column);
+		block->SetMode(MapBar::Left);
+		block->SetPlayer(player_);
+		instance = std::move(block);
+		break;
+	}
+	case Tile::RightBar:
+	{
+		auto block = std::make_unique<MapBar>(*this, row, column);
+		block->SetMode(MapBar::Right);
 		block->SetPlayer(player_);
 		instance = std::move(block);
 		break;

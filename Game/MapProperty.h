@@ -7,6 +7,8 @@ struct Tile {
 		Air,
 		Block,
 		Gravity,
+		LeftBar,
+		RightBar,
 
 		NumTypes
 	};

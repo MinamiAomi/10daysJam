@@ -71,7 +71,9 @@
     <ClCompile Include="Particles.cpp">
       <Filter>Game\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="MapBar.cpp" />
+    <ClCompile Include="MapBar.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
