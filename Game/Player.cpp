@@ -77,7 +77,7 @@ void Player::ReflectBar(const Vector3& normal) {
 }
 
 void Player::KnockbackBomb(const Vector3& direction) {
-    velocity_ = direction * 0.1f;
+    velocity_ = direction * 5.0f;
     UpdateRotate(velocity_.Normalized());
 }
 
