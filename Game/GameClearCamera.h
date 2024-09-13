@@ -16,7 +16,8 @@ public:
 	void SetCamera(std::shared_ptr<Camera> camera) { camera_ = camera; }
 	const Vector3& GetEndCameraPos() { return endCameraPos_; }
 
-	bool GetIsEasing() { return isEasingCamera_; }
+	void SetEasingTime(float time) { time_ = time; }
+	Transform transform_;
 private:
 	void Debug();
 	std::shared_ptr<Camera> camera_;
@@ -24,7 +25,4 @@ private:
 	Vector3 startCameraPos_;
 	Vector3 endCameraPos_;
 	float time_;
-	float transitionFrame_;
-	
-	bool isEasingCamera_;
 };

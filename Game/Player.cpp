@@ -136,13 +136,14 @@ void Player::Move() {
 		// プレイヤーの移動制限
 		if (transform.translate.x <= -MapProperty::kSideLimit) {
 			transform.translate.x = -MapProperty::kSideLimit;
-			// 速度リセット
-			velocity_ = Vector3::zero;
+			// 速度反転
+			velocity_.x *= -1.0f;
 		}
 		if (transform.translate.x >= MapProperty::kSideLimit) {
 			transform.translate.x = MapProperty::kSideLimit;
-			// 速度リセット
-			velocity_ = Vector3::zero;
+			// 速度反転
+			velocity_.x *= -1.0f;
+			UpdateRotate(velocity_.Normalized());
 
 		}
 	}
