@@ -62,6 +62,8 @@ void GameScene::OnInitialize() {
 	particles_->SetCamera(camera_.get());
 	particles_->SetPlayer(player_.get());
 	particles_->Initialize();
+
+	map_->SetParticles(particles_.get());
 }
 
 void GameScene::OnUpdate() {
@@ -75,7 +77,6 @@ void GameScene::OnUpdate() {
 		particles_->SetEmitRotate(false);
 	}
 	particles_->SetEmitPlayer(true);
-
 
 	switch (GameProperty::state_) {
 	case GameProperty::kInGame:

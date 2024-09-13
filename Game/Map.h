@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "BlockParticles.h"
 #include "Score.h"
+#include "Particles.h"
 
 class Map {
 public:
@@ -63,6 +64,11 @@ public:
 
     // マップのベースのトランスフォーム
     Transform transform;
+
+    void SetParticles(Particles* particles) {
+        particles_ = particles;
+    }
+    Particles* particles_;
 
     // マップの縦の長さ
     float GetMapRow() { return float(tileData_.size()) * MapProperty::kBlockSize; }

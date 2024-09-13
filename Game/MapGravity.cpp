@@ -34,7 +34,10 @@ void MapGravity::OnInitialize() {
     collider_->SetIsActive(true);
 }
 
-void MapGravity::OnUpdate() {}
+void MapGravity::OnUpdate() {
+
+    map_.particles_->EmitTrunade(transform.translate);
+}
 
 void MapGravity::OnBreak() {
     isActive_ = false;

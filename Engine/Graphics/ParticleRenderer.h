@@ -11,7 +11,7 @@ class CommandContext;
 
 class ParticleRenderer {
 public:
-    static const uint32_t kMaxNumParticles = 1024;
+    static const uint32_t kMaxNumParticles = 1024 * 3;
    
     void Initialize(const ColorBuffer& colorBuffer, const DepthBuffer& depthBuffer);
     void Render(CommandContext& commandContext, const Camera& camera);
