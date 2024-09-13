@@ -81,28 +81,33 @@ void Score::Update() {
 	titleTransform_.translate = titleOffset_;
 	resultTransform_.UpdateMatrix();
 	titleTransform_.UpdateMatrix();
+	S_.SetWorldMatrix(resultTransform_.worldMatrix);
+	A_.SetWorldMatrix(resultTransform_.worldMatrix);
+	B_.SetWorldMatrix(resultTransform_.worldMatrix);
+	C_.SetWorldMatrix(resultTransform_.worldMatrix);
+
 	title_.SetWorldMatrix(titleTransform_.worldMatrix);
 	///4 B 5 A 6 S
 	if (score_ < 30000) {
 		S_.SetIsActive(false);
 		A_.SetIsActive(false);
 		B_.SetIsActive(false);
-		C_.SetIsActive(isFirst_);
+		C_.SetIsActive(!isFirst_);
 	}
 	else if (score_ < 40000) {
 		S_.SetIsActive(false);
 		A_.SetIsActive(false);
-		B_.SetIsActive(isFirst_);
+		B_.SetIsActive(!isFirst_);
 		C_.SetIsActive(false);
 	}
 	else if (score_ < 50000) {
 		S_.SetIsActive(false);
-		A_.SetIsActive(isFirst_);
+		A_.SetIsActive(!isFirst_);
 		B_.SetIsActive(false);
 		C_.SetIsActive(false);
 	}
 	else  {
-		S_.SetIsActive(isFirst_);
+		S_.SetIsActive(!isFirst_);
 		A_.SetIsActive(false);
 		B_.SetIsActive(false);
 		C_.SetIsActive(false);
