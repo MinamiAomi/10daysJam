@@ -76,16 +76,21 @@ void Player::ReflectBar(const Vector3& normal) {
     UpdateRotate(velocity_.Normalized());
 }
 
+void Player::KnockbackBomb(const Vector3& direction) {
+    velocity_ = direction * 0.1f;
+    UpdateRotate(velocity_.Normalized());
+}
+
 void Player::Move() {
-	auto input = Input::GetInstance();
-	auto gamepad = input->GetXInputState();
-	// Move
-	{
-		Vector3 move{};
-		Vector3 directionAcceleration{};
-		// ゲームパッドのスティックで移動を処理
-		//if (std::abs(gamepad.Gamepad.sThumbLX) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.x = gamepad.Gamepad.sThumbLX / 32767.0f; }
-		//if (std::abs(gamepad.Gamepad.sThumbLY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.y = gamepad.Gamepad.sThumbLY / 32767.0f; }
+    auto input = Input::GetInstance();
+    auto gamepad = input->GetXInputState();
+    // Move
+    {
+        Vector3 move{};
+        Vector3 directionAcceleration{};
+        // ゲームパッドのスティックで移動を処理
+        //if (std::abs(gamepad.Gamepad.sThumbLX) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.x = gamepad.Gamepad.sThumbLX / 32767.0f; }
+        //if (std::abs(gamepad.Gamepad.sThumbLY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.y = gamepad.Gamepad.sThumbLY / 32767.0f; }
 
         Vector3 rStick;
         input->GetLStick(rStick.x, rStick.y);
@@ -127,7 +132,7 @@ void Player::Move() {
 
             directionAcceleration += keyBord * directionSpeed_;
         }
-        
+
 
         // 速度に加速度を加算
         velocity_ += directionAcceleration;

@@ -22,6 +22,7 @@ public:
 
 	void AddGravity(const Vector3& vector);
 	void ReflectBar(const Vector3& normal);
+	void KnockbackBomb(const Vector3& direction);
 
 	const Vector3& GetSize()const { return colliderSize_; }
 	const Vector3& GetVelocity() const { return velocity_; }
