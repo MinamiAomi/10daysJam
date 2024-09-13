@@ -32,6 +32,9 @@ private:
 	void OnCollision(const CollisionInfo& collisionInfo);
 	void Debug();
 	ModelInstance model_;
+	ModelInstance drillMode_;
+	Transform modelTransform_;
+	Transform drillTransform_;
 	std::shared_ptr<BoxCollider> collider_;
 	Vector3 colliderSize_ = { 3.0f,6.0f,3.0f };
 	std::shared_ptr<MapCollider> mapCollider_;

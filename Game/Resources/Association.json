@@ -3,6 +3,7 @@
         "box": "box.obj",
         "sphere": "sphere.obj",
         "player": "player.gltf",
+        "playerDrill": "playerDrill.gltf",
         "playerBullet": "playerBullet.gltf",
         "enemy": "enemy.gltf",
         "enemyBullet": "enemyBullet.gltf",
