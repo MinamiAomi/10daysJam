@@ -48,6 +48,7 @@
     },
     "Sound": {
         "blockBreak": "SE/blockBreak.mp3",
+        "bomb": "SE/bomb.mp3",
         "inGame": "BGM/inGame.mp3",
         "result": "BGM/result.mp3"
     }

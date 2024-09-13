@@ -86,7 +86,7 @@ void Score::Update() {
 			InitializeResultGame();
 			state_ = Result;
 		}
-		score_ = blockCount_ * depthCount_;
+		score_ = blockCount_ / 10 * depthCount_ / 10;
 		ConversionSeconds();
 		UpdateScore();
 		UpdateTimer();
@@ -364,7 +364,7 @@ void Score::AddScore(int depth) {
 void Score::Debug() {
 	ImGui::Begin("GameObject");
 	if (ImGui::BeginMenu("Score")) {
-			ImGui::DragFloat3("blockTransform_.translate ", &blockTransform_.translate.x);
+		ImGui::DragFloat3("blockTransform_.translate ", &blockTransform_.translate.x);
 		ImGui::DragInt("score", &score_);
 		ImGui::DragInt("blockCount", &blockCount_);
 		ImGui::DragInt("depthCount", &depthCount_);
