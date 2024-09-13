@@ -102,6 +102,36 @@ void Particles::EmitBar(const Vector3& position, const Vector3& direction, const
 	
 }
 
+void Particles::EmitBom(const Vector3& position)
+{
+	std::list<Particle> emitParticles;
+
+	for (uint32_t i = 0; i < 32; i++) {
+
+		Particle particle;
+		particle.acceleration = { 0.0f,0.0f,0.0f };
+		particle.startAlpha = 1.0f;
+		particle.endAlpha = 1.0f;
+		float color = rng_.NextFloatRange(0.1f, 0.5f);
+		particle.startColor = { 1.0f,color,color };
+		particle.endColor = { 1.0f,color,color };
+		particle.startSize = 1.2f;
+		particle.endSize = 0.0f;
+		particle.lifeTime = 15;
+		particle.existenceTime = 0;
+		particle.position = position;
+		particle.position.z = 2.0f;
+		//particle.velocity = -rng_.NextFloatRange() * rng_.NextFloatRange(0.9f, 1.2f);
+		particle.spin = 0.0f;
+		particle.spinSpeed = (3.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
+		particle.isCircle = bool(rng_.NextIntRange(0, 1));
+
+		emitParticles.push_back(particle);
+	}
+
+	particleManager_->AddParticles(std::move(emitParticles));
+}
+
 void Particles::Emit()
 {
 	emitTransform_.UpdateMatrix();
