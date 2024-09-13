@@ -13,10 +13,10 @@ public:
 
 	void Reset();
 
-	void SetPlayer(std::shared_ptr<Player> player) { player_ = player; }
+	void SetPlayer(const std::shared_ptr<Player>& player) { player_ = player; }
 
-	std::shared_ptr<Camera> GetCamera() { return camera_; }
-	void SetCamera(std::shared_ptr<Camera> camera) { camera_ = camera; }
+	const std::shared_ptr<Camera>& GetCamera() { return camera_; }
+	void SetCamera(const std::shared_ptr<Camera>& camera) { camera_ = camera; }
 	Transform transform_;
 private:
 	void Debug();

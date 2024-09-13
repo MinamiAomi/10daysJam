@@ -72,9 +72,6 @@ void Voronoi::Initialize(uint32_t width, uint32_t height, uint32_t numPoints) {
     commandContext.SetComputeDescriptorTable(2, colorBuffer_.GetUAV());
 
     commandContext.Dispatch((UINT)std::floor(width / 8), (UINT)std::floor(height / 8));
-    commandContext.UAVBarrier(colorBuffer_);
-    commandContext.FlushResourceBarriers();
     commandContext.Finish(true);
-
 }
 

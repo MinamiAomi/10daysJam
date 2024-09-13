@@ -30,7 +30,6 @@ public:
 
 private:
 	std::shared_ptr<Camera> camera_;
-	Vector3 euler_;
 	std::shared_ptr<DirectionalLight> sunLight_;
 
 	std::shared_ptr<FollowCamera> followCamera_;

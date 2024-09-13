@@ -1,11 +1,13 @@
 #pragma once
 
+#include <array>
 #include <stdint.h>
 #include <string>
 
 #include "GameObject/GameObject.h"
 #include "Graphics/Model.h"
 
+class Player;
 class Score {
 public:
 	void Initialize();
@@ -17,38 +19,46 @@ public:
 
 	bool GetIsClear() { return isClear_; }
 
-	void SetParent(const Transform& parent) { 
+	void SetParent(const Transform& parent) {
 		timerTransform_.SetParent(&parent);
+		scoreTransform_.SetParent(&parent);
 	}
+
+	void SetPlayer(const std::shared_ptr<Player>& player) { player_ = player; }
 private:
 	void Debug();
 	void ConversionSeconds();
 	void UpdateTimer();
+	void UpdateScore();
+	std::shared_ptr<Player> player_;
 
 	bool isClear_;
+	bool isStart_;
 
 	int score_;
 	int blockCount_;
+	int preBlockCount_;
 	int depthCount_;
+	int preDepthCount_;
 
 	// 位
 	struct NumPlace {
-		float easingTime_;
-		float transformFrame_;
-
-		Quaternion startRotate_;
-		Quaternion endRotate_;
-
-		Transform transform_;
-		ModelInstance model_;
-
-		// trueアップデート開始
-		bool isUpdate_;
-
-		void Initialize(const std::string& modelName,const Quaternion& rotate);
+		void Initialize(const std::string& modelName, int number);
 		void Update();
-		void Reset(const std::string& name, const Quaternion& rotate);
+		void UpdateTranslate();
+		void ActiveModel(int num);
+		void Reset(const std::string& name,int number);
 		void Debug(const std::string& name);
+
+		std::array<ModelInstance, 10> numberModel_;
+		//float easingTime_;
+		//float transformFrame_;
+		//Quaternion startRotate_;
+		//Quaternion endRotate_;
+
+		Vector3 offset_;
+		Transform transform_;
+
 	};
 
 	int limitTime_;
@@ -60,4 +70,11 @@ private:
 	NumPlace tenPlace_;
 	Vector3 timerOffset_;
 	Transform timerTransform_;
+
+	NumPlace blockOnePlace_;
+	NumPlace blockTenPlace_;
+	NumPlace blockHundredPlace_;
+	NumPlace blockThousandPlace_;
+	Vector3 scoreOffset_;
+	Transform scoreTransform_;
 };

@@ -33,6 +33,7 @@ void GameScene::OnInitialize() {
 	blockParticles_->SetMap(map_.get());
 	blockParticles_->Initialize();
 
+	map_->SetCamera(camera_);
 	map_->SetPlayer(player_);
 	map_->SetBlockParticles(blockParticles_);
 	map_->SetScore(score_);
@@ -45,6 +46,7 @@ void GameScene::OnInitialize() {
 	followCamera_->SetPlayer(player_);
 	followCamera_->SetCamera(camera_);
 
+	score_->SetPlayer(player_);
 	score_->SetParent(followCamera_->transform_);
 	score_->Initialize();
 	
@@ -78,6 +80,7 @@ void GameScene::OnUpdate() {
 	{
 		player_->Update();
 		followCamera_->Update();
+		map_->Update();
 		score_->Update();
 		map_->CheckCollision();
 		CollisionManager::GetInstance()->CheckCollision();
@@ -105,6 +108,7 @@ void GameScene::OnUpdate() {
 		// カメラが動いているとき
 		if (!gameClearCamera_->GetIsEasing()) {
 			gameClearCamera_->Update();
+			map_->Update();
 		}
 		else {
 			// クリアしたら

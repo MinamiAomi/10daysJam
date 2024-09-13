@@ -30,8 +30,9 @@ void GameClearCamera::SetCameraPosition(float mapRowLength) {
 	transitionFrame_ = 90.0f;
 	isEasingCamera_ = false;
 	startCameraPos_ = camera_->GetPosition();
-	float distance = (mapRowLength * 0.5f) / std::tan(camera_->GetProjection().perspective.fovY * 0.5f);
-	endCameraPos_ = { 0.0f,mapRowLength * 0.5f,distance };
+	mapRowLength;
+	//float distance = (mapRowLength * 0.5f) / std::tan(camera_->GetProjection().perspective.fovY * 0.5f);
+	endCameraPos_ = { 0.0f,0.0f,camera_->GetPosition().z };
 }
 
 void GameClearCamera::Debug() {
