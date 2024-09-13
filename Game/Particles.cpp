@@ -2,6 +2,7 @@
 #include "Engine/Framework/AssetManager.h"
 #include "Engine/Math/Camera.h"
 #include "Player.h"
+#include "MapProperty.h"
 
 void Particles::Initialize() {
 
@@ -25,6 +26,41 @@ void Particles::Update() {
 void Particles::Reset() {
 	particleManager_->Reset();
 	frame_ = 0;
+}
+
+void Particles::EmitTrunade(const Vector3& position)
+{
+
+	std::list<Particle> emitParticles;
+
+	for (uint32_t i = 0; i < emitTranadeNum_; i++) {
+
+		Particle particle;
+		particle.acceleration = { 0.0f,0.0f,0.0f };
+		particle.startAlpha = 1.0f;
+		particle.endAlpha = 0.0f;
+		float color = rng_.NextFloatRange(0.1f, 0.5f);
+		particle.startColor = { color,color,1.0f };
+		particle.endColor = { color,color,1.0f };
+		particle.startSize = 0.5f;
+		particle.endSize = 0.1f;
+		particle.lifeTime = 300;
+		particle.existenceTime = 0;
+		particle.spin = 0.0f;
+		particle.spinSpeed = (1.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
+		particle.isCircle = bool(rng_.NextIntRange(0, 1));
+
+		particle.rotate = rng_.NextFloatRange(0.0f, Math::Pi * 2.0f) * ((i % 2) * 2.0f - 1.0f);
+		particle.endRadius = 0.0f;
+		particle.startRadius = rng_.NextFloatRange(MapProperty::kGravityRadius * 0.5f, MapProperty::kGravityRadius);
+		particle.rotateCenter = { position.x,position.y,-2.0f };
+		particle.ratateSpeed = rng_.NextFloatRange(0.0f, 5.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
+
+
+		emitParticles.push_back(particle);
+	}
+
+	particleManager_->AddRotateParticles(std::move(emitParticles));
 }
 
 void Particles::Emit()
@@ -52,7 +88,7 @@ void Particles::Emit()
 			particle.position = { 0.0f,0.0f,0.0f };
 			particle.velocity = Vector3{ rng_.NextFloatRange(minDirection_.x,maxDirection_.x),rng_.NextFloatRange(minDirection_.y,maxDirection_.y) ,rng_.NextFloatRange(minDirection_.z,maxDirection_.z) }.Normalize() * 1.0f;
 			particle.spin = 0.0f;
-			particle.spinSpeed = (3.0f * Math::ToRadian) * ((i % 2 ) * -1.0f);
+			particle.spinSpeed = (3.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
 			particle.isCircle = false;
 
 			emitParticles.push_back(particle);
@@ -86,14 +122,14 @@ void Particles::RotateEmit()
 			particle.position = { 0.0f,0.0f,0.0f };
 			particle.velocity = Vector3{ rng_.NextFloatRange(minDirection_.x,maxDirection_.x),rng_.NextFloatRange(minDirection_.y,maxDirection_.y) ,rng_.NextFloatRange(minDirection_.z,maxDirection_.z) }.Normalize() * 1.0f;
 			particle.spin = 0.0f;
-			particle.spinSpeed = (1.0f * Math::ToRadian) * ((i % 2 ) * -1.0f);
+			particle.spinSpeed = (1.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
 			particle.isCircle = false;
 
 			particle.rotate = 0.0f;
 			particle.endRadius = 10.0f;
 			particle.startRadius = 0.0f;
 			particle.rotateCenter = { 0.0f,0.0f,0.0f };
-			particle.ratateSpeed = (2.0f * Math::ToRadian) * ((i % 2 ) * -1.0f);
+			particle.ratateSpeed = (2.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
 
 
 			emitParticles.push_back(particle);
@@ -110,7 +146,8 @@ void Particles::PlayerEmit()
 		
 		if (frame_ % emitPlayerFrame_ == 0) {
 
-			std::list<Particle> emitParticles;
+			std::list<Particle> emitParticles[2];
+
 
 			for (uint32_t i = 0; i < emitPlayerNum_; i++) {
 
@@ -127,8 +164,8 @@ void Particles::PlayerEmit()
 				particle.position = { 0.0f,0.0f,0.0f };
 				particle.velocity = player_->GetVelocity() / 1.5f;
 				particle.spin = 0.0f;
-				particle.spinSpeed = 0.0f;
-				particle.isCircle = true;
+				particle.spinSpeed = 10.0f * Math::ToRadian;
+				particle.isCircle = bool(rng_.NextIntRange(0,1));
 
 				particle.rotate = 0.0f;
 				particle.endRadius = 10.0f;
@@ -138,10 +175,36 @@ void Particles::PlayerEmit()
 				particle.playerQuaternion = player_->transform.rotate;
 
 
-				emitParticles.push_back(particle);
+				emitParticles[0].push_back(particle);
 			}
 
-			particleManager_->AddPlayerParticles(std::move(emitParticles));
+			particleManager_->AddPlayerParticles(std::move(emitParticles[0]));
+
+
+			for (uint32_t i = 0; i < 2; i++) {
+
+				Particle particle;
+				particle.acceleration = { 0.0f,0.0f,0.0f };
+				particle.startAlpha = 1.0f;
+				particle.endAlpha = 1.0f;
+				particle.startColor = { 1.0f,1.0f + 0.5f * ((i % 2) * -1.0f),0.0f };
+				particle.endColor = { 1.0f,1.0f + 0.5f * ((i % 2) * -1.0f),0.0f };
+				particle.startSize = 0.5f;
+				particle.endSize = 0.0f;
+				particle.lifeTime = 30;
+				particle.existenceTime = 0;
+				float a = rng_.NextFloatRange(-0.5f,0.5f);
+				particle.position = player_->transform.translate +  Vector3{ a,a,a};
+				particle.velocity = Vector3::zero;
+				particle.spin = 0.0f;
+				particle.spinSpeed = (5.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
+				particle.isCircle = bool(rng_.NextIntRange(0, 1));
+
+
+				emitParticles[1].push_back(particle);
+			}
+
+			particleManager_->AddParticles(std::move(emitParticles[1]));
 		}
 	}
 }
