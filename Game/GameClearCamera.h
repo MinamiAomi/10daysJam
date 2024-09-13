@@ -17,6 +17,8 @@ public:
 	const Vector3& GetEndCameraPos() { return endCameraPos_; }
 
 	bool GetIsEasing() { return isEasingCamera_; }
+	
+	Transform transform_;
 private:
 	void Debug();
 	std::shared_ptr<Camera> camera_;

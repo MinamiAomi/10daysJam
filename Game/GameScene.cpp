@@ -91,6 +91,7 @@ void GameScene::OnUpdate() {
 		if (score_->GetIsClear()) {
 			gameClearCamera_->SetCameraPosition(-(float(map_->GetMapRow()) + MapProperty::kBlockSize * 2.0f));
 			player_->SetGameClearPosPosition(gameClearCamera_->GetEndCameraPos().z + 80.0f);
+			score_->SetParent(gameClearCamera_->transform_);
 			GameProperty::state_ = GameProperty::kResult;
 		}
 		break;
@@ -99,6 +100,7 @@ void GameScene::OnUpdate() {
 		// カメラが動いているとき
 		if (!gameClearCamera_->GetIsEasing()) {
 			gameClearCamera_->Update();
+			score_->Update();
 			map_->Update();
 		}
 		else {
@@ -108,6 +110,7 @@ void GameScene::OnUpdate() {
 				followCamera_->Reset();
 				map_->Generate();
 				score_->Reset();
+				score_->SetParent(followCamera_->transform_);
 				GameProperty::state_ = GameProperty::kInGame;
 			}
 			player_->Update();

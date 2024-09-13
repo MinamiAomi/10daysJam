@@ -11,9 +11,10 @@ void GameClearCamera::Initialize() {
 
 void GameClearCamera::Update() {
 	if (time_ < 1.0f) {
-		Vector3 position = Vector3::Lerp(time_, startCameraPos_, endCameraPos_);
-		camera_->SetPosition(position);
+		transform_.translate = Vector3::Lerp(time_, startCameraPos_, endCameraPos_);
+		camera_->SetPosition(transform_.translate);
 		camera_->UpdateMatrices();
+		transform_.UpdateMatrix();
 		time_ += 1.0f / transitionFrame_;
 	}
 	else {
@@ -32,7 +33,18 @@ void GameClearCamera::SetCameraPosition(float mapRowLength) {
 	startCameraPos_ = camera_->GetPosition();
 	mapRowLength;
 	//float distance = (mapRowLength * 0.5f) / std::tan(camera_->GetProjection().perspective.fovY * 0.5f);
-	endCameraPos_ = { 0.0f,0.0f,camera_->GetPosition().z };
+	Vector3 offset_{}, initializePosition_{};
+	JSON_OPEN("Resources/Data/FollowCamera/followCamera.json");
+	JSON_LOAD(offset_);
+	JSON_CLOSE();
+	JSON_OPEN("Resources/Data/Player/player.json");
+	JSON_LOAD(initializePosition_);
+	JSON_CLOSE();
+	// 初期位置に
+	endCameraPos_ = offset_ + initializePosition_;
+
+	transform_.translate = startCameraPos_;
+	transform_.UpdateMatrix();
 }
 
 void GameClearCamera::Debug() {

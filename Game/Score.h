@@ -21,7 +21,8 @@ public:
 
 	void SetParent(const Transform& parent) {
 		timerTransform_.SetParent(&parent);
-		scoreTransform_.SetParent(&parent);
+		blockTransform_.SetParent(&parent);
+		depthTransform_.SetParent(&parent);
 	}
 
 	void SetPlayer(const std::shared_ptr<Player>& player) { player_ = player; }
@@ -36,6 +37,7 @@ private:
 	bool isStart_;
 
 	int score_;
+	int preScore_;
 	int blockCount_;
 	int preBlockCount_;
 	int depthCount_;
@@ -75,6 +77,21 @@ private:
 	NumPlace blockTenPlace_;
 	NumPlace blockHundredPlace_;
 	NumPlace blockThousandPlace_;
+	Vector3 blockOffset_;
+	Transform blockTransform_;
+
+	NumPlace depthOnePlace_;
+	NumPlace depthTenPlace_;
+	NumPlace depthHundredPlace_;
+	NumPlace depthThousandPlace_;
+	Vector3 depthOffset_;
+	Transform depthTransform_;
+
+	NumPlace scoreOnePlace_;
+	NumPlace scoreTenPlace_;
+	NumPlace scoreHundredPlace_;
+	NumPlace scoreThousandPlace_;
+	NumPlace scoreTenThousandPlace_;
 	Vector3 scoreOffset_;
 	Transform scoreTransform_;
 };

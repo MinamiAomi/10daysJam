@@ -4,6 +4,11 @@
         0.0,
         0.0
     ],
+    "blockOffset_": [
+        -18.0,
+        45.0,
+        125.0
+    ],
     "blockOnePlaceOffset_": [
         6.0,
         0.0,
@@ -19,6 +24,31 @@
         0.0,
         0.0
     ],
+    "depthHundredPlaceOffset_": [
+        -2.0,
+        0.0,
+        0.0
+    ],
+    "depthOffset_": [
+        -18.0,
+        38.0,
+        125.0
+    ],
+    "depthOnePlaceOffset_": [
+        6.0,
+        0.0,
+        0.0
+    ],
+    "depthTenPlaceOffset_": [
+        2.0,
+        0.0,
+        0.0
+    ],
+    "depthThousandPlaceOffset_": [
+        -6.0,
+        0.0,
+        0.0
+    ],
     "limitTime_": 3600,
     "onePlaceOffset_": [
         1.5,
@@ -26,23 +56,38 @@
         0.0
     ],
     "onePlaceTransformFrame_": 60.0,
+    "scoreHundredPlaceOffset_": [
+        0.0,
+        0.0,
+        0.0
+    ],
     "scoreOffset_": [
-        -16.0,
-        45.0,
-        125.0
+        -18.0,
+        97.0,
+        0.0
     ],
     "scoreOnePlaceOffset_": [
-        0.0,
+        8.0,
         0.0,
         0.0
     ],
     "scoreOnePlaceTransformFrame_": 15.0,
     "scoreTenPlaceOffset_": [
-        0.0,
+        4.0,
         0.0,
         0.0
     ],
     "scoreTenPlaceTransformFrame_": 20.0,
+    "scoreTenThousandPlaceOffset_": [
+        -8.0,
+        0.0,
+        0.0
+    ],
+    "scoreThousandPlaceOffset_": [
+        -4.0,
+        0.0,
+        0.0
+    ],
     "tenPlaceOffset_": [
         -2.0,
         0.0,
@@ -51,7 +96,7 @@
     "tenPlaceTransformFrame_": 60.0,
     "timerOffset_": [
         14.0,
-        29.0,
+        28.0,
         80.0
     ]
 }
