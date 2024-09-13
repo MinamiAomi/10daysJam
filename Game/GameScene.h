@@ -19,6 +19,8 @@
 #include "Game/Particles.h"
 
 #include "GameClearCamera.h"
+#include "Audio/AudioSource.h"
+
 
 class GameScene :
 	public BaseScene {
@@ -44,4 +46,7 @@ private:
 	
 	std::shared_ptr<GameClearCamera> gameClearCamera_;
 
+
+	AudioSource bgm_;
+	AudioSource result_;
 };

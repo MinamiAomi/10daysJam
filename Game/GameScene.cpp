@@ -35,6 +35,11 @@ void GameScene::OnInitialize() {
 	blockParticles_->SetMap(map_.get());
 	blockParticles_->Initialize();
 
+	followCamera_ = std::make_shared<FollowCamera>();
+	followCamera_->SetPlayer(player_);
+	followCamera_->SetCamera(camera_);
+	followCamera_->Initialize();
+
 	map_->SetCamera(camera_);
 	map_->SetPlayer(player_);
 	map_->SetBlockParticles(blockParticles_);
@@ -42,12 +47,7 @@ void GameScene::OnInitialize() {
 	map_->Initialize();
 
 	player_->Initialize(map_.get());
-
-	followCamera_ = std::make_shared<FollowCamera>();
-	followCamera_->SetPlayer(player_);
-	followCamera_->SetCamera(camera_);
-	followCamera_->Initialize();
-
+	
 	score_->SetPlayer(player_);
 	score_->SetParent(followCamera_->transform_);
 	score_->Initialize();
@@ -62,6 +62,10 @@ void GameScene::OnInitialize() {
 	particles_->SetCamera(camera_.get());
 	particles_->SetPlayer(player_.get());
 	particles_->Initialize();
+
+	bgm_ = AssetManager::GetInstance()->FindSound("inGame");
+	bgm_.Play(true);
+	result_ = AssetManager::GetInstance()->FindSound("result");
 
 	map_->SetParticles(particles_.get());
 }
@@ -91,6 +95,8 @@ void GameScene::OnUpdate() {
 		particles_->Update();
 		// リセット
 		if (input->IsKeyTrigger(DIK_R)) {
+			bgm_.Play(true);
+			result_.Stop();
 			player_->Reset();
 			followCamera_->Reset();
 			map_->Generate();
@@ -101,9 +107,11 @@ void GameScene::OnUpdate() {
 
 		// クリアしたか
 		if (score_->GetIsClear()) {
+			bgm_.Stop();
 			gameClearCamera_->SetCameraPosition(-(float(map_->GetMapRow()) + MapProperty::kBlockSize * 2.0f));
 			player_->SetGameClearPosPosition(gameClearCamera_->GetEndCameraPos().z + 80.0f);
 			score_->SetParent(gameClearCamera_->transform_);
+			result_.Play(true);
 			GameProperty::state_ = GameProperty::kResult;
 		}
 		break;
@@ -117,6 +125,8 @@ void GameScene::OnUpdate() {
 			map_->Update();
 			// 切り替わる瞬間
 			if (score_->GetState() != Score::State::Result) {
+				result_.Stop();
+				bgm_.Play(true);
 				player_->Reset();
 				followCamera_->Reset();
 				map_->Generate();
@@ -126,7 +136,6 @@ void GameScene::OnUpdate() {
 				SkyRenderer::y_ = 0;
 				SkyRenderer::switchNum_ = 0;
 			}
-			//player_->Update();
 		}
 		else {
 			GameProperty::state_ = GameProperty::kInGame;

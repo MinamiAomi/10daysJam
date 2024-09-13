@@ -44,15 +44,17 @@ void BlockParticle::Update() {
 	const auto& tileData = map_->GetTileData();
 	if (tileData[posKey.row][posKey.column] == Tile::Enum::Block) {
 		const auto& tileInstance = map_->GetTileInstanceList();
-		const auto& tile = tileInstance.at(posKey);
+		if (tileInstance.contains(posKey)) {
+			const auto& tile = tileInstance.at(posKey);
 
-		//床にはねる ここをマップチップに
-		if (tile->IsActive() == true) {
-			transform.translate.y = -posKey.row * MapProperty::kBlockSize + collSphere_.radius;
-			if (-velocity_.y <= collSphere_.radius) {
-				isGround_ = true;
+			//床にはねる ここをマップチップに
+			if (tile->IsActive() == true) {
+				transform.translate.y = -posKey.row * MapProperty::kBlockSize + collSphere_.radius;
+				if (-velocity_.y <= collSphere_.radius) {
+					isGround_ = true;
+				}
+				velocity_ = -velocity_ * 0.2f;
 			}
-			velocity_ = -velocity_ * 0.2f;
 		}
 	}
 

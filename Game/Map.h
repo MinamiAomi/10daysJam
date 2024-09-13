@@ -17,7 +17,9 @@
 #include "Player.h"
 #include "BlockParticles.h"
 #include "Score.h"
+#include "Audio/AudioSource.h"
 #include "Particles.h"
+
 
 class Map {
 public:
@@ -75,7 +77,7 @@ public:
 private:
     void CullingTile();
     void Load();
-    void AddSection(uint32_t sectionIndex, bool culling = false);
+    void AddSection(uint32_t sectionIndex);
     std::unique_ptr<MapTileBase> CreateTileInstance(Tile::Enum tile, uint16_t row, uint16_t column);
 
     // セクションの順番
@@ -103,4 +105,8 @@ private:
     uint16_t preCullingRangeTop_;
     // カリングの下部
     uint16_t preCullingRangeBottom_;
+
+    // SEのリスト
+    std::list<std::unique_ptr<AudioSource>> se_;
+
 };

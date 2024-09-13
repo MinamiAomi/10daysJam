@@ -36,6 +36,7 @@ public:
 		timerTransform_.SetParent(&parent);
 		blockTransform_.SetParent(&parent);
 		depthTransform_.SetParent(&parent);
+		mTransform_.SetParent(&depthTransform_);
 		if (state_ == Result) {
 			scoreTransform_.SetParent(&parent);
 		}
@@ -123,6 +124,11 @@ private:
 	NumPlace scoreTenThousandPlace_;
 	Vector3 scoreOffset_;
 	Transform scoreTransform_;
+
+	ModelInstance m_;
+	Vector3 mOffset_;
+	Transform mTransform_;
+
 
 	float resultEasingTime_;
 	float resultTransitionFrame_;

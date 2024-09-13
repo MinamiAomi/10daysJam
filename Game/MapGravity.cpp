@@ -47,12 +47,6 @@ void MapGravity::OnBreak() {
     score_->AddScore(int(row_));
 }
 
-void MapGravity::OnSwitchingCulling() {
-    mapModel_.SetIsActive(!mapModel_.IsActive());
-    gravityModel_.SetIsActive(!gravityModel_.IsActive());
-    collider_->SetIsActive(!collider_->IsActive());
-}
-
 void MapGravity::OnCollision(const CollisionInfo& collisionInfo) {
     if (collisionInfo.gameObject->GetName() == "Player") {
         player_->AddGravity((transform.worldMatrix.GetTranslate() - player_->transform.worldMatrix.GetTranslate()).Normalize());
