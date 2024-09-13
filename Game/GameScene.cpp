@@ -66,6 +66,8 @@ void GameScene::OnInitialize() {
 	bgm_ = AssetManager::GetInstance()->FindSound("inGame");
 	bgm_.Play(true);
 	result_ = AssetManager::GetInstance()->FindSound("result");
+
+	map_->SetParticles(particles_.get());
 }
 
 void GameScene::OnUpdate() {
@@ -73,13 +75,12 @@ void GameScene::OnUpdate() {
 	Input* input = Input::GetInstance();
 
 	if (input->IsKeyTrigger(DIK_P)) {
-		particles_->SetEmitRotate(true);
+	
 	}
 	else {
 		particles_->SetEmitRotate(false);
 	}
 	particles_->SetEmitPlayer(true);
-
 
 	switch (GameProperty::state_) {
 	case GameProperty::kInGame:

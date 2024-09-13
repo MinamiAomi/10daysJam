@@ -25,6 +25,9 @@ public:
 	void SetEmitRotate(bool is) { isEmitRotate_ = is; }
 	void SetEmitPlayer(bool is) { isEmitPlayer_ = is; }
 
+	void EmitTrunade(const Vector3& position);
+	void EmitBar(const Vector3& position, const Vector3& direction, const float length);
+
 private:
 
 	ParticleManager* particleManager_ = nullptr;
@@ -46,6 +49,7 @@ private:
 	uint32_t emitRotateNum_ = 1;
 	uint32_t emitPlayerNum_ = 4;
 	uint32_t emitPlayerFrame_ = 2;
+	uint32_t emitTranadeNum_ = 3;
 
 	uint32_t frame_ = 0;
 	Vector3 minDirection_;

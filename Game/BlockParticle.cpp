@@ -32,7 +32,7 @@ void BlockParticle::Update() {
 	if (time_ <= 0) {
 		isAlive_ = false;
 	}
-	static const Vector3 accelaration = {0.0f, -0.01f,0.0f };
+	static const Vector3 accelaration = {0.0f, -0.02f,0.0f };
 	velocity_ += accelaration;
 	transform.translate += velocity_;
 	if (!isGround_) {

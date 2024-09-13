@@ -43,7 +43,6 @@
     <ClCompile Include="MapCollider.cpp">
       <Filter>Game\Map</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="BlockParticles.cpp">
       <Filter>Game\Particle</Filter>
     </ClCompile>
@@ -72,6 +71,7 @@
     <ClCompile Include="Particles.cpp">
       <Filter>Game\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="MapBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -133,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="Particles.h">
       <Filter>Game\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBar.h">
+      <Filter>Game\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
