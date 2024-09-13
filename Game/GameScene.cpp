@@ -75,7 +75,7 @@ void GameScene::OnUpdate() {
 	Input* input = Input::GetInstance();
 
 	if (input->IsKeyTrigger(DIK_P)) {
-	
+		
 	}
 	else {
 		particles_->SetEmitRotate(false);

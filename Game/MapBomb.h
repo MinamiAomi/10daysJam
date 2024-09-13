@@ -4,6 +4,9 @@
 #include "GameObject/GameObject.h"
 #include "Math/Transform.h"
 #include "Graphics/Model.h"
+#include "Engine/Collision/Collider.h"
+
+class Player;
 
 class MapBomb :
 	public MapTileBase, GameObject {
@@ -15,6 +18,9 @@ public:
 	void OnBreak() override;
 
 private:
-	ModelInstance model_;
+	void OnCollision(const CollisionInfo& collisionInfo);
 
+	ModelInstance model_;
+	std::shared_ptr<SphereCollider> collider_;
+	std::shared_ptr<Player> player_;
 };

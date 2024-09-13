@@ -51,12 +51,15 @@ public:
     void AddCollider(const std::shared_ptr<MapCollider>& collider);
     void RemoveCollider(const std::shared_ptr<MapCollider>& collider);
 
+    void RemoveTile(uint16_t row, uint16_t column);
+
     void SetCamera(const std::shared_ptr<Camera>& camera) { camera_ = camera; }
     void SetPlayer(const std::shared_ptr<Player>& player) { player_ = player; }
     void SetScore(const std::shared_ptr<Score>& score) { score_ = score; }
     void SetBlockParticles(std::shared_ptr<BlockParticles> blockParticles) { blockParticles_ = blockParticles; }
 
     PosKey CalcTilePosition(const Vector2& worldPosition) const;
+    void MapRangeTile(int32_t& row, int32_t& column) const;
 
     const std::vector<MapProperty::RowData>& GetTileData() const { return tileData_; }
 
@@ -86,6 +89,8 @@ private:
     std::vector<MapProperty::RowData> tileData_;
     // タイルのインスタンスリスト
     std::unordered_map<PosKey, std::unique_ptr<MapTileBase>, PosKeyHash> tileInstanceList_;
+    // 削除予定タイルリスト
+    std::unordered_map<PosKey, std::unique_ptr<MapTileBase>, PosKeyHash> removeTileInstanceList_;
     // セクションごとのデータ
     std::vector<std::unique_ptr<MapSection>> sections_;
     // 当たり判定を取るコライダー
@@ -108,5 +113,6 @@ private:
 
     // SEのリスト
     std::list<std::unique_ptr<AudioSource>> se_;
+
 
 };
