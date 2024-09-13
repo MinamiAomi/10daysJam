@@ -370,6 +370,12 @@
     <ClCompile Include="Graphics\App\Voronoi.cpp">
       <Filter>Graphics\App</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\ParticleManager.cpp">
+      <Filter>Graphics\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\ParticleRenderer.cpp">
+      <Filter>Graphics\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\BaseScene.h">
@@ -710,6 +716,12 @@
     </ClInclude>
     <ClInclude Include="Graphics\App\Voronoi.h">
       <Filter>Graphics\App</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ParticleManager.h">
+      <Filter>Graphics\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ParticleRenderer.h">
+      <Filter>Graphics\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@
 #include "GameWindow.h"
 #include "ImGuiManager.h"
 
+
 #include "Framework/Engine.h"
 
 static bool useGrayscale = true;
@@ -61,7 +62,10 @@ void RenderManager::Initialize() {
     skyTexture_.Create(L"SkyTexture", lightingRenderingPass_.GetResult().GetWidth(), lightingRenderingPass_.GetResult().GetHeight(), DXGI_FORMAT_R8G8B8A8_UNORM);
     skyRenderer_.Initialize(skyTexture_.GetRTVFormat());
 
+    particleRenderer_.Initialize(lightingRenderingPass_.GetResult(), geometryRenderingPass_.GetDepth());
+   
     frameCount_ = 0;
+
 }
 
 void RenderManager::Finalize() {
@@ -110,17 +114,24 @@ void RenderManager::Render() {
         commandContext_.TransitionResource(geometryRenderingPass_.GetDepth(), D3D12_RESOURCE_STATE_DEPTH_READ);
         commandContext_.SetViewportAndScissorRect(0, 0, lightingRenderingPass_.GetResult().GetWidth(), lightingRenderingPass_.GetResult().GetHeight());
         commandContext_.SetRenderTarget(lightingRenderingPass_.GetResult().GetRTV(), geometryRenderingPass_.GetDepth().GetDSV());
-        //skybox_.SetWorldMatrix(Matrix4x4::MakeAffineTransform({ 1.0f, 1.0f, 1.0f }, Quaternion::identity, camera->GetPosition()));
-        //skybox_.Render(commandContext_, *camera);
+  
+
+
+        particleRenderer_.Render(commandContext_, *camera);
 
         commandContext_.SetRenderTarget(lightingRenderingPass_.GetResult().GetRTV());
         commandContext_.SetViewportAndScissorRect(0, 0, lightingRenderingPass_.GetResult().GetWidth(), lightingRenderingPass_.GetResult().GetHeight());
         lineDrawer_.Render(commandContext_, *camera);
 
         //particleCore_.Render(commandContext_, *camera);
+
+
+
+     
+
     }
 
-
+   
 
     bloom_.Render(commandContext_);
     fxaa_.Render(commandContext_);

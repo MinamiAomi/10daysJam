@@ -8,6 +8,9 @@
 
 #include "Engine/Collision/CollisionManager.h"
 #include "GameProperty.h"
+#include "Graphics/App/SkyRenderer.h"
+
+#include "Engine/Graphics/ImGuiManager.h"
 
 void GameScene::OnInitialize() {
 
@@ -15,6 +18,9 @@ void GameScene::OnInitialize() {
 	camera_->SetPosition({ 0.0f, -10.0f, -80.0f });
 	camera_->SetRotate(Quaternion::MakeLookRotation({ 0.0f, 0.0f, 1.0f }));
 	camera_->UpdateMatrices();
+	SkyRenderer::y_ = 0;
+	SkyRenderer::switchNum_ = 0;
+
 	RenderManager::GetInstance()->SetCamera(camera_);
 
 	sunLight_ = std::make_shared<DirectionalLight>();
@@ -38,14 +44,14 @@ void GameScene::OnInitialize() {
 	player_->Initialize(map_.get());
 
 	followCamera_ = std::make_shared<FollowCamera>();
-	followCamera_->Initialize();
 	followCamera_->SetPlayer(player_);
 	followCamera_->SetCamera(camera_);
+	followCamera_->Initialize();
 
 	score_->SetPlayer(player_);
 	score_->SetParent(followCamera_->transform_);
 	score_->Initialize();
-	
+
 	gameClearCamera_ = std::make_shared<GameClearCamera>();
 	gameClearCamera_->Initialize();
 	gameClearCamera_->SetCamera(camera_);
@@ -54,6 +60,7 @@ void GameScene::OnInitialize() {
 
 	particles_ = std::make_shared<Particles>();
 	particles_->SetCamera(camera_.get());
+	particles_->SetPlayer(player_.get());
 	particles_->Initialize();
 }
 
@@ -62,11 +69,13 @@ void GameScene::OnUpdate() {
 	Input* input = Input::GetInstance();
 
 	if (input->IsKeyTrigger(DIK_P)) {
-		particles_->SetEmit(true);
+		particles_->SetEmitRotate(true);
 	}
 	else {
-		particles_->SetEmit(false);
+		particles_->SetEmitRotate(false);
 	}
+	particles_->SetEmitPlayer(true);
+
 
 	switch (GameProperty::state_) {
 	case GameProperty::kInGame:
@@ -85,32 +94,41 @@ void GameScene::OnUpdate() {
 			followCamera_->Reset();
 			map_->Generate();
 			score_->Reset();
+			SkyRenderer::y_ = 0;
+			SkyRenderer::switchNum_ = 0;
 		}
 
 		// クリアしたか
 		if (score_->GetIsClear()) {
 			gameClearCamera_->SetCameraPosition(-(float(map_->GetMapRow()) + MapProperty::kBlockSize * 2.0f));
 			player_->SetGameClearPosPosition(gameClearCamera_->GetEndCameraPos().z + 80.0f);
+			score_->SetParent(gameClearCamera_->transform_);
 			GameProperty::state_ = GameProperty::kResult;
 		}
 		break;
 	case GameProperty::kResult:
 	{
-		// カメラが動いているとき
-		if (!gameClearCamera_->GetIsEasing()) {
+		// 集計中
+		if (score_->GetState() == Score::State::Result) {
+			gameClearCamera_->SetEasingTime(score_->GetEasingTime());
 			gameClearCamera_->Update();
+			score_->Update();
 			map_->Update();
-		}
-		else {
-			// クリアしたら
-			if (input->IsKeyTrigger(DIK_R)) {
+			// 切り替わる瞬間
+			if (score_->GetState() != Score::State::Result) {
 				player_->Reset();
 				followCamera_->Reset();
 				map_->Generate();
+				score_->SetParent(followCamera_->transform_);
 				score_->Reset();
 				GameProperty::state_ = GameProperty::kInGame;
+				SkyRenderer::y_ = 0;
+				SkyRenderer::switchNum_ = 0;
 			}
-			player_->Update();
+			//player_->Update();
+		}
+		else {
+			GameProperty::state_ = GameProperty::kInGame;
 		}
 	}
 	break;
@@ -118,6 +136,9 @@ void GameScene::OnUpdate() {
 		break;
 	}
 	}
+
+
+	SkyRenderer::y_ = camera_->GetPosition().y;
 }
 
 void GameScene::OnFinalize() {

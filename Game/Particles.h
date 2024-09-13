@@ -5,43 +5,49 @@
 #include "Graphics/Model.h"
 #include "Math/Transform.h"
 #include "Math/Random.h"
+
+#include "Engine/Graphics/ParticleManager.h"
 class Camera;
+class Player;
 
 class Particles {
 public:
-	static const uint32_t kParticleNum = 50;
+
 
 	void SetCamera(const Camera* camera) { camera_ = camera; }
+	void SetPlayer(const Player* player) { player_ = player; }
 	void Initialize();
 	void Update();
 
 	void Reset();
 
-	struct Particle {
-		Transform transform;
-		Vector3 direction;
-		Vector3 velocity;
-		std::unique_ptr<ModelInstance> model_;
-		bool isActive;
-	};
-
 	void SetEmit(bool is) { isEmit_ = is; }
+	void SetEmitRotate(bool is) { isEmitRotate_ = is; }
+	void SetEmitPlayer(bool is) { isEmitPlayer_ = is; }
 
 private:
 
+	ParticleManager* particleManager_ = nullptr;
+
 	void Emit();
-	void ParticleUpdate();
+	void RotateEmit();
+	void PlayerEmit();
 
 	Random::RandomNumberGenerator rng_;
 	const Camera* camera_;
+	const Player* player_;
 
 	Transform emitTransform_;
-	std::array<Particle, kParticleNum> particles_;
-	float speed_ = 0.1f;
-	float scaleSpeed_ = 0.03f;
-	Vector3 initialScale = {5.5f,5.5f,5.5f};
+	Transform emitPlayerTransform_;
 	bool isEmit_ = false;
-	uint32_t emitNum_ = 20;
+	bool isEmitRotate_ = false;
+	bool isEmitPlayer_ = false;
+	uint32_t emitNum_ = 1;
+	uint32_t emitRotateNum_ = 1;
+	uint32_t emitPlayerNum_ = 4;
+	uint32_t emitPlayerFrame_ = 2;
+
+	uint32_t frame_ = 0;
 	Vector3 minDirection_;
 	Vector3 maxDirection_;
 	

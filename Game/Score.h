@@ -4,14 +4,27 @@
 #include <stdint.h>
 #include <string>
 
+#include "Math/Random.h"
 #include "GameObject/GameObject.h"
 #include "Graphics/Model.h"
 
 class Player;
 class Score {
 public:
+	enum State {
+		OutGame,
+		InGame,
+		Result,
+	};
+
 	void Initialize();
 	void Update();
+
+	void InitializeInGame();
+	void FinalizeInGame();
+
+	void InitializeResultGame();
+	void FinalizeResultGameGame();
 
 	void Reset();
 
@@ -21,21 +34,37 @@ public:
 
 	void SetParent(const Transform& parent) {
 		timerTransform_.SetParent(&parent);
-		scoreTransform_.SetParent(&parent);
+		blockTransform_.SetParent(&parent);
+		depthTransform_.SetParent(&parent);
+		if (state_ == Result) {
+			scoreTransform_.SetParent(&parent);
+		}
+		else {
+			scoreTransform_.SetParent(nullptr);
+		}
 	}
 
 	void SetPlayer(const std::shared_ptr<Player>& player) { player_ = player; }
+
+	float GetEasingTime() { return resultEasingTime_; }
+	const State& GetState() { return state_; }
 private:
 	void Debug();
 	void ConversionSeconds();
 	void UpdateTimer();
 	void UpdateScore();
+
 	std::shared_ptr<Player> player_;
+	State state_;
+	Random::RandomNumberGenerator rnd_;
+
+	// スコアを最初に見せないため
+	bool isFirst_;
 
 	bool isClear_;
-	bool isStart_;
 
 	int score_;
+	int preScore_;
 	int blockCount_;
 	int preBlockCount_;
 	int depthCount_;
@@ -47,7 +76,7 @@ private:
 		void Update();
 		void UpdateTranslate();
 		void ActiveModel(int num);
-		void Reset(const std::string& name,int number);
+		void Reset(const std::string& name, int number);
 		void Debug(const std::string& name);
 
 		std::array<ModelInstance, 10> numberModel_;
@@ -75,6 +104,26 @@ private:
 	NumPlace blockTenPlace_;
 	NumPlace blockHundredPlace_;
 	NumPlace blockThousandPlace_;
+	Vector3 blockOffset_;
+	Vector3 blockScoreOffset_;
+	Transform blockTransform_;
+
+	NumPlace depthOnePlace_;
+	NumPlace depthTenPlace_;
+	NumPlace depthHundredPlace_;
+	NumPlace depthThousandPlace_;
+	Vector3 depthOffset_;
+	Vector3 depthScoreOffset_;
+	Transform depthTransform_;
+
+	NumPlace scoreOnePlace_;
+	NumPlace scoreTenPlace_;
+	NumPlace scoreHundredPlace_;
+	NumPlace scoreThousandPlace_;
+	NumPlace scoreTenThousandPlace_;
 	Vector3 scoreOffset_;
 	Transform scoreTransform_;
+
+	float resultEasingTime_;
+	float resultTransitionFrame_;
 };
