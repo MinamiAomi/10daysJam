@@ -26,6 +26,7 @@ public:
 	void SetEmitPlayer(bool is) { isEmitPlayer_ = is; }
 
 	void EmitTrunade(const Vector3& position);
+	void EmitBar(const Vector3& position, const Vector3& direction, const float length);
 
 private:
 

@@ -38,13 +38,13 @@ void Particles::EmitTrunade(const Vector3& position)
 		Particle particle;
 		particle.acceleration = { 0.0f,0.0f,0.0f };
 		particle.startAlpha = 1.0f;
-		particle.endAlpha = 0.0f;
+		particle.endAlpha = 1.0f;
 		float color = rng_.NextFloatRange(0.1f, 0.5f);
 		particle.startColor = { color,color,1.0f };
 		particle.endColor = { color,color,1.0f };
 		particle.startSize = 0.5f;
 		particle.endSize = 0.1f;
-		particle.lifeTime = 300;
+		particle.lifeTime = 120;
 		particle.existenceTime = 0;
 		particle.spin = 0.0f;
 		particle.spinSpeed = (1.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
@@ -61,6 +61,45 @@ void Particles::EmitTrunade(const Vector3& position)
 	}
 
 	particleManager_->AddRotateParticles(std::move(emitParticles));
+}
+
+void Particles::EmitBar(const Vector3& position, const Vector3& direction, const float length)
+{
+
+	std::list<Particle> emitParticles;
+
+	Vector3 vertical;
+	vertical.x = direction.y;
+	vertical.y = -direction.x;
+	vertical.z = 0.0f;
+
+	float halfLength = length * 0.5f;
+
+	for (uint32_t i = 0; i < uint32_t(length); i++) {
+
+		Particle particle;
+		particle.acceleration = { 0.0f,0.0f,0.0f };
+		particle.startAlpha = 1.0f;
+		particle.endAlpha = 0.0f;
+		float color = rng_.NextFloatRange(0.1f, 0.5f);
+		particle.startColor = { color,1.0f,color };
+		particle.endColor = { color,1.0f,color };
+		particle.startSize = 1.0f;
+		particle.endSize = 1.0f;
+		particle.lifeTime = 30;
+		particle.existenceTime = 0;
+		particle.position = position + (vertical * rng_.NextFloatRange(0.0f,halfLength)) * ((i % 2) * 2.0f - 1.0f);
+		particle.position.z = 2.0f;
+		particle.velocity = -direction * rng_.NextFloatRange(0.9f,1.2f);
+		particle.spin = 0.0f;
+		particle.spinSpeed = (3.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
+		particle.isCircle = bool(rng_.NextIntRange(0, 1));
+
+		emitParticles.push_back(particle);
+	}
+
+	particleManager_->AddParticles(std::move(emitParticles));
+	
 }
 
 void Particles::Emit()

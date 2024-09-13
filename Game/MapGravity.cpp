@@ -16,10 +16,10 @@ void MapGravity::OnInitialize() {
     transform.rotate = Quaternion::identity;
     transform.UpdateMatrix();
 
-    mapModel_.SetModel(AssetManager::GetInstance()->FindModel("block"));
-    mapModel_.SetWorldMatrix(transform.worldMatrix);
-    gravityModel_.SetModel(AssetManager::GetInstance()->FindModel("gravity"));
-    gravityModel_.SetWorldMatrix(transform.worldMatrix);
+  /*  mapModel_.SetModel(AssetManager::GetInstance()->FindModel("block"));
+    mapModel_.SetWorldMatrix(transform.worldMatrix);*/
+    /*gravityModel_.SetModel(AssetManager::GetInstance()->FindModel("gravity"));
+    gravityModel_.SetWorldMatrix(transform.worldMatrix);*/
 
     isActive_ = true;
 
@@ -41,8 +41,8 @@ void MapGravity::OnUpdate() {
 
 void MapGravity::OnBreak() {
     isActive_ = false;
-    mapModel_.SetIsActive(false);
-    gravityModel_.SetIsActive(false);
+    //mapModel_.SetIsActive(false);
+   // gravityModel_.SetIsActive(false);
     collider_->SetIsActive(false);
     score_->AddScore(int(row_));
 }
