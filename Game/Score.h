@@ -122,6 +122,8 @@ private:
 	NumPlace scoreHundredPlace_;
 	NumPlace scoreThousandPlace_;
 	NumPlace scoreTenThousandPlace_;
+	NumPlace scoreHundredThousandPlace_;
+
 	Vector3 scoreOffset_;
 	Transform scoreTransform_;
 
