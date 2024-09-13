@@ -149,13 +149,13 @@ void Score::Update() {
 		depthTransform_.translate = Vector3::Lerp(resultEasingTime_, depthOffset_, depthScoreOffset_);
 		if (resultEasingTime_ < 1.0f) {
 			scoreTransform_.translate = scoreOffset_;
+			scoreOnePlace_.ActiveModel(rnd_.NextIntRange(0, 9));
+			scoreTenPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
+			scoreHundredPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
+			scoreThousandPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
+			scoreTenThousandPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
 		}
 
-		scoreOnePlace_.ActiveModel(rnd_.NextIntRange(0, 9));
-		scoreTenPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
-		scoreHundredPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
-		scoreThousandPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
-		scoreTenThousandPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
 
 		blockTransform_.UpdateMatrix();
 		depthTransform_.UpdateMatrix();
