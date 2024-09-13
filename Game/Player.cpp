@@ -143,6 +143,7 @@ void Player::Move() {
             transform.translate.x = -MapProperty::kSideLimit;
             // 速度反転
             velocity_.x *= -1.0f;
+            UpdateRotate(velocity_.Normalized());
         }
         if (transform.translate.x >= MapProperty::kSideLimit) {
             transform.translate.x = MapProperty::kSideLimit;
