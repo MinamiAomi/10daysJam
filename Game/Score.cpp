@@ -208,9 +208,9 @@ void Score::Update() {
 
 void Score::InitializeInGame() {
 	onePlace_.transform_.SetParent(&timerTransform_);
-	onePlace_.Reset("onePlace", limitTime_ % 10);
+	onePlace_.Reset("onePlace", (limitTime_ / 60) % 10);
 	tenPlace_.transform_.SetParent(&timerTransform_);
-	tenPlace_.Reset("tenPlace", (limitTime_ / 10) % 10);
+	tenPlace_.Reset("tenPlace", ((limitTime_ / 600)) % 10);
 
 	blockOnePlace_.Reset("blockOnePlace", 0);
 	blockOnePlace_.transform_.SetParent(&blockTransform_);
