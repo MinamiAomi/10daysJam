@@ -53,8 +53,8 @@ void MapBomb::OnCollision(const CollisionInfo& collisionInfo) {
         map_.MapRangeTile(bottomRow, rightColumn);
 
         Vector2  bombPosition = { (float)column_, (float)row_ };
-        for (int32_t row = topRow; row < bottomRow; ++row) {
-            for (int32_t column = leftColumn; column < rightColumn; ++column) {
+        for (int32_t row = topRow; row <= bottomRow; ++row) {
+            for (int32_t column = leftColumn; column <= rightColumn; ++column) {
                 Vector2 tilePosition = { (float)column, (float)row };
                 if ((bombPosition - tilePosition).Length() < (float)kExplosionRange) {
                     map_.RemoveTile((uint16_t)row, (uint16_t)column);
