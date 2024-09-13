@@ -121,7 +121,7 @@ void Particles::EmitBom(const Vector3& position)
 		particle.existenceTime = 0;
 		particle.position = position;
 		particle.position.z = 2.0f;
-		//particle.velocity = -rng_.NextFloatRange() * rng_.NextFloatRange(0.9f, 1.2f);
+		particle.velocity = Vector3{ 1.0f,0.0f,0.0f } *Matrix4x4::MakeRotationZ(rng_.NextFloatRange(0.0f,360.0f * Math::ToRadian)) * rng_.NextFloatRange(0.9f,1.2f);
 		particle.spin = 0.0f;
 		particle.spinSpeed = (3.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
 		particle.isCircle = bool(rng_.NextIntRange(0, 1));

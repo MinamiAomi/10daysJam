@@ -7,6 +7,7 @@
 #include <wrl/client.h>
 
 #include <cstdint>
+#include <cmath>
 
 #define MOUSE_BUTTON_LEFT  0
 #define MOUSE_BUTTON_RIGHT 1
@@ -57,6 +58,36 @@ public:
     bool IsGamepadButtonPressed(GamepadButton::Enum gamepadButton) const { return xInputState_.Gamepad.wButtons & gamepadButton; }
     bool IsGamepadButtonTrigger(GamepadButton::Enum gamepadButton) const { return (xInputState_.Gamepad.wButtons & gamepadButton) && !(preXInputState_.Gamepad.wButtons & gamepadButton); }
     bool IsGamepadButtonRelease(GamepadButton::Enum gamepadButton) const { return !(xInputState_.Gamepad.wButtons & gamepadButton) && (preXInputState_.Gamepad.wButtons & gamepadButton); }
+
+    void GetRStick(float& x,float& y) const {
+        if (std::fabs(xInputState_.Gamepad.sThumbRX) <= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+            x = 0.0f;
+        }
+        else {
+            x = static_cast<float>(xInputState_.Gamepad.sThumbRX);
+        }
+        if (std::fabs(xInputState_.Gamepad.sThumbRY) <= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+            y = 0.0f;
+        }
+        else {
+            y = static_cast<float>(xInputState_.Gamepad.sThumbRY);
+        }
+    }
+
+    void GetLStick(float& x, float& y) const {
+        if (std::fabs(xInputState_.Gamepad.sThumbLX) <= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+            x = 0.0f;
+        }
+        else {
+            x = static_cast<float>(xInputState_.Gamepad.sThumbLX);
+        }
+        if (std::fabs(xInputState_.Gamepad.sThumbLY) <= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+            y = 0.0f;
+        }
+        else {
+            y = static_cast<float>(xInputState_.Gamepad.sThumbLY);
+        }
+    }
 
     const XINPUT_STATE& GetXInputState() const { return xInputState_; }
     const XINPUT_STATE& GetPreXInputState() const { return preXInputState_; }

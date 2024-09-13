@@ -87,47 +87,48 @@ void Player::Move() {
 		//if (std::abs(gamepad.Gamepad.sThumbLX) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.x = gamepad.Gamepad.sThumbLX / 32767.0f; }
 		//if (std::abs(gamepad.Gamepad.sThumbLY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) { move.y = gamepad.Gamepad.sThumbLY / 32767.0f; }
 
+        Vector3 rStick;
+        input->GetLStick(rStick.x, rStick.y);
+        rStick.x = rStick.x / 32768.0f;
+        rStick.y = rStick.y / 32768.0f;
+        rStick.z = 0.0f;
+        if (rStick.x != 0.0f || rStick.y != 0.0f || rStick.z != 0.0f) {
+            rStick = rStick.Normalize();
+            currentVector_ = Vector3::Lerp(0.2f, currentVector_, rStick).Normalize();
+            transform.rotate = Quaternion::MakeLookRotation(-currentVector_, Vector3::forward);
+            directionAcceleration += rStick * directionSpeed_;
+        }
+
+        Vector3 keyBord = { 0.0f,0.0f,0.0f };
+
         // Aキーが押されている間、加速を適用
         if (input->IsKeyPressed(DIK_A)) {
-            directionAcceleration += Vector3(currentVector_.y, -currentVector_.x, currentVector_.z) * directionSpeed_;
-            if (velocity_.Length() != 0.0f) {
-                UpdateRotate(velocity_.Normalized());
-            }
-            else {
-                UpdateRotate((currentVector_ + directionAcceleration).Normalized());
-            }
+            keyBord.x -= 1.0f;
         }
 
         // Dキーが押されている間、加速を適用
         if (input->IsKeyPressed(DIK_D)) {
-            directionAcceleration += Vector3(-currentVector_.y, currentVector_.x, currentVector_.z) * directionSpeed_;
-            if (velocity_.Length() != 0.0f) {
-                UpdateRotate(velocity_.Normalized());
-            }
-            else {
-                UpdateRotate((currentVector_ + directionAcceleration).Normalized());
-            }
+            keyBord.x += 1.0f;
         }
 
         // Wキーで減速
         if (input->IsKeyPressed(DIK_W)) {
-            // 速度があったら減速
-            if (velocity_.Length() != 0.0f) {
-                directionAcceleration += velocity_.Normalized() * -directionSpeed_;
-                // 0.0fに近かったら止まる
-                if (velocity_.Length() - directionAcceleration.Length() <= 0.01f) {
-                    directionAcceleration = Vector3::zero;
-                    velocity_ = Vector3::zero;
-                }
-            }
+            keyBord.y += 1.0f;
         }
         // Sキーで加速
         if (input->IsKeyPressed(DIK_S)) {
-            // プレイヤーの方向に加速
-            if (currentVector_.Length() != 0.0f) {
-                directionAcceleration += currentVector_.Normalized() * directionSpeed_;
-            }
+            keyBord.y -= 1.0f;
         }
+
+        if (keyBord.x != 0.0f || keyBord.y != 0.0f || keyBord.z != 0.0f) {
+            keyBord = keyBord.Normalize();
+            currentVector_ = Vector3::Lerp(0.2f, currentVector_, keyBord).Normalize();
+            transform.rotate = Quaternion::MakeLookRotation(-currentVector_, Vector3::forward);
+
+            directionAcceleration += keyBord * directionSpeed_;
+        }
+        
+
         // 速度に加速度を加算
         velocity_ += directionAcceleration;
         // 空気抵抗的な
