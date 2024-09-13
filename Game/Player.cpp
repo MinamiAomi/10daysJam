@@ -221,6 +221,8 @@ void Player::OnCollision(const CollisionInfo& collisionInfo) {
 }
 
 void Player::Debug() {
+#ifdef _DEBUG
+
     ImGui::Begin("GameObject");
     if (ImGui::BeginMenu("Player")) {
         ImGui::DragFloat3("velocity", &velocity_.x, 0.1f);
@@ -248,6 +250,7 @@ void Player::Debug() {
         ImGui::EndMenu();
     }
     ImGui::End();
+#endif // _DEBUG
 }
 
 

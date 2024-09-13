@@ -374,6 +374,9 @@ void Score::AddScore(int depth) {
 }
 
 void Score::Debug() {
+#ifdef _DEBUG
+
+
 	ImGui::Begin("GameObject");
 	if (ImGui::BeginMenu("Score")) {
 		ImGui::DragFloat3("blockTransform_.translate ", &blockTransform_.translate.x);
@@ -430,6 +433,7 @@ void Score::Debug() {
 	scoreThousandPlace_.Debug("scoreThousandPlace");
 	scoreTenThousandPlace_.Debug("scoreTenThousandPlace");
 	scoreHundredThousandPlace_.Debug("scoreHundredThousandPlace");
+#endif // _DEBUG
 }
 
 void Score::ConversionSeconds() {
@@ -597,6 +601,8 @@ void Score::NumPlace::Reset(const std::string& name, int number) {
 }
 
 void Score::NumPlace::Debug(const std::string& name) {
+	name;
+#ifdef _DEBUG
 	if (ImGui::TreeNode(name.c_str())) {
 
 		ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
@@ -616,4 +622,5 @@ void Score::NumPlace::Debug(const std::string& name) {
 
 		ImGui::TreePop();
 	}
+#endif // _DEBUG
 }
