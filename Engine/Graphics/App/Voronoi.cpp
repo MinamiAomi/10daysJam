@@ -48,6 +48,7 @@ void Voronoi::Initialize(uint32_t width, uint32_t height, uint32_t numPoints) {
 
     CommandContext commandContext;
     commandContext.Start(D3D12_COMMAND_LIST_TYPE_DIRECT);
+    commandContext.BeginEvent(L"Voronoi");
 
     commandContext.TransitionResource(colorBuffer_, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 
@@ -72,6 +73,7 @@ void Voronoi::Initialize(uint32_t width, uint32_t height, uint32_t numPoints) {
     commandContext.SetComputeDescriptorTable(2, colorBuffer_.GetUAV());
 
     commandContext.Dispatch((UINT)std::floor(width / 8), (UINT)std::floor(height / 8));
+    commandContext.EndEvent();
     commandContext.Finish(true);
 }
 

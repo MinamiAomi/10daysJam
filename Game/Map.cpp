@@ -82,6 +82,11 @@ void Map::Update() {
 
     CullingTile();
 
+    uint16_t lastSectionStart = (uint16_t)tileData_.size() - (uint16_t)sections_[sectionOrder_.back()]->GetHeight();
+    if (preCullingRangeBottom_ >= lastSectionStart) {
+        uint32_t addSectionIndex = rng_.NextUIntRange(1, (uint32_t)sections_.size() - 1);
+        AddSection(addSectionIndex, true);
+    }
 }
 
 void Map::Generate() {
@@ -89,8 +94,10 @@ void Map::Generate() {
     tileInstanceList_.clear();
     tileData_.clear();
 
+    // タイトルが0にある
+    AddSection(0);
     for (uint32_t i = 0; i < 10; ++i) {
-        uint32_t addSectionIndex = rng_.NextUIntRange(0, (uint32_t)sections_.size() - 1);
+        uint32_t addSectionIndex = rng_.NextUIntRange(1, (uint32_t)sections_.size() - 1);
         AddSection(addSectionIndex);
     }
 
@@ -282,7 +289,7 @@ void Map::Load() {
 
 }
 
-void Map::AddSection(uint32_t sectionIndex) {
+void Map::AddSection(uint32_t sectionIndex, bool culling) {
     assert(sectionIndex < sections_.size());
     // 追加する区画の種類
     sectionOrder_.emplace_back(sectionIndex);
@@ -300,6 +307,9 @@ void Map::AddSection(uint32_t sectionIndex) {
             uint16_t mapRow = row + baseRow, mapColumn = column;
             auto tileInstance = CreateTileInstance(tile, mapRow, mapColumn);
             if (tileInstance) {
+                if (culling) {
+                    tileInstance->OnSwitchingCulling();
+                }
                 tileInstanceList_[PosKey(mapRow, mapColumn)] = std::move(tileInstance);
             }
         }
