@@ -93,12 +93,11 @@ void Map::Update() {
 		}
 	}
 
-	CullingTile();
 
 	uint16_t lastSectionStart = (uint16_t)tileData_.size() - (uint16_t)sections_[sectionOrder_.back()]->GetHeight();
 	if (preCullingRangeBottom_ >= lastSectionStart) {
 		uint32_t addSectionIndex = rng_.NextUIntRange(1, (uint32_t)sections_.size() - 1);
-		AddSection(addSectionIndex, true);
+		AddSection(addSectionIndex);
 	}
 }
 
