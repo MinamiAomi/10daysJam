@@ -44,7 +44,8 @@
         "number_8": "Number/number_8.gltf",
         "number_9": "Number/number_9.gltf",
         "m": "m.gltf",
-        "particle": "particle.gltf"
+        "particle": "particle.gltf",
+        "bar" : "bar.gltf"
     },
     "Sound": {
         "blockBreak": "SE/blockBreak.mp3",
