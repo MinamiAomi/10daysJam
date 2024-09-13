@@ -46,6 +46,11 @@
         "m": "m.gltf",
         "particle": "particle.gltf",
         "bar" : "bar.gltf",
+        "S" : "S.gltf",
+        "A" : "A.gltf",
+        "B" : "B.gltf",
+        "C" : "C.gltf",
+        "title" : "title.gltf",
         "bom" : "bom.gltf"
     },
     "Sound": {

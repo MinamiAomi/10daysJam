@@ -124,6 +124,19 @@ private:
 	NumPlace scoreTenThousandPlace_;
 	NumPlace scoreHundredThousandPlace_;
 
+	Transform resultTransform_;
+	Transform titleTransform_;
+
+	Vector3 resultOffset_;
+	Vector3 titleOffset_;
+	Vector3 resultScaleOffset_;
+
+	ModelInstance S_;
+	ModelInstance A_;
+	ModelInstance B_;
+	ModelInstance C_;
+	ModelInstance title_;
+
 	Vector3 scoreOffset_;
 	Transform scoreTransform_;
 

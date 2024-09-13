@@ -58,12 +58,56 @@ void Score::Initialize() {
 	scoreHundredThousandPlace_.transform_.SetParent(&scoreTransform_);
 	scoreHundredThousandPlace_.Initialize("scoreHundredThousandPlace", 0);
 
+	resultTransform_.UpdateMatrix();
+	
+
+
 	m_.SetModel(AssetManager::GetInstance()->FindModel("m"));
 
+	S_.SetModel(AssetManager::GetInstance()->FindModel("S"));
+	A_.SetModel(AssetManager::GetInstance()->FindModel("A"));
+	B_.SetModel(AssetManager::GetInstance()->FindModel("B"));
+	C_.SetModel(AssetManager::GetInstance()->FindModel("C"));
+
+	title_.SetModel(AssetManager::GetInstance()->FindModel("title"));
+
 	Reset();
+
 }
 
 void Score::Update() {
+	resultTransform_.translate = resultOffset_;
+	titleTransform_.rotate = Quaternion::MakeForXAxis(-90.0f * Math::ToRadian);
+	titleTransform_.translate = titleOffset_;
+	resultTransform_.UpdateMatrix();
+	titleTransform_.UpdateMatrix();
+	title_.SetWorldMatrix(titleTransform_.worldMatrix);
+	///4 B 5 A 6 S
+	if (score_ < 30000) {
+		S_.SetIsActive(false);
+		A_.SetIsActive(false);
+		B_.SetIsActive(false);
+		C_.SetIsActive(isFirst_);
+	}
+	else if (score_ < 40000) {
+		S_.SetIsActive(false);
+		A_.SetIsActive(false);
+		B_.SetIsActive(isFirst_);
+		C_.SetIsActive(false);
+	}
+	else if (score_ < 50000) {
+		S_.SetIsActive(false);
+		A_.SetIsActive(isFirst_);
+		B_.SetIsActive(false);
+		C_.SetIsActive(false);
+	}
+	else  {
+		S_.SetIsActive(isFirst_);
+		A_.SetIsActive(false);
+		B_.SetIsActive(false);
+		C_.SetIsActive(false);
+	}
+
 	switch (state_) {
 	case Score::OutGame:
 		if (player_->transform.translate.y <= 0.0f) {
@@ -152,6 +196,10 @@ void Score::Update() {
 			scoreThousandPlace_.UpdateTranslate();
 			scoreTenThousandPlace_.UpdateTranslate();
 			scoreHundredThousandPlace_.UpdateTranslate();
+
+			//SABC
+
+
 			state_ = OutGame;
 		}
 
@@ -298,6 +346,8 @@ void Score::Reset() {
 	JSON_LOAD(depthScoreOffset_);
 	JSON_LOAD(scoreOffset_);
 	JSON_LOAD(resultTransitionFrame_);
+	JSON_LOAD(resultOffset_);
+	JSON_LOAD(titleOffset_);
 	JSON_CLOSE();
 
 	state_ = OutGame;
@@ -394,6 +444,8 @@ void Score::Debug() {
 			ImGui::DragFloat3("blockScoreOffset_", &blockScoreOffset_.x);
 			ImGui::DragFloat3("depthScoreOffset_", &depthScoreOffset_.x);
 			ImGui::DragFloat("resultTransitionFrame_", &resultTransitionFrame_, 0.1f);
+			ImGui::DragFloat3("resultOffset_", &resultOffset_.x, 0.1f);
+			ImGui::DragFloat3("titleOffset_", &titleOffset_.x, 0.1f);
 			if (ImGui::Button("Save")) {
 				JSON_OPEN("Resources/Data/Score/score.json");
 				JSON_SAVE(limitTime_);
@@ -405,6 +457,8 @@ void Score::Debug() {
 				JSON_SAVE(depthScoreOffset_);
 				JSON_SAVE(scoreOffset_);
 				JSON_SAVE(resultTransitionFrame_);
+				JSON_SAVE(resultOffset_);
+				JSON_SAVE(titleOffset_);
 				JSON_CLOSE();
 			}
 
