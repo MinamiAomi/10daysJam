@@ -1,12 +1,12 @@
 {
-    "directionSpeed_": 0.05999999865889549,
-    "gravity_": 0.05000000074505806,
+    "directionSpeed_": 0.029999999329447746,
+    "gravity_": 0.019999999552965164,
     "initializePosition_": [
         0.0,
         50.0,
         0.0
     ],
-    "maxSpeed_": 2.0,
+    "maxSpeed_": 1.5,
     "resistance_": 0.9950000047683716,
     "speed_": 0.0
 }
