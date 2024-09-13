@@ -122,6 +122,7 @@ void Map::Generate() {
     }
 
     preCullingRangeTop_ = preCullingRangeBottom_ = 0;
+    breakTiles_ = 0;
 }
 
 void Map::CheckCollision() {
@@ -193,6 +194,7 @@ void Map::CheckCollision() {
                                 tileInstanceList_[PosKey(row, column)]->OnBreak();
                                 tileInstanceList_.erase(PosKey(row, column));
                                 tileData_[row][column] = Tile::Air;
+                                breakTiles_++;
                             }
                             break;
                             // 重力
@@ -238,6 +240,7 @@ void Map::RemoveTile(uint16_t row, uint16_t column) {
         tileInstanceList_[PosKey(row, column)]->OnBreak();
         tileInstanceList_.erase(PosKey(row, column));
         tileData_[row][column] = Tile::Air;
+        breakTiles_++;
         break;
     }
     // 重力
@@ -251,6 +254,7 @@ void Map::RemoveTile(uint16_t row, uint16_t column) {
         removeTileInstanceList_[PosKey(row, column)] = std::move(tileInstanceList_[PosKey(row, column)]);
         tileInstanceList_.erase(PosKey(row, column));
         tileData_[row][column] = Tile::Air;
+        breakTiles_++;
     }
     case Tile::Air:
     default:
