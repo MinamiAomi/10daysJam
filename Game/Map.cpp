@@ -71,6 +71,7 @@ namespace {
 
 void Map::Initialize() {
 
+
     Load();
 
     Generate();
@@ -440,6 +441,7 @@ std::unique_ptr<MapTileBase> Map::CreateTileInstance(Tile::Enum tile, uint16_t r
     case Tile::Bomb:
     {
         auto block = std::make_unique<MapBomb>(*this, row, column);
+        block->SetPlayer(player_);
         instance = std::move(block);
         break;
     }

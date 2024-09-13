@@ -17,6 +17,8 @@ public:
 	void OnUpdate() override;
 	void OnBreak() override;
 
+	void SetPlayer(const std::shared_ptr<Player>& player) { player_ = player; }
+
 private:
 	void OnCollision(const CollisionInfo& collisionInfo);
 

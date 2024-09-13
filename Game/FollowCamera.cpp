@@ -31,6 +31,8 @@ void FollowCamera::Reset() {
 }
 
 void FollowCamera::Debug() {
+#ifdef _DEBUG
+
 	ImGui::Begin("GameObject");
 	if (ImGui::BeginMenu("FollowCamera")) {
 		if (ImGui::TreeNode("Property")) {
@@ -46,4 +48,5 @@ void FollowCamera::Debug() {
 		ImGui::EndMenu();
 	}
 	ImGui::End();
+#endif // _DEBUG
 }

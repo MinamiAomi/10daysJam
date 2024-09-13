@@ -1,11 +1,15 @@
 {
     "Sections": [
         "Title.csv",
-        
         "Map1.csv",
         "Map2.csv",
         "Map3.csv",
         "Map4.csv",
-        "Map5.csv"
+        "Map5.csv",
+        "Map6.csv",
+        "Map7.csv",
+        "Map8.csv",
+        "Map9.csv",
+        "Map10.csv"
     ]
 }

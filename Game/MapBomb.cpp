@@ -63,6 +63,7 @@ void MapBomb::OnCollision(const CollisionInfo& collisionInfo) {
         }
 
         map_.particles_->EmitBom(transform.worldMatrix.GetTranslate());
+        player_->KnockbackBomb((player_->transform.worldMatrix.GetTranslate() - transform.worldMatrix.GetTranslate()).Normalized());
     }
 }
 

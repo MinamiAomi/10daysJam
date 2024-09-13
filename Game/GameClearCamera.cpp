@@ -38,6 +38,9 @@ void GameClearCamera::SetCameraPosition(float mapRowLength) {
 }
 
 void GameClearCamera::Debug() {
+#ifdef _DEBUG
+
+
 	ImGui::Begin("GameObject");
 	if (ImGui::BeginMenu("GameClearCamera")) {
 		ImGui::DragFloat("time_", &time_, 0.1f);
@@ -54,4 +57,5 @@ void GameClearCamera::Debug() {
 		ImGui::EndMenu();
 	}
 	ImGui::End();
+#endif // _DEBUG
 }
