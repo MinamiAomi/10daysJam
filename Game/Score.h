@@ -61,6 +61,7 @@ private:
 
 	// スコアを最初に見せないため
 	bool isFirst_;
+	bool is = false;
 
 	bool isClear_;
 

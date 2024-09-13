@@ -11,6 +11,7 @@
 
 void Score::Initialize() {
 	isFirst_ = true;
+	is = true;
 	score_ = 0;
 
 	onePlace_.transform_.SetParent(&timerTransform_);
@@ -92,22 +93,22 @@ void Score::Update() {
 		S_.SetIsActive(false);
 		A_.SetIsActive(false);
 		B_.SetIsActive(false);
-		C_.SetIsActive(!isFirst_);
+		C_.SetIsActive(!is);
 	}
 	else if (score_ < 40000) {
 		S_.SetIsActive(false);
 		A_.SetIsActive(false);
-		B_.SetIsActive(!isFirst_);
+		B_.SetIsActive(!is);
 		C_.SetIsActive(false);
 	}
 	else if (score_ < 50000) {
 		S_.SetIsActive(false);
-		A_.SetIsActive(!isFirst_);
+		A_.SetIsActive(!is);
 		B_.SetIsActive(false);
 		C_.SetIsActive(false);
 	}
 	else  {
-		S_.SetIsActive(!isFirst_);
+		S_.SetIsActive(!is);
 		A_.SetIsActive(false);
 		B_.SetIsActive(false);
 		C_.SetIsActive(false);
@@ -171,8 +172,10 @@ void Score::Update() {
 		break;
 	case Result:
 	{
+		
 		// 1触れ遅らせる
 		if (resultEasingTime_ >= 1.0f) {
+			is = false;
 			blockOnePlace_.ActiveModel(10);
 			blockTenPlace_.ActiveModel(10);
 			blockHundredPlace_.ActiveModel(10);
