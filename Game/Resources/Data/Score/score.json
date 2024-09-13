@@ -73,7 +73,12 @@
     "onePlaceTransformFrame_": 60.0,
     "resultTransitionFrame_": 120.0,
     "scoreHundredPlaceOffset_": [
+        2.0,
         0.0,
+        0.0
+    ],
+    "scoreHundredThousandPlaceOffset_": [
+        -10.0,
         0.0,
         0.0
     ],
@@ -83,24 +88,24 @@
         110.0
     ],
     "scoreOnePlaceOffset_": [
-        8.0,
+        10.0,
         0.0,
         0.0
     ],
     "scoreOnePlaceTransformFrame_": 15.0,
     "scoreTenPlaceOffset_": [
-        4.0,
+        6.0,
         0.0,
         0.0
     ],
     "scoreTenPlaceTransformFrame_": 20.0,
     "scoreTenThousandPlaceOffset_": [
-        -8.0,
+        -6.0,
         0.0,
         0.0
     ],
     "scoreThousandPlaceOffset_": [
-        -4.0,
+        -2.0,
         0.0,
         0.0
     ],

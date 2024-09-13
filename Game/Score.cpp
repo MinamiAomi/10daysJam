@@ -55,6 +55,8 @@ void Score::Initialize() {
 	scoreThousandPlace_.Initialize("scoreThousandPlace", 0);
 	scoreTenThousandPlace_.transform_.SetParent(&scoreTransform_);
 	scoreTenThousandPlace_.Initialize("scoreTenThousandPlace", 0);
+	scoreHundredThousandPlace_.transform_.SetParent(&scoreTransform_);
+	scoreHundredThousandPlace_.Initialize("scoreHundredThousandPlace", 0);
 
 	m_.SetModel(AssetManager::GetInstance()->FindModel("m"));
 
@@ -76,6 +78,7 @@ void Score::Update() {
 		scoreHundredPlace_.UpdateTranslate();
 		scoreThousandPlace_.UpdateTranslate();
 		scoreTenThousandPlace_.UpdateTranslate();
+		scoreHundredThousandPlace_.UpdateTranslate();
 
 		break;
 	case Score::InGame:
@@ -86,7 +89,7 @@ void Score::Update() {
 			InitializeResultGame();
 			state_ = Result;
 		}
-		score_ = blockCount_ / 10 * depthCount_ / 10;
+		score_ = blockCount_ / 10 * depthCount_ / 20;
 		ConversionSeconds();
 		UpdateScore();
 		UpdateTimer();
@@ -139,6 +142,7 @@ void Score::Update() {
 			scoreHundredPlace_.ActiveModel((score_ / 100) % 10);
 			scoreThousandPlace_.ActiveModel((score_ / 1000) % 10);
 			scoreTenThousandPlace_.ActiveModel((score_ / 10000) % 10);
+			scoreHundredThousandPlace_.ActiveModel((score_ / 100000) % 10);
 
 			scoreTransform_.SetParent(nullptr);
 			scoreTransform_.UpdateMatrix();
@@ -147,6 +151,7 @@ void Score::Update() {
 			scoreHundredPlace_.UpdateTranslate();
 			scoreThousandPlace_.UpdateTranslate();
 			scoreTenThousandPlace_.UpdateTranslate();
+			scoreHundredThousandPlace_.UpdateTranslate();
 			state_ = OutGame;
 		}
 
@@ -162,6 +167,7 @@ void Score::Update() {
 			scoreHundredPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
 			scoreThousandPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
 			scoreTenThousandPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
+			scoreHundredThousandPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
 		}
 
 
@@ -188,6 +194,7 @@ void Score::Update() {
 		scoreHundredPlace_.UpdateTranslate();
 		scoreThousandPlace_.UpdateTranslate();
 		scoreTenThousandPlace_.UpdateTranslate();
+		scoreHundredThousandPlace_.UpdateTranslate();
 	}
 	break;
 	default:
@@ -262,6 +269,7 @@ void Score::InitializeResultGame() {
 	scoreHundredPlace_.UpdateTranslate();
 	scoreThousandPlace_.UpdateTranslate();
 	scoreTenThousandPlace_.UpdateTranslate();
+	scoreHundredThousandPlace_.UpdateTranslate();
 	resultEasingTime_ = 0.0f;
 }
 
@@ -341,6 +349,8 @@ void Score::Reset() {
 		scoreThousandPlace_.transform_.SetParent(&scoreTransform_);
 		scoreTenThousandPlace_.Reset("scoreTenThousandPlace", 10);
 		scoreTenThousandPlace_.transform_.SetParent(&scoreTransform_);
+		scoreHundredThousandPlace_.Reset("scoreHundredThousandPlace", 10);
+		scoreHundredThousandPlace_.transform_.SetParent(&scoreTransform_);
 	}
 	else {
 		scoreOnePlace_.Reset("scoreOnePlace", score_ % 10);
@@ -353,6 +363,8 @@ void Score::Reset() {
 		scoreThousandPlace_.transform_.SetParent(&scoreTransform_);
 		scoreTenThousandPlace_.Reset("scoreTenThousandPlace", (score_ / 10000) % 10);
 		scoreTenThousandPlace_.transform_.SetParent(&scoreTransform_);
+		scoreHundredThousandPlace_.Reset("scoreHundredThousandPlace", (score_ / 100000) % 10);
+		scoreHundredThousandPlace_.transform_.SetParent(&scoreTransform_);
 	}
 }
 
@@ -417,6 +429,7 @@ void Score::Debug() {
 	scoreHundredPlace_.Debug("scoreHundredPlace");
 	scoreThousandPlace_.Debug("scoreThousandPlace");
 	scoreTenThousandPlace_.Debug("scoreTenThousandPlace");
+	scoreHundredThousandPlace_.Debug("scoreHundredThousandPlace");
 }
 
 void Score::ConversionSeconds() {
@@ -491,6 +504,9 @@ void Score::UpdateScore() {
 		if ((preScore_ / 10000) % 10 != (score_ / 10000) % 10) {
 			scoreTenThousandPlace_.ActiveModel((score_ / 10000) % 10);
 		}
+		if ((preScore_ / 100000) % 10 != (score_ / 100000) % 10) {
+			scoreHundredThousandPlace_.ActiveModel((score_ / 100000) % 10);
+		}
 	}
 
 	blockOnePlace_.Update();
@@ -508,6 +524,7 @@ void Score::UpdateScore() {
 	scoreHundredPlace_.Update();
 	scoreThousandPlace_.Update();
 	scoreTenThousandPlace_.Update();
+	scoreHundredThousandPlace_.Update();
 
 	preBlockCount_ = blockCount_;
 	preDepthCount_ = depthCount_;
