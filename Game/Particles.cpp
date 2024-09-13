@@ -89,7 +89,7 @@ void Particles::EmitBar(const Vector3& position, const Vector3& direction, const
 		particle.lifeTime = 30;
 		particle.existenceTime = 0;
 		particle.position = position + (vertical * rng_.NextFloatRange(0.0f,halfLength)) * ((i % 2) * 2.0f - 1.0f);
-		particle.position.z = 2.0f;
+		particle.position.z = -2.0f;
 		particle.velocity = -direction * rng_.NextFloatRange(0.9f,1.2f);
 		particle.spin = 0.0f;
 		particle.spinSpeed = (3.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
@@ -120,7 +120,7 @@ void Particles::EmitBom(const Vector3& position)
 		particle.lifeTime = 15;
 		particle.existenceTime = 0;
 		particle.position = position;
-		particle.position.z = 2.0f;
+		particle.position.z = -2.0f;
 		particle.velocity = Vector3{ 1.0f,0.0f,0.0f } *Matrix4x4::MakeRotationZ(rng_.NextFloatRange(0.0f,360.0f * Math::ToRadian)) * rng_.NextFloatRange(0.9f,1.2f);
 		particle.spin = 0.0f;
 		particle.spinSpeed = (3.0f * Math::ToRadian) * ((i % 2) * 2.0f - 1.0f);
