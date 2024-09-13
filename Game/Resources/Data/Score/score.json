@@ -71,6 +71,11 @@
         0.0
     ],
     "onePlaceTransformFrame_": 60.0,
+    "resultOffset_": [
+        0.0,
+        45.70000076293945,
+        -110.4000015258789
+    ],
     "resultTransitionFrame_": 120.0,
     "scoreHundredPlaceOffset_": [
         2.0,
@@ -119,5 +124,10 @@
         14.0,
         28.0,
         80.0
+    ],
+    "titleOffset_": [
+        0.0,
+        51.79999923706055,
+        -115.19999694824219
     ]
 }
