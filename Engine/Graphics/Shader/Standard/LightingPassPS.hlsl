@@ -66,14 +66,14 @@ PSOutput main(PSInput input) {
     reflectedLight.directSpecular = float32_t3(0.0f, 0.0f, 0.0f);
     
     ///color += ShadeDirectionalLight(g_Scene.directionalLight);
-    PBR::DirectRenderingEquations(incidentLight, geometry, material, reflectedLight);
+    //PBR::DirectRenderingEquations(incidentLight, geometry, material, reflectedLight);
     
     // IBL
     //reflectedLight.directDiffuse += DiffuseIBL(geometry.normal, material.diffuseReflectance);
     //reflectedLight.directSpecular += SpecularIBL(geometry.normal, geometry.viewDirection, material.specularReflectance, material.specularRoughness);
 
     float32_t3 color = reflectedLight.directDiffuse + reflectedLight.directSpecular;
-    //color = albedo;
+    color = albedo;
 
     output.color.rgb = color;
     output.color.a = 1.0f;

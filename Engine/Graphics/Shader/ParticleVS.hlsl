@@ -7,6 +7,7 @@ struct Instance {
     float4x4 worldMatrix;
     float3 color;
     float alpha;
+    uint32_t isCircle;
 };
 StructuredBuffer<Instance> instances_ : register(t0);
 

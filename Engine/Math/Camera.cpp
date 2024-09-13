@@ -30,11 +30,12 @@ void Camera::UpdateMatrices() {
 		}
 
 		viewProjectionMatrix_ = viewMatrix_ * projectionMatrix_;
-		billbordMatrix_ = viewMatrix_;
-		billbordMatrix_.m[3][0] = 0.0f;
-		billbordMatrix_.m[3][1] = 0.0f;
-		billbordMatrix_.m[3][2] = 0.0f;
-		billbordMatrix_ = billbordMatrix_.Inverse();
+		billbordMatrix_ = Matrix4x4::MakeRotation(rotate_);
+		//billbordMatrix_ = viewMatrix_;
+		//billbordMatrix_.m[3][0] = 0.0f;
+		//billbordMatrix_.m[3][1] = 0.0f;
+		//billbordMatrix_.m[3][2] = 0.0f;
+		//billbordMatrix_ = billbordMatrix_.Inverse();
 	}
 }
 
