@@ -35,8 +35,8 @@ public:
 	void SetParent(const Transform& parent) {
 		timerTransform_.SetParent(&parent);
 		blockTransform_.SetParent(&parent);
-		mTransform_.SetParent(&blockTransform_);
 		depthTransform_.SetParent(&parent);
+		mTransform_.SetParent(&depthTransform_);
 		if (state_ == Result) {
 			scoreTransform_.SetParent(&parent);
 		}

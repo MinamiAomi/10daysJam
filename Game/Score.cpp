@@ -80,6 +80,7 @@ void Score::Update() {
 		break;
 	case Score::InGame:
 		time_++;
+		// タイム終わり
 		if (time_ > limitTime_) {
 			isClear_ = true;
 			InitializeResultGame();
@@ -92,13 +93,13 @@ void Score::Update() {
 
 		timerTransform_.translate = timerOffset_;
 		blockTransform_.translate = blockOffset_;
-		mTransform_.translate = mOffset_;
 		depthTransform_.translate = depthOffset_;
+		mTransform_.translate = mOffset_;
 
 		timerTransform_.UpdateMatrix();
 		blockTransform_.UpdateMatrix();
-		mTransform_.UpdateMatrix();
 		depthTransform_.UpdateMatrix();
+		mTransform_.UpdateMatrix();
 
 		onePlace_.UpdateTranslate();
 		tenPlace_.UpdateTranslate();
@@ -234,6 +235,7 @@ void Score::InitializeInGame() {
 	timerTransform_.UpdateMatrix();
 	blockTransform_.UpdateMatrix();
 	depthTransform_.UpdateMatrix();
+	mTransform_.UpdateMatrix();
 
 	onePlace_.UpdateTranslate();
 	tenPlace_.UpdateTranslate();
@@ -362,6 +364,7 @@ void Score::AddScore(int depth) {
 void Score::Debug() {
 	ImGui::Begin("GameObject");
 	if (ImGui::BeginMenu("Score")) {
+			ImGui::DragFloat3("blockTransform_.translate ", &blockTransform_.translate.x);
 		ImGui::DragInt("score", &score_);
 		ImGui::DragInt("blockCount", &blockCount_);
 		ImGui::DragInt("depthCount", &depthCount_);
