@@ -271,8 +271,10 @@ Map::PosKey Map::CalcTilePosition(const Vector2& worldPosition) const {
 }
 
 void Map::MapRangeTile(int32_t& row, int32_t& column) const {
-    row = std::min((uint16_t)row, (uint16_t)(tileData_.size() - 1));
-    column = std::min((uint16_t)column, (uint16_t)(MapProperty::kMapColumn - 1));
+    if (row < 0) { row = 0; }
+    if (column < 0) { column = 0; }
+    row = (int32_t)std::min((uint16_t)row, (uint16_t)(tileData_.size() - 1));
+    column = (int32_t)std::min((uint16_t)column, (uint16_t)(MapProperty::kMapColumn - 1));
 }
 
 void Map::CullingTile() {
