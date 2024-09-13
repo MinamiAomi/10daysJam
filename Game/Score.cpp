@@ -144,10 +144,12 @@ void Score::Update() {
 		}
 
 		resultEasingTime_ += 1.0f / resultTransitionFrame_;
-		resultEasingTime_ = std::clamp(resultEasingTime_,0.0f,1.0f);
+		resultEasingTime_ = std::clamp(resultEasingTime_, 0.0f, 1.0f);
 		blockTransform_.translate = Vector3::Lerp(resultEasingTime_, blockOffset_, blockScoreOffset_);
 		depthTransform_.translate = Vector3::Lerp(resultEasingTime_, depthOffset_, depthScoreOffset_);
-		scoreTransform_.translate = scoreOffset_;
+		if (resultEasingTime_ < 1.0f) {
+			scoreTransform_.translate = scoreOffset_;
+		}
 
 		scoreOnePlace_.ActiveModel(rnd_.NextIntRange(0, 9));
 		scoreTenPlace_.ActiveModel(rnd_.NextIntRange(0, 9));
