@@ -73,6 +73,7 @@ void Player::AddGravity(const Vector3& vector) {
 
 void Player::ReflectBar(const Vector3& normal) {
     velocity_ = normal.Normalized() * velocity_.Length();
+    UpdateRotate(velocity_.Normalized());
 }
 
 void Player::Move() {
